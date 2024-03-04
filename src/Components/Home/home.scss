@@ -1,0 +1,75 @@
+// --- css variables --- //
+:root {
+    --black: #190464;
+    --white: #ffffff;
+    --primary: #0f6b0e;
+  }
+  
+  // --- styling --- //
+  // fonts
+  @import url(https://fonts.googleapis.com/css?family=Montserrat:400|Montserrat:500|Montserrat:700);
+  $font-family: "Montserrat", "Open Sans", sans-serif;
+  
+  // config
+  $max-width: 992px;
+  
+
+  .button {
+    position: relative;
+    border: 0;
+    transition: 0.5s;
+    z-index: 1;
+    min-width: 10rem;
+    padding: 1rem 2rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    font-family: $font-family;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: var(--black);
+    color: var(--white);
+  
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+    }
+  
+    
+    &.--shine {
+      overflow: hidden;
+      &:after {
+        height: 100%;
+        width: 0;
+        left: -25%;
+        top: 0;
+        background: var(--primary);
+        transform: skew(50deg);
+        transform-origin: top left;
+        transition: 0.5s;
+      }
+      &:hover {
+        &:after {
+          width: 125%;
+        }
+      
+      }
+    }
+  }
+  
+  // --- animations --- //
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 var(--black);
+    }
+    50% {
+      box-shadow: 0 0 10px var(--black);
+    }
+    100% {
+      box-shadow: 0 0 0 var(--black);
+    }
+  }
+  

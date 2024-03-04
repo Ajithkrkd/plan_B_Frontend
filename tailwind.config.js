@@ -1,11 +1,17 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+module.exports = {
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        // Create a new color group named 'button_1'
+        button_1: {
+          DEFAULT: '#0067B8', 
+          'hover': '#fff', 
+          'disabled': '#ced4da', 
+        },
+      },
+    },
   },
   plugins: [],
-}
+};

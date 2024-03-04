@@ -5,8 +5,16 @@ import { CardContent, IconButton, InputAdornment } from '@mui/material';
 import axios from 'axios'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { validate ,renderError } from '../Validation';
+import {AUTH_LOGIN_URL} from '../authUtils'
+import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom';
+
+
+
 const LoginForm = () => {
 
+
+    const navigate = useNavigate();
     const [errors,setErrors]=useState({});
     const [showPassword , setShowPassword] = useState(false)
     const [formData, setFormData] = useState({
@@ -34,16 +42,20 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(!handleValidation()){
+      console.log("verification failed")
         return;
     }
     try {
       const response = await axios.post(
-        'https://your-api-endpoint.com/register',
+        AUTH_LOGIN_URL,
         formData
       );
       console.log('Form submitted:', response.data);
+      localStorage.setItem('accessToken' , response.data.access_token);
+      localStorage.setItem('accessToken' , response.data.refresh_token);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      toast.error(error.response.data.message);
+      console.error('Error submitting form:', error.response.data);
     }
   };
 
@@ -93,10 +105,11 @@ const LoginForm = () => {
 
      </CardContent>
       <CardContent style={{display: 'flex' , justifyContent:'flex-end'}}>
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
+      <button onClick={()=>{handleSubmit}} class="button --shine">Login</button>
       </CardContent>
+      <p onClick={()=>{navigate('/register')}} style={{ color: 'blue' }}>
+       create new account?
+      </p>
     </form>
   );
 };

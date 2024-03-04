@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { CardContent ,IconButton, InputAdornment } from '@mui/material';
+import { CardContent ,IconButton, InputAdornment, Link, Typography } from '@mui/material';
 import axios from 'axios'
 import {validate ,renderError} from '../Validation.jsx'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import {AUTH_REGISTER_URL} from '../authUtils.js'
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
+
+
+
+
 
 const Form = () => {
+
+  const navigate = useNavigate();
+  
+
     const [formData, setFormData] = useState({
         fullName: '',
         phoneNumber:'',
@@ -17,37 +29,53 @@ const Form = () => {
   const [errors, setErrors] = useState({}); 
   const [showPassword, setShowPassword] = useState(false)  
 
-//show password button
+//show password button START
 const handleClickShowPassword =()=>{
-    setShowPassword(!showPassword);
+  setShowPassword(!showPassword);
 }
+//show password button END
 
 
-  const handleValidation = () =>{
-    const errors = validate(formData);
-    setErrors(errors);
-    return Object.keys(errors).length === 0; 
+// for check the form data valid or not START
+const handleValidation = () =>{
+  const errors = validate(formData);
+  setErrors(errors);
+  return Object.keys(errors).length === 0; 
+}
+// for check the form data valid or not END
+
+
+// when ever user type something in the input this fuction will handle START
+const handleChange = (event) => {
+  setFormData({ ...formData, [event.target.name]: event.target.value });
+};
+// when ever user type something in the input this fuction will handle END
+
+//  ASYNC function for making api request START
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  if(!handleValidation()){
+    toast.error('verification failed');
+    console.log("verification failed")
+    return;
   }
-
-  const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if(!handleValidation()){
-        return;
-    }
-    try {
-      const response = await axios.post(
-        'https://your-api-endpoint.com/register',
-        formData
+  try {
+    const response = await axios.post(
+      AUTH_REGISTER_URL,
+      formData
       );
+      if(response.status === 201){
+        toast.success("successfully registered")
+      }
       console.log('Form submitted:', response.data);
+      
     } catch (error) {
+      console.log('hai')
+      toast.error("registration failed")
       console.error('Error submitting form:', error);
     }
   };
+  //  ASYNC function for making api request END
 
   return (
     <form onSubmit={handleSubmit}>
@@ -121,10 +149,12 @@ const handleClickShowPassword =()=>{
       />
      </CardContent>
       <CardContent style={{display: 'flex' , justifyContent:'flex-end'}}>
-      <Button type="submit" variant="contained" color="primary">
-        Submit
-      </Button>
+      <button onClick={()=>{handleSubmit}} class="button --shine">submit</button>
       </CardContent>
+      <p onClick={()=>{navigate('/login')}} style={{ color: 'blue' }}>
+        already have an account?
+      </p>
+
     </form>
   );
 };

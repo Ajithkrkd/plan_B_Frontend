@@ -1,14 +1,12 @@
 import React from 'react'
-import Login from '../Components/Auth/Login/Login'
 import Header from '../Components/Header/Header'
 
-function LoginPage() {
+function AllProjectsPage() {
   return (
     <div>
         <Header/>
-        <Login/>
     </div>
   )
 }
 
-export default LoginPage
+export default AllProjectsPage

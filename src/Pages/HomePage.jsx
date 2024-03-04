@@ -1,13 +1,12 @@
 import React from 'react'
-import SideBar from '../Components/SideBar/SideBar'
 import Header from '../Components/Header/Header'
-
+import Home from '../Components/Home/Home'
 function HomePage() {
   return (
-    <div>
+    <>
         <Header/>
-        <SideBar/>
-    </div>
+        <Home/>
+    </>
   )
 }
 

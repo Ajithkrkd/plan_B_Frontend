@@ -17,7 +17,7 @@ function Register() {
         <Typography variant="h5" component="div" sx={{ mb: 1, padding:'10px'}}>
           Register
         </Typography>
-        <Form /> {/* Include your form component here */}
+        <Form /> 
       </CardContent>
     </Card>
   </Box>
