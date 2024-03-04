@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {} from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../SideBar/SideBarScript";
 import "../SideBar/SideBar.css";
@@ -9,7 +9,6 @@ function Header() {
 
 
   const navigate = useNavigate();
-
 
 
   return (
@@ -26,7 +25,7 @@ function Header() {
             className="keep-img"
             rel="keep logo"
           />
-          <h5 className="keep-text" onClick={()=>{navigate('/')}}>Plan-B</h5>
+          <h5 className="keep-text" onClick={()=>{navigate('/')}}>PLAN-B</h5>
         </div>
         <div className="d-flex align-items-center   ">
           <i className="bx bx-cog mx-2"></i>

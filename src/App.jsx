@@ -19,6 +19,7 @@ function App() {
 
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>
+            <Route path='/projects' Component={U}/>
           </Route>
 
         </Routes>
