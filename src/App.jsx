@@ -6,6 +6,7 @@ import RegisterPage from './Pages/RegisterPage'
 import HomePage from './Pages/HomePage'
 import UserRoutes from './Components/PrivateRoutes/UserRoutes'
 import AllProjectsPage from './Pages/AllProjectsPage'
+import UserProfilePage from './Pages/UserProfilePage'
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
 
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>
-            <Route path='/projects' Component={U}/>
+            <Route path='/profile-settings' Component={UserProfilePage}/>
           </Route>
 
         </Routes>
