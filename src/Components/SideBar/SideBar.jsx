@@ -1,15 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "../SideBar/SideBarScript";
 import "../SideBar/SideBar.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
+import { UrlContext } from "../../store/urlContext";
+
+
+
 function SideBar() {
+
+    const currentURL = useContext(UrlContext);
+    console.log(currentURL + '---------------------------------------------------url')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [userData , setUsreData] = useState(null);
     useEffect(()=>{
       const storedUserDetails = localStorage.getItem("userData");
       const UserDetails = JSON.parse(storedUserDetails);
       setUsreData(UserDetails)
+
     },[])
     
   
@@ -33,45 +41,45 @@ function SideBar() {
       onMouseLeave={() => setIsSidebarOpen(false)}
     >
       <ul class="nav-list">
-        {userData ? (
+        {currentURL == '/profile-settings' || '/privacy-settings' ? (
           <>
             <li>
-              <a onClick={()=>{navigate('/')}}>
+              <a onClick={()=>{navigate('/profile-settings')}}>
                 <i className="bx bx-note btnx"></i>
                 <span class="link_name">
-                  projects
+                  profile
                 </span>
               </a>
-              <span class="tooltip">projects</span>
+              <span class="tooltip">profile</span>
             </li>
             <li>
               <a>
                 <i class="bx bx-bell btnx " onClick={toggleSideBar}></i>
-                <span class="link_name">Reminders</span>
+                <span class="link_name">notifications</span>
               </a>
-              <span class="tooltip">Reminders</span>
+              <span class="tooltip">notificationsv</span>
             </li>
             <li>
               <a >
-                <i class="bx bx-label btnx"></i>
-                <span class="link_name">Edit Labels</span>
+                <i class="bx bxs-file-doc btnx"></i>
+                <span class="link_name">My work items</span>
               </a>
-              <span class="tooltip">Edit Labels</span>
+              <span class="tooltip">My work items</span>
             </li>
             <li>
-              <a  onClick={()=>{navigate('/archive')}}>
-                <i class="bx bx-archive btnx "></i>
-                <span class="link_name ">Archive</span>
+              <a  onClick={()=>{navigate('/privacy-settings')}}>
+                <i class="bx bxs-lock-alt btnx "></i>
+                <span class="link_name ">Privacy</span>
               </a>
-              <span class="tooltip">Archive</span>
+              <span class="tooltip">Privacy</span>
             </li>
-            <li>
+            {/* <li>
               <a href="" onClick={()=>navigate("/bin")}>
                 <i class="bx bx-trash btnx"></i>
                 <span class="link_name">Bin</span>
               </a>
               <span class="tooltip">Bin</span>
-            </li>
+            </li> */}
           </>
         ) : (
           <>

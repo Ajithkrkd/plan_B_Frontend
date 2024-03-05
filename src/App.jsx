@@ -7,6 +7,7 @@ import HomePage from './Pages/HomePage'
 import UserRoutes from './Components/PrivateRoutes/UserRoutes'
 import AllProjectsPage from './Pages/AllProjectsPage'
 import UserProfilePage from './Pages/UserProfilePage'
+import PrivacyDetailsPage from './Pages/PrivacyDetailsPage'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>
             <Route path='/profile-settings' Component={UserProfilePage}/>
+            <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
           </Route>
 
         </Routes>
