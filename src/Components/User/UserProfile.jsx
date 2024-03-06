@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './user.css'
 import { TextField, Typography } from '@mui/material'
 import customAxios from '../../store/customAxios';
-import {USER_BASE_SECURE_URL, USER_UPDATE_URL, fetchUserDetails} from './userUtils'
+import {USER_BASE_SECURE_URL, USER_UPDATE_URL, fetchUserDetails, formateJoiningDateTime} from './userUtils'
 import toast from 'react-hot-toast'
 import { validate } from '../Auth/Validation';
 function UserProfile() {
@@ -105,11 +105,14 @@ const updateUserDetails = async(e)=>{
     const response = await customAxios.post(USER_UPDATE_URL ,formData);
     console.log(response.data)
     fetchUserDetails(setUserDetails);
+    toast.success('Your details updated')
   } catch (error) {
     console.log(error.response.data)
   }
 
 }
+
+const formatedJoiningDate = formateJoiningDateTime(userDetails1.joinDate);
 
 
 
@@ -125,6 +128,7 @@ const updateUserDetails = async(e)=>{
                     accept="image/*" 
                     className=" my-4 form-control" 
                     onChange={handleFileChange}
+                    required
                     />
                     <button className="button --shine"
                     onClick={handleUpload}
@@ -172,7 +176,7 @@ const updateUserDetails = async(e)=>{
                 <div className="flex gap-3">
                   <div>
                     <span>Join date : </span>
-                    <span class="text-blue-700 font-medium">{userDetails1.joinDate}</span> </div>
+                    <span class="text-blue-700 font-medium">{formatedJoiningDate}</span> </div>
                     
                 </div>
             </div>

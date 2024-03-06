@@ -4,6 +4,7 @@ import { Box, Card, CardContent, Typography } from '@mui/material'
 import axios from 'axios';
 import { AUTH_CONFIRM_EMAIL } from '../authUtils';
 import { useSearchParams,useNavigate} from 'react-router-dom';
+import BasicModalDialog from '../../User/BasicModalDialog';
 function Login() {
 
 
@@ -44,6 +45,7 @@ console.log(emailToken + 'token got')
           Login
         </Typography>
         <LoginForm /> 
+        <BasicModalDialog/>
       </CardContent>
     </Card>
   </Box>

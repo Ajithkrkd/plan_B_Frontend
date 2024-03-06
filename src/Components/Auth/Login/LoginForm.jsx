@@ -53,6 +53,7 @@ const LoginForm = () => {
       console.log('Form submitted:', response.data);
       localStorage.setItem('accessToken' , response.data.access_token);
       localStorage.setItem('accessToken' , response.data.refresh_token);
+      navigate('/')
     } catch (error) {
       toast.error(error.response.data.message);
       console.error('Error submitting form:', error.response.data);
@@ -107,10 +108,11 @@ const LoginForm = () => {
       <CardContent style={{display: 'flex' , justifyContent:'flex-end'}}>
       <button onClick={()=>{handleSubmit}} class="button --shine">Login</button>
       </CardContent>
-      <p onClick={()=>{navigate('/register')}} style={{ color: 'blue' }}>
+      <p onClick={()=>{navigate('/register')}} style={{ color: 'blue' }} className='text-end'>
        create new account?
       </p>
     </form>
+
   );
 };
 

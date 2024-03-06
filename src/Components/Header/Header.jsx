@@ -18,7 +18,7 @@ function Header() {
     const {profile_image_path} = userDetails
     console.log(profile_image_path)
     if(profile_image_path){
-      setProfilePic()
+      setProfilePic(profile_image_path)
     }else{
       ''
     }
@@ -37,7 +37,7 @@ function Header() {
           <img
             src="/src/assets/workers.jpg"
             className="keep-img"
-            rel="keep logo"
+            rel="logo"
           />
           <h5 className="keep-text" onClick={()=>{navigate('/')}}>PLAN-B</h5>
         </div>

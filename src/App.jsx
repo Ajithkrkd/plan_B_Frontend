@@ -8,6 +8,7 @@ import UserRoutes from './Components/PrivateRoutes/UserRoutes'
 import AllProjectsPage from './Pages/AllProjectsPage'
 import UserProfilePage from './Pages/UserProfilePage'
 import PrivacyDetailsPage from './Pages/PrivacyDetailsPage'
+import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
             <Route path='/projects' Component={AllProjectsPage}/>
             <Route path='/profile-settings' Component={UserProfilePage}/>
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
+            <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
           </Route>
 
         </Routes>
