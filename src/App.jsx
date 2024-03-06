@@ -19,12 +19,12 @@ function App() {
           <Route path='/' Component={HomePage}/>
           <Route path='/login' Component={LoginPage}/>
           <Route path='/register' Component={RegisterPage}/>
+            <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
 
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>
             <Route path='/profile-settings' Component={UserProfilePage}/>
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
-            <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
           </Route>
 
         </Routes>

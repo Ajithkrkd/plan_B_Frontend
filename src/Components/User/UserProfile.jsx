@@ -5,8 +5,9 @@ import customAxios from '../../store/customAxios';
 import {USER_BASE_SECURE_URL, USER_UPDATE_URL, fetchUserDetails, formateJoiningDateTime} from './userUtils'
 import toast from 'react-hot-toast'
 import { validate } from '../Auth/Validation';
+import { useNavigate } from 'react-router-dom';
 function UserProfile() {
-
+    const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState();
    
     const [formData, setFormData] = useState({
@@ -114,7 +115,12 @@ const updateUserDetails = async(e)=>{
 
 const formatedJoiningDate = formateJoiningDateTime(userDetails1.joinDate);
 
-
+const handleLogout =()=>{
+  localStorage.clear();
+  toast.success("logout success")
+  navigate('/');
+  return;
+}
 
   return (
     <>
@@ -177,6 +183,16 @@ const formatedJoiningDate = formateJoiningDateTime(userDetails1.joinDate);
                   <div>
                     <span>Join date : </span>
                     <span class="text-blue-700 font-medium">{formatedJoiningDate}</span> </div>
+                    
+                </div>
+                <div className="flex gap-3">
+                  <div>
+                    
+                    <button className="button --shine mt-5"
+                    onClick={handleLogout}
+                    >logout</button>
+                    
+                     </div>
                     
                 </div>
             </div>

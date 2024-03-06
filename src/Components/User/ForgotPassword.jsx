@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { forgottPasswordValidation } from './validation'
-import customAxios from '../../store/customAxios';
 import { USER_FORGOTTEN_PASSWORD } from './userUtils';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import axios from 'axios';
 function ForgotPassword() {
 
     const [showPassword , setShowPassword] = useState()
@@ -61,8 +61,10 @@ function ForgotPassword() {
         })
 
         try {
-            const response = await customAxios.post(USER_FORGOTTEN_PASSWORD , ForgotPasswordRequest);
+            const response = await axios.post(USER_FORGOTTEN_PASSWORD, ForgotPasswordRequest);
             console.log(response);
+            navigate('/')
+
         } catch (error) {
             console.log(error)
         }

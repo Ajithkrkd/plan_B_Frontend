@@ -68,10 +68,10 @@ const handleSubmit = async (event) => {
         toast.success("successfully registered")
       }
       console.log('Form submitted:', response.data);
-      
+      navigate('/login')
     } catch (error) {
       console.log('hai')
-      toast.error("registration failed")
+      toast.error(error.response.data.message)
       console.error('Error submitting form:', error);
     }
   };

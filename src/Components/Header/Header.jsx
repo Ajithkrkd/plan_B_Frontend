@@ -4,14 +4,15 @@ import "../SideBar/SideBarScript";
 import "../SideBar/SideBar.css";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { fetchUserDetails } from "../User/userUtils";
 
 function Header() {
 
   
   const navigate = useNavigate();
-  const [profilePic ,setProfilePic] = useState(null);
-
-  useEffect(()=>{
+  const [profilePic ,setProfilePic] = useState('/src/assets/workers.jpg');
+  
+    useEffect(()=>{
     const userDetailsString = localStorage.getItem('userData');
     if(userDetailsString){
       const userDetails = JSON.parse(userDetailsString);

@@ -7,8 +7,8 @@ export const USER_BASE_SECURE_URL = '/user/api/secure/'
 export const USER_DETAILS_URL = `${USER_BASE_SECURE_URL}get_user_details`
 export const USER_UPDATE_URL = `${USER_BASE_SECURE_URL}update_user_details`
 export const USER_CHANGE_PASSWORD = `${USER_BASE_SECURE_URL}change_password`
-export const USER_FORGOT_PASSWORD_LINK = `${USER_BASE_SECURE_URL}get_forgot_password_link`
-export const USER_FORGOTTEN_PASSWORD = `${USER_BASE_SECURE_URL}forgot_password`
+export const USER_FORGOT_PASSWORD_LINK = `http://localhost:8080/user/api/auth/get_forgot_password_link`
+export const USER_FORGOTTEN_PASSWORD = `http://localhost:8080/user/api/auth/forgot_password`
 
 
 

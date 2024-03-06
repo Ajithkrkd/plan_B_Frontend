@@ -10,9 +10,9 @@ import DialogContent from '@mui/joy/DialogContent';
 import Stack from '@mui/joy/Stack';
 import Add from '@mui/icons-material/Add';
 import { Typography } from '@mui/material';
-import customAxios from '../../store/customAxios';
 import toast from 'react-hot-toast';
-import { USER_FORGOTTEN_PASSWORD } from './userUtils';
+import {USER_FORGOT_PASSWORD_LINK } from './userUtils';
+import axios from 'axios';
 
 export default function BasicModalDialog() {
 
@@ -35,7 +35,7 @@ const handleSubmition = async(event)=>{
 
     try {
             
-        const response = await customAxios.post(USER_FORGOTTEN_PASSWORD+"/"+userEmail);
+        const response = await axios.post(USER_FORGOT_PASSWORD_LINK+"/"+userEmail);
         console.log(response.data);
         toast.success('success');
         setOpen(false);
