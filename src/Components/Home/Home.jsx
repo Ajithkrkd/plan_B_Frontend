@@ -2,11 +2,14 @@ import React, {} from 'react'
 import {} from '@mui/material';
 import './home.css'
 import './home.scss'
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 function Home() {
+
+const navigate = useNavigate()
   return (
     <div className=" flex home-container flex-wrap justify-center items-center ">
        <div className='w-full sm:w-4/5 px-4 py-8 mb-8 sm:mb-0'>

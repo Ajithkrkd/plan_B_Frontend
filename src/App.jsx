@@ -9,6 +9,7 @@ import AllProjectsPage from './Pages/AllProjectsPage'
 import UserProfilePage from './Pages/UserProfilePage'
 import PrivacyDetailsPage from './Pages/PrivacyDetailsPage'
 import ForgotPasswordPage from './Pages/ForgotPasswordPage'
+import EditProfilePage from './Pages/EditProfilePage'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
             <Route path='/projects' Component={AllProjectsPage}/>
             <Route path='/profile-settings' Component={UserProfilePage}/>
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
+            <Route path='/editProfile' Component={EditProfilePage}/>
           </Route>
 
         </Routes>

@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UrlProvider>
       <Provider store={reduxStore}>
-        <App />
+               <App />
       </Provider>
       <Toaster position="top-right" reverseOrder={false} />
     </UrlProvider>
