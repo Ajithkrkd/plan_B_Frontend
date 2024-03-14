@@ -1,35 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, {} from 'react'
 import {} from '@mui/material';
 import './home.css'
 import './home.scss'
-import {fetchUserDetails} from '../User/userUtils'
+
 
 
 
 function Home() {
-  const [userDetails ,setUserDetails] = useState({
-      userId:'',
-      fullName: '',
-      phoneNumber: '',
-      email:'',
-      profileImagePath:'',
-      joinDate : '',
-      isEmailVerified :'',
-      isBlocked:'',
-      role:'',
-  })
-
-  useEffect(()=>{
-    fetchUserDetails(setUserDetails);
-    console.log(userDetails);
-    console.log("times ")
-    localStorage.setItem('user_details', userDetails);
-    
-  },[])
-
-
-
-
   return (
     <div className=" flex home-container flex-wrap justify-center items-center ">
        <div className='w-full sm:w-4/5 px-4 py-8 mb-8 sm:mb-0'>
@@ -41,7 +18,9 @@ function Home() {
             <h3>Plan smarter, collaborate better, build your project with your plan</h3>
           </div>
           <div className='my-3'>
-            <button className="button --shine">Start Now</button>
+            <button className="button --shine"
+            onClick={()=>navigate('/projects')}
+            >Start Now</button>
           </div>
        </div>
        <div className="">

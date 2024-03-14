@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './user.css'
-import { TextField, Typography } from '@mui/material'
-import customAxios from '../../store/customAxios';
-import {USER_BASE_SECURE_URL, USER_UPDATE_URL, fetchUserDetails, formateJoiningDateTime} from './userUtils'
+import { TextField} from '@mui/material'
+import {formateJoiningDateTime} from './userUtils'
 import toast from 'react-hot-toast'
 import { validate } from '../Auth/Validation';
 import { useNavigate } from 'react-router-dom';
+import { getUserDetails, uploadProfileImage } from '../../Api/User'
 function UserProfile() {
     const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState();
@@ -14,42 +14,55 @@ function UserProfile() {
         fullName: '',
         phoneNumber:'',
     });
+   const imgUrl = `http://localhost:8081`
    const [errors, setErrors] = useState({});  
    const [profilePic , setProfilePic] = useState(null)
-   const [userDetails1 , setUserDetails]=useState({
+   const [userDetails , setUserDetails]=useState({
     userId:'',
     fullName: '',
     phoneNumber: '',
     email:'',
-    profileImagePath:'',
+    profile_image_path:'',
     joinDate : '',
     isEmailVerified :'',
     isBlocked:'',
     role:'',
    })
 
-    useEffect(()=>{
-      fetchUserDetails(setUserDetails);
-      const userDetailsString = localStorage.getItem('userData');
-      const userDetails = JSON.parse(userDetailsString);
-      const {profile_image_path} = userDetails
-      const {fullName,phoneNumber} = userDetails;
-      setUserDetails(userDetails)
-      setFormData({ // Set initial form data from user details
-        fullName: fullName,
-        phoneNumber:phoneNumber,
-      });
-      console.log(profile_image_path)
-      setProfilePic(`http://localhost:8081${profile_image_path}`);
-    },[])
+   const fetchUserDetails = async () =>{
+    const userDetailsResponse = await getUserDetails();
+     console.log(userDetailsResponse.data , 'from here')
+     const data = userDetailsResponse.data
+    setUserDetails({
+      userId:data.userId,
+      fullName:data.fullName,
+      phoneNumber:data.phoneNumber,
+      email:data.email,
+      profile_image_path:data.profile_image_path,
+      joinDate :data.joinData,
+      isEmailVerified :data.isEmailVerified,
+      isBlocked:data.isBlocked,
+      role:data.role,
+    });
+    setFormData({
+      fullName : data.fullName,
+      phoneNumber:data.phoneNumber
+    })
+    setProfilePic(`${imgUrl}${data.profile_image_path}`)
+  }
 
-  // when ever user type something in the input this fuction will handle START
-    const handleChange = (event) => {
-    setFormData({ ...formData, [event.target.name]: event.target.value });
-  };
-  // when ever user type something in the input this fuction will handle END
-  const USER_ADD_PROFILEPIC = USER_BASE_SECURE_URL +'add_profile_image'
+   useEffect(()=>{
+      if(localStorage.getItem('accessToken')){
+          fetchUserDetails();
+          
+    }
 
+   },[])
+
+   const handleChange = (e) =>{
+    setFormData({...formData , [e.target.name]:e.target.value})
+   }
+   
   const handleUpload = async () => {
     try {
       const formData = new FormData();
@@ -59,8 +72,7 @@ function UserProfile() {
           "Content-Type": "multipart/form-data",
         },
       };
-      const response = await customAxios.post(
-        USER_ADD_PROFILEPIC,
+      const response = await uploadProfileImage(
         formData,
         config
       );
@@ -103,7 +115,7 @@ const updateUserDetails = async(e)=>{
     return;
   }
   try {
-    const response = await customAxios.post(USER_UPDATE_URL ,formData);
+    const response = await update(formData);
     console.log(response.data)
     fetchUserDetails(setUserDetails);
     toast.success('Your details updated')
@@ -113,7 +125,7 @@ const updateUserDetails = async(e)=>{
 
 }
 
-const formatedJoiningDate = formateJoiningDateTime(userDetails1.joinDate);
+const formatedJoiningDate = formateJoiningDateTime(userDetails.joinDate);
 
 const handleLogout =()=>{
   localStorage.clear();
@@ -124,15 +136,15 @@ const handleLogout =()=>{
 
   return (
     <>
+
         <div className="profile-container flex justify-left  ">
             <div className="max-w-4xl max-w-2sm mx-auto">
-                <p className=" font-semibold profile-text">Profile</p>
+                <p className=" font-semibold profile-text ">Profile</p>
                 <div className="grid grid-cols-4 items-center justify-center gap-4">
-                <img src={profilePic} className="profile-img flex" alt="Profile" />
+                <img src={profilePic ? profilePic : `/src/assets/workers`} className="profile-img flex" alt="Profile" />
                     <input
                     type="file" 
                     accept="image/*" 
-                    className=" my-4 form-control" 
                     onChange={handleFileChange}
                     required
                     />
@@ -174,7 +186,7 @@ const handleLogout =()=>{
                   <div className='flex gap-3'>
                     <div>
                       <span>Email address : </span>
-                    <span class="text-xl underline  text-blue-900 dark:text-blue">{userDetails1.email}</span>
+                    <span class="text-xl underline  text-blue-900 dark:text-blue">{userDetails.email}</span>
                     </div>
                     <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2 py-2   dark:text-green-400 border border-green-400">verified</span>
                   </div>  

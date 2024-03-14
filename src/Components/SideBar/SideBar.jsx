@@ -43,9 +43,18 @@ function SideBar() {
       <ul class="nav-list">
         {currentURL == '/profile-settings' || '/privacy-settings' ? (
           <>
+          <li>
+              <a onClick={()=>{navigate('/projects')}}>
+                <i className="bx bxs-note btnx"></i>
+                <span class="link_name">
+                    projects
+                </span>
+              </a>
+              <span class="tooltip">projects</span>
+            </li>
             <li>
               <a onClick={()=>{navigate('/profile-settings')}}>
-                <i className="bx bx-note btnx"></i>
+                <i className="bx bx-user btnx"></i>
                 <span class="link_name">
                   profile
                 </span>

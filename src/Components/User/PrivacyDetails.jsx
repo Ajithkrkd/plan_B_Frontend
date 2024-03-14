@@ -1,12 +1,11 @@
 import { Visibility, VisibilityOff, VpnLock } from '@mui/icons-material'
 import { IconButton, InputAdornment, TextField } from '@mui/material'
 import React, { useState } from 'react'
-import customAxios from '../../store/customAxios'
 import toast from 'react-hot-toast'
-import { USER_CHANGE_PASSWORD } from './userUtils'
 import BasicModalDialog from './BasicModalDialog'
 import { forgottPasswordValidation } from './validation'
 import { useNavigate } from 'react-router-dom'
+import { change_password_withCurrntPassword} from '../../Api/User'
 
 function PrivacyDetails() {
   const navigate = useNavigate();
@@ -32,6 +31,7 @@ function PrivacyDetails() {
   const handleInputChange =(e)=>{
       setFormData({...formData ,[e.target.name]:e.target.value})
       console.log(formData , 'form handleinputchange')
+      setChangePasswordRequest({...changePasswordRequest, [e.target.name]:e.target.value});
   }
 
   
@@ -53,11 +53,10 @@ function PrivacyDetails() {
     }
 
     try {
-
-      const response =  await customAxios.post(USER_CHANGE_PASSWORD,changePasswordRequest);
+      const response =  await change_password_withCurrntPassword(changePasswordRequest);
       console.log(response);
       toast.success('password changed successfully')
-      navigate('/privacy-settings')
+      navigate('/profile-settings')
       
     } catch (error) {
       console.log(error.response.data);

@@ -4,7 +4,6 @@ import "../SideBar/SideBarScript";
 import "../SideBar/SideBar.css";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
-import { fetchUserDetails } from "../User/userUtils";
 
 function Header() {
 
@@ -13,18 +12,8 @@ function Header() {
   const [profilePic ,setProfilePic] = useState('/src/assets/workers.jpg');
   
     useEffect(()=>{
-    const userDetailsString = localStorage.getItem('userData');
-    if(userDetailsString){
-      const userDetails = JSON.parse(userDetailsString);
-    const {profile_image_path} = userDetails
-    console.log(profile_image_path)
-    if(profile_image_path){
-      setProfilePic(profile_image_path)
-    }else{
-      ''
-    }
-    }
-  },[])
+      
+    },[])
 
   return (
     <div>

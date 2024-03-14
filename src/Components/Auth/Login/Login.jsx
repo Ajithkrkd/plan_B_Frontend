@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect} from 'react'
 import LoginForm from './LoginForm'
 import { Box, Card, CardContent, Typography } from '@mui/material'
-import axios from 'axios';
-import { AUTH_CONFIRM_EMAIL } from '../authUtils';
 import { useSearchParams,useNavigate} from 'react-router-dom';
 import BasicModalDialog from '../../User/BasicModalDialog';
+import toast from 'react-hot-toast';
+import { confirmEmail, getUserDetails } from '../../../Api/User';
+
+
 function Login() {
 
 
@@ -15,24 +17,25 @@ const navigate = useNavigate();
 const [searchParams] = useSearchParams()
 const emailToken  = searchParams.get('token');
 console.log(emailToken + 'token got')
-// for extracting the token from the url END
+
 
 
   useEffect(()=>{
     checkUserEmailVerified(emailToken);
   },[emailToken])
 
+
   const checkUserEmailVerified = async (emailToken)=>{
     try {
       
-      const response = await axios.post(AUTH_CONFIRM_EMAIL + '/' + emailToken);
+      const response = await confirmEmail(emailToken);
       console.log(response)
       if(response.data.status === 200){
         navigate('/login')
+        toast.success('Email verified successfully')
       }
     } catch (error) {
       console.log(error.response.data)
-      console.log("error close")
     }
   }
 

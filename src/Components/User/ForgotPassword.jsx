@@ -2,17 +2,16 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { forgottPasswordValidation } from './validation'
-import { USER_FORGOTTEN_PASSWORD } from './userUtils';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import axios from 'axios';
+import { forgotPassword } from '../../Api/User';
 function ForgotPassword() {
 
     const [showPassword , setShowPassword] = useState()
     const [errors,setErrors] = useState({})
     const navigate = useNavigate();
 
-    const [ForgotPasswordRequest , setForgotPasswordRequest] = useState({
+    const [forgotPasswordRequest , setForgotPasswordRequest] = useState({
         token:'',
         newPassword:''
     })
@@ -61,9 +60,10 @@ function ForgotPassword() {
         })
 
         try {
-            const response = await axios.post(USER_FORGOTTEN_PASSWORD, ForgotPasswordRequest);
+            const response = await forgotPassword(forgotPasswordRequest);
             console.log(response);
             navigate('/')
+            toast.success('password was changed')
 
         } catch (error) {
             console.log(error)

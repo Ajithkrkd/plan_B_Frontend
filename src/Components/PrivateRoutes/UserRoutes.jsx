@@ -13,6 +13,9 @@ const UserRoutes = () => {
             const userRole = decode.roles[0];
             setRole(userRole);
         }
+        else{
+            navigate('/register')
+        }
     },[])
 
     if (role === null) {
@@ -22,7 +25,7 @@ const UserRoutes = () => {
 
     return (
         <>
-            {role === 'USER' ? <Outlet /> : <Navigate to="/login" />}
+            {role && role === 'USER' ? <Outlet /> : <Navigate to="/login" />}
         </>
     );
 

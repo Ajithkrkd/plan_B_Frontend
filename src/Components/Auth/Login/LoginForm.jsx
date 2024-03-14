@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { CardContent, IconButton, InputAdornment } from '@mui/material';
-import axios from 'axios'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { validate ,renderError } from '../Validation';
-import {AUTH_LOGIN_URL} from '../authUtils'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../../Api/User';
 
 
 
@@ -31,6 +28,17 @@ const LoginForm = () => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  const validate =(formData)=>{
+    const errors ={};
+    if (formData.email.trim() === ''){
+      errors.email = 'Email mush not be empty';
+    }
+    if(formData.password.trim() === ''){
+      errors.password = 'Password must not be empty';
+    }
+  
+    return errors;
+  }
   //handle validation error message -------------->
   const handleValidation = () =>{
       const errors = validate(formData);
@@ -42,24 +50,23 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if(!handleValidation()){
-      console.log("verification failed")
+      toast.error('Please enter valid details')
         return;
-    }
+    };
+
     try {
-      const response = await axios.post(
-        AUTH_LOGIN_URL,
-        formData
-      );
-      console.log('Form submitted:', response.data);
+      const response = await login(formData);
+      console.log(response)
       localStorage.setItem('accessToken' , response.data.access_token);
-      localStorage.setItem('accessToken' , response.data.refresh_token);
+      localStorage.setItem('reffreshToken' , response.data.refresh_token);
       navigate('/')
     } catch (error) {
-      toast.error(error.response.data.message);
-      console.error('Error submitting form:', error.response.data);
+      if(error.response.data.message == 'email verification failed'){
+        toast.error("Please check your Email ")
+      }else
+      toast.error(error.response.data.message)
     }
-  };
-
+  }
   return (
     <form onSubmit={handleSubmit}>
      <CardContent>
@@ -72,7 +79,6 @@ const LoginForm = () => {
         fullWidth
         margin="normal"
         type="email" 
-        required
         error={!! errors.email}
         helperText={errors.email}
       />
@@ -85,7 +91,6 @@ const LoginForm = () => {
         fullWidth
         margin="normal"
         type={showPassword ? 'text' : 'password'} 
-        required
         error={!! errors.password}
         helperText={errors.password}
 

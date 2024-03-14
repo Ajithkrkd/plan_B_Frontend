@@ -8,11 +8,8 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import DialogTitle from '@mui/joy/DialogTitle';
 import DialogContent from '@mui/joy/DialogContent';
 import Stack from '@mui/joy/Stack';
-import Add from '@mui/icons-material/Add';
-import { Typography } from '@mui/material';
 import toast from 'react-hot-toast';
-import {USER_FORGOT_PASSWORD_LINK } from './userUtils';
-import axios from 'axios';
+import { getForgottenPasswordLink } from '../../Api/User';
 
 export default function BasicModalDialog() {
 
@@ -34,10 +31,9 @@ const handleSubmition = async(event)=>{
     }
 
     try {
-            
-        const response = await axios.post(USER_FORGOT_PASSWORD_LINK+"/"+userEmail);
+        const response = await getForgottenPasswordLink(userEmail);
         console.log(response.data);
-        toast.success('success');
+        toast.success('Forgot password link was sent ');
         setOpen(false);
 
     } catch (error) {

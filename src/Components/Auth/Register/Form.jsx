@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import { CardContent ,IconButton, InputAdornment, Link, Typography } from '@mui/material';
-import axios from 'axios'
+import { CardContent ,IconButton, InputAdornment } from '@mui/material';
 import {validate ,renderError} from '../Validation.jsx'
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import {AUTH_REGISTER_URL} from '../authUtils.js'
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { register } from '../../../Api/User.js';
+
 
 
 
@@ -51,31 +50,26 @@ const handleChange = (event) => {
 };
 // when ever user type something in the input this fuction will handle END
 
-//  ASYNC function for making api request START
+//  register function for making api request START
+
 const handleSubmit = async (event) => {
   event.preventDefault();
   if(!handleValidation()){
-    toast.error('verification failed');
-    console.log("verification failed")
+    toast.error('validation error')
     return;
   }
   try {
-    const response = await axios.post(
-      AUTH_REGISTER_URL,
-      formData
-      );
+    const response = await register(formData)
       if(response.status === 201){
         toast.success("successfully registered")
       }
-      console.log('Form submitted:', response.data);
       navigate('/login')
     } catch (error) {
-      console.log('hai')
-      toast.error(error.response.data.message)
-      console.error('Error submitting form:', error);
+      console.log(error)
+      toast.error(error.response);
     }
   };
-  //  ASYNC function for making api request END
+  //  register function for making api request END
 
   return (
     <form onSubmit={handleSubmit}>
@@ -88,7 +82,6 @@ const handleSubmit = async (event) => {
         onChange={handleChange}
         fullWidth 
         margin="normal" 
-        required 
         error={!! errors.fullName}
         helperText={errors.fullName}
       />
@@ -101,7 +94,6 @@ const handleSubmit = async (event) => {
         fullWidth
         margin="normal"
         type="phoneNumber"
-        required
         error={!! errors.phoneNumber}
         helperText={errors.phoneNumber}
       />
@@ -114,7 +106,6 @@ const handleSubmit = async (event) => {
         fullWidth
         margin="normal"
         type="email" 
-        required
         error={!! errors.email}
         helperText={errors.email}
       />
@@ -127,7 +118,6 @@ const handleSubmit = async (event) => {
         fullWidth
         margin="normal"
         type={showPassword ? 'text' : 'password'} 
-        required
         error={!! errors.password}
         helperText={errors.password}
 

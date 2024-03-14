@@ -8,7 +8,6 @@ const customAxios = axios.create({
   
 });
 
-// Interceptor to add the access token to each request
 customAxios.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken');

@@ -4,6 +4,12 @@ import Typography from '@mui/material/Typography';
 const validate = (formData) => {
   const errors = {};
 
+  if(formData.fullName.trim() === ''){
+    errors.fullName = 'Full name must not be empty'
+  }
+  if(formData.phoneNumber.trim() === ''){
+    errors.phoneNumber = 'Phone number must not be empty'
+  }
   if (formData.fullName && formData.fullName.length < 5) {
     errors.fullName = 'Full name must be at least 5 characters long.';
   }
