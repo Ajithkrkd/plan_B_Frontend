@@ -4,17 +4,36 @@ import "../SideBar/SideBarScript";
 import "../SideBar/SideBar.css";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../Api/User";
 
 function Header() {
 
-  
+
   const navigate = useNavigate();
-  const [profilePic ,setProfilePic] = useState('/src/assets/workers.jpg');
+  const [profilePic ,setProfilePic] = useState(null);
   
     useEffect(()=>{
-      
+      const token = localStorage.getItem('accessToken');
+      if(token){
+        fetchUserDetails();
+      }
     },[])
 
+    const fetchUserDetails = async() =>{
+      try {
+        const response = await getUserDetails();
+        console.log(response.data.profile_image_path);
+        if(response.data.profile_image_path === null){
+          setProfilePic('/src/assets/workers.jpg')
+        }else{
+
+          setProfilePic(response.data.profile_image_path)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    const imgUrl = `http://localhost:8081${profilePic}`;
   return (
     <div>
       <link
@@ -37,7 +56,7 @@ function Header() {
            ? 
            <>
           <img className="profile"
-          src={`http://localhost:8081${profilePic}`}
+          src={profilePic ? imgUrl : '/src/assets/workers.jpg'}
           onClick={()=>navigate('/profile-settings')}
           />
           </>

@@ -10,6 +10,12 @@ const validate = (formData) => {
   if(formData.phoneNumber.trim() === ''){
     errors.phoneNumber = 'Phone number must not be empty'
   }
+  if(formData.email.trim() === ''){
+    errors.email = 'Email must not be empty'
+  }
+  if(formData.password.trim() === ''){
+    errors.password = 'password must not be empty'
+  }
   if (formData.fullName && formData.fullName.length < 5) {
     errors.fullName = 'Full name must be at least 5 characters long.';
   }
@@ -27,7 +33,7 @@ const validate = (formData) => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format validation
   if (formData.email && !emailRegex.test(formData.email)) {
-    errors.email = 'Invalid email format.';
+    errors.email = 'Invalid email format. (example@gmail.com)';
   }
 
   return errors;

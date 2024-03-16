@@ -5,11 +5,12 @@ import LoginPage from './Pages/LoginPage'
 import RegisterPage from './Pages/RegisterPage'
 import HomePage from './Pages/HomePage'
 import UserRoutes from './Components/PrivateRoutes/UserRoutes'
-import AllProjectsPage from './Pages/AllProjectsPage'
 import UserProfilePage from './Pages/UserProfilePage'
 import PrivacyDetailsPage from './Pages/PrivacyDetailsPage'
 import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 import EditProfilePage from './Pages/EditProfilePage'
+import ViewSingleProjectPage from './Pages/projects/ViewSingleProjectPage'
+import AllProjectsPage from './Pages/projects/AllProjectsPage'
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path='/login' Component={LoginPage}/>
           <Route path='/register' Component={RegisterPage}/>
             <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
+            <Route path='/project/:id' Component={ViewSingleProjectPage}/>
 
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>

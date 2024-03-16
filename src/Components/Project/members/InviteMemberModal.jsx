@@ -3,17 +3,15 @@ import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import Sheet from "@mui/joy/Sheet";
-import { Alert, TextField } from "@mui/material";
-import toast from "react-hot-toast";
+import { Alert, Button, TextField } from "@mui/material";
 import { CheckCircleOutlined } from "@mui/icons-material";
-import { createProject } from "../../Api/project";
-import Loader from "../../common/Loader";
+import Loader from "../../../common/Loader";
 
 
 
 
 
-export default function CreateProjectModal() {
+export default function InviteMemberModal() {
 
 
 
@@ -58,8 +56,8 @@ export default function CreateProjectModal() {
       return;
     }
     try {
-      setIsLoading(true);
-      const response = await createProject(formData);
+      setIsLoading(false);
+
       setIsLoading(false);
 
       console.log(response.data);
@@ -68,9 +66,7 @@ export default function CreateProjectModal() {
       setOpen(false)
       
     } catch (error) {
-      setIsLoading(false);
-
-      toast.error(error.response)
+      toast.error(error.response.data.message)
       console.log(error);
     }
   };
@@ -79,19 +75,11 @@ export default function CreateProjectModal() {
 
 
   return (
-    <>
-{
-  isLoading ?
-
-  <Loader/>
-
-  :
-
-<>
-
-    <button className="button --shine" onClick={() => setOpen(true)}>
-        + New Project
-      </button>
+    <React.Fragment>
+  
+    <Button variant="contained" onClick={() => setOpen(true)}>
+        + members
+      </Button>
       <Modal
         aria-labelledby="modal-title"
         aria-describedby="modal-desc"
@@ -117,11 +105,11 @@ export default function CreateProjectModal() {
             fontWeight="lg"
             mb={1}
           >
-            Create Your Project
+            Send Invitation
           </Typography>
           <div>
             <TextField
-              label="Title"
+              label="email"
               variant="outlined"
               name="title"
               value={formData.title}
@@ -129,12 +117,11 @@ export default function CreateProjectModal() {
               fullWidth
               margin="normal"
               type="text"
-              required
               error={!!errors.title}
               helperText={errors.title}
             />
             <TextField
-              label="description"
+              label="message"
               variant="outlined"
               name="description"
               value={formData.description}
@@ -143,34 +130,26 @@ export default function CreateProjectModal() {
               margin="normal"
               maxRows={5}
               multiline
-              type="text"
-              required
+              type="text"     
               error={!!errors.description}
               helperText={errors.description}
             />
-            <button className="button --shine" onClick={handleSubmition}>
-              create
-            </button>
+            <Button variant="contained" onClick={handleSubmition}>
+              invite
+            </Button>
           </div>
           <Alert icon={<CheckCircleOutlined fontSize="inherit" />}
           className="my-3" 
           severity="success">
-            You are the project administrator
+            Email will sent to the member
           </Alert>
           <Alert icon={<CheckCircleOutlined fontSize="inherit" />}
           className="my-3" 
           severity="success">
-            Initially the project is assigned to you
-          </Alert>
-          <Alert icon={<CheckCircleOutlined fontSize="inherit" />}
-          className="my-3" 
-          severity="success">
-            Initially a board is created for you
+            If he joined or declined you will receive the notification
           </Alert>
         </Sheet>
       </Modal>
-      </>
-}
-    </>
+    </React.Fragment>
   );
 }

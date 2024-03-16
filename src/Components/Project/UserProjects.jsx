@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./project.css";
 import CreateProjectModal from "./CreateProjectModal";
-import customAxios from "../../services/customAxios";
+import { getAllProjectOfUser } from "../../Api/project";
 
 function UserProjects() {
   const [selectedLink, setSelectedLink] = useState("projects");
@@ -15,7 +15,7 @@ function UserProjects() {
   useEffect(() => {
     const getAllProjects = async () => {
       try {
-        const response = await customAxios.get("/project/get_all_projects");
+        const response = await getAllProjectOfUser();
         console.log(response.data);
         setProjects(response.data);
         console.log(projects)
@@ -23,13 +23,12 @@ function UserProjects() {
         console.log(error);
       }
     };
-
     getAllProjects();
-  }, []);
-
+  }, [projects]);
+  
   return (
     <>
-      <div className="user-container px-4 flex-row">
+      <div className="project-container flex-row">
         <div className="max-w-4xl max-w-2sm mx-auto">
           <div className=" flex justify-between items-center rounded-lg ">
             <div>
@@ -60,11 +59,11 @@ function UserProjects() {
         
         {projects &&   projects.map((project)=>(
                 <>
-        <div className="max-w-6xl flex-col gap-3  max-w-2sm mx-auto second-row">
           <a
-            href="#"
+            href={`project/${project.projectId}`}
             class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
           >
+        <div className="max-w-6xl flex-col gap-3  max-w-2sm mx-auto second-row">
                 
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-black">
                 {project.title}
@@ -74,8 +73,8 @@ function UserProjects() {
                 </p>
               
                 
-          </a>
         </div>
+          </a>
         </>
               ))}
       </div>

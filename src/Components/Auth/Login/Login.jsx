@@ -5,6 +5,7 @@ import { useSearchParams,useNavigate} from 'react-router-dom';
 import BasicModalDialog from '../../User/BasicModalDialog';
 import toast from 'react-hot-toast';
 import { confirmEmail, getUserDetails } from '../../../Api/User';
+import Loader from '../../../common/Loader';
 
 
 function Login() {

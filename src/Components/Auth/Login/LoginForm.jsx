@@ -5,12 +5,13 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../../Api/User';
+import Loader from '../../../common/Loader';
 
 
 
 const LoginForm = () => {
 
-
+    const [isLoading , setIsLoding] = useState(false);
     const navigate = useNavigate();
     const [errors,setErrors]=useState({});
     const [showPassword , setShowPassword] = useState(false)
@@ -55,7 +56,9 @@ const LoginForm = () => {
     };
 
     try {
+      setIsLoding(true);
       const response = await login(formData);
+      setIsLoding(false);
       console.log(response)
       localStorage.setItem('accessToken' , response.data.access_token);
       localStorage.setItem('reffreshToken' , response.data.refresh_token);
@@ -63,12 +66,22 @@ const LoginForm = () => {
     } catch (error) {
       if(error.response.data.message == 'email verification failed'){
         toast.error("Please check your Email ")
-      }else
-      toast.error(error.response.data.message)
+        setIsLoding(false);
+      }else {
+        setIsLoding(false)
+        toast.error(error.response.data.message)
+      }
     }
   }
   return (
-    <form onSubmit={handleSubmit}>
+   <>
+   {isLoading ?
+  <>
+  <Loader/>
+  </> 
+  :
+  <>
+   <form onSubmit={handleSubmit}>
      <CardContent>
      <TextField
         label="Email"
@@ -118,6 +131,10 @@ const LoginForm = () => {
       </p>
     </form>
 
+  
+  </>
+  }
+   </>
   );
 };
 
