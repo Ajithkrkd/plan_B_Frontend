@@ -11,6 +11,7 @@ import ForgotPasswordPage from './Pages/ForgotPasswordPage'
 import EditProfilePage from './Pages/EditProfilePage'
 import ViewSingleProjectPage from './Pages/projects/ViewSingleProjectPage'
 import AllProjectsPage from './Pages/projects/AllProjectsPage'
+import NotificationPage from './Pages/notification/NotificationPage'
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
             <Route path='/profile-settings' Component={UserProfilePage}/>
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
             <Route path='/editProfile' Component={EditProfilePage}/>
+            <Route path='/notification' Component={NotificationPage}/>
           </Route>
 
         </Routes>

@@ -6,22 +6,21 @@ import Sheet from "@mui/joy/Sheet";
 import { Alert, Button, TextField } from "@mui/material";
 import { CheckCircleOutlined } from "@mui/icons-material";
 import Loader from "../../../common/Loader";
+import { sentInvitaionForMember } from "../../../Api/project";
+import toast from "react-hot-toast";
 
 
 
 
 
-export default function InviteMemberModal() {
-
-
-
+export default function InviteMemberModal({ projectId, onOpen }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    email: "",
+    message: "",
   });
   const [errors, setErrors] = useState({});
   
@@ -33,11 +32,11 @@ export default function InviteMemberModal() {
 
   const validate = (formData) => {
     const errors = {};
-    if (formData.title.trim() === "") {
-      errors.title = "Title must not be empty ";
+    if (formData.email.trim() === "") {
+      errors.email = "email must not be empty ";
     }
-    if (formData.description.trim() === "") {
-      errors.description = "Description must not be empty";
+    if (formData.message.trim() === "") {
+      errors.message = "message must not be empty";
     }
     return errors;
   };
@@ -56,17 +55,20 @@ export default function InviteMemberModal() {
       return;
     }
     try {
+      console.log(formData);
       setIsLoading(false);
-
+      
+      const response = await sentInvitaionForMember(projectId,formData)
+      console.log(response.data , 'from invite');
       setIsLoading(false);
 
       console.log(response.data);
       
-      toast.success("Created project successfully");
+      toast.success("Invitation sent successfully");
       setOpen(false)
       
     } catch (error) {
-      toast.error(error.response.data.message)
+      toast.error(error.response)
       console.log(error);
     }
   };
@@ -111,28 +113,28 @@ export default function InviteMemberModal() {
             <TextField
               label="email"
               variant="outlined"
-              name="title"
-              value={formData.title}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               fullWidth
               margin="normal"
               type="text"
-              error={!!errors.title}
-              helperText={errors.title}
+              error={!!errors.email}
+              helperText={errors.email}
             />
             <TextField
               label="message"
               variant="outlined"
-              name="description"
-              value={formData.description}
+              name="message"
+              value={formData.message}
               onChange={handleChange}
               fullWidth
               margin="normal"
               maxRows={5}
               multiline
               type="text"     
-              error={!!errors.description}
-              helperText={errors.description}
+              error={!!errors.message}
+              helperText={errors.message}
             />
             <Button variant="contained" onClick={handleSubmition}>
               invite

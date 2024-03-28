@@ -7,12 +7,10 @@ const errorHandle =(AxiosError) =>{
 
     if(axiosError.response?.data  && axiosError.response){
 
-        const errorResponse = axiosError.response.data;
-
-        if(errorResponse.message === 'You are blocked by Admin'){
+        if(axiosError && axiosError.response.data.message === 'You are blocked by Admin'){
             localStorage.clear();
             location.href('/login')
-            toast.error(errorResponse.message);
+            throw(axiosError);
         }
         else {
             console.log('Error response has no message');
@@ -21,7 +19,6 @@ const errorHandle =(AxiosError) =>{
     }
     else {
         toast.error('An error occurred. Please try again!');
-        console.log(axiosError.message);
         throw(axiosError)
     }
 }

@@ -5,8 +5,10 @@ import axios from "axios";
 
 export async function refreshToken() {
   const refreshToken = localStorage.getItem('refreshToken');
-  const refreshTokenUrl = 'http://localhost:8080/user/api/auth/refresh-token';
+  console.log(refreshToken ,'from utils')
+  const refreshTokenUrl = 'http://localhost:8080/user/api/auth/refreshToken';
 
+  console.log(refreshToken ,'from refresh')
   const headers = {
     'Authorization': `Bearer ${refreshToken}`,
   };

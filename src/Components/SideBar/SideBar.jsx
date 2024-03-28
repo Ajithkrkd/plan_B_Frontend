@@ -62,8 +62,8 @@ function SideBar() {
               <span class="tooltip">profile</span>
             </li>
             <li>
-              <a>
-                <i class="bx bx-bell btnx " onClick={toggleSideBar}></i>
+              <a onClick={()=>{navigate('/notification')}}>
+                <i class="bx bx-bell btnx " ></i>
                 <span class="link_name">notifications</span>
               </a>
               <span class="tooltip">notificationsv</span>

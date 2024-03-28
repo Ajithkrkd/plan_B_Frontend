@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import { CardContent, IconButton, InputAdornment } from "@mui/material";
-import { validate, renderError } from "../Validation.jsx";
+import { validate} from "../Validation.jsx";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -54,13 +54,15 @@ const Form = () => {
       setLoading(true);
       const response = await register(formData);
       setLoading(false);
+
       if (response.status === 201) {
         toast.success("successfully registered");
+        navigate("/login");
       }
-      navigate("/login");
     } catch (error) {
       console.log(error);
-      toast.error(error.response);
+      toast.error(error.response.data.message);
+      setLoading(false)
     }
   };
   //  register function for making api request END

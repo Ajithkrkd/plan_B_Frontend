@@ -31,3 +31,12 @@ export const getProjectDetailsByProjectId = async(projectId)=>{
         return errorHandler(error);
     }
 }
+
+export const sentInvitaionForMember = async(projectId,_invitationRequest)=>{
+    try {
+        const response = customAxios.post(`${projectRoutes.sentInvitation_URL}/${projectId}`,_invitationRequest);
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}

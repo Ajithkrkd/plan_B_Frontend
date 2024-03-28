@@ -4,16 +4,16 @@ import Typography from '@mui/material/Typography';
 const validate = (formData) => {
   const errors = {};
 
-  if(formData.fullName.trim() === ''){
+  if(formData.fullName&& formData.fullName.trim() === ''){
     errors.fullName = 'Full name must not be empty'
   }
-  if(formData.phoneNumber.trim() === ''){
+  if(formData.phoneNumber && formData.phoneNumber.trim() === ''){
     errors.phoneNumber = 'Phone number must not be empty'
   }
-  if(formData.email.trim() === ''){
+  if(formData.email && formData.email.trim() === ''){
     errors.email = 'Email must not be empty'
   }
-  if(formData.password.trim() === ''){
+  if(formData.password && formData.password.trim() === ''){
     errors.password = 'password must not be empty'
   }
   if (formData.fullName && formData.fullName.length < 5) {

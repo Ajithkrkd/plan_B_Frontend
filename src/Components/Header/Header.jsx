@@ -22,7 +22,7 @@ function Header() {
     const fetchUserDetails = async() =>{
       try {
         const response = await getUserDetails();
-        console.log(response.data.profile_image_path);
+        console.log(response.data.profile_image_path ,'profile Image path');
         if(response.data.profile_image_path === null){
           setProfilePic('/src/assets/workers.jpg')
         }else{

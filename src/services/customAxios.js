@@ -30,8 +30,8 @@ customAxios.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-
-    if (error.response.data === "Token expired" && !originalRequest._retry) {
+    console.log(error.response.data.status, 'from custom axios' )
+    if (error.response.data.status === 406 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
