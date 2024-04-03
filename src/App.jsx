@@ -12,6 +12,7 @@ import EditProfilePage from './Pages/EditProfilePage'
 import ViewSingleProjectPage from './Pages/projects/ViewSingleProjectPage'
 import AllProjectsPage from './Pages/projects/AllProjectsPage'
 import NotificationPage from './Pages/notification/NotificationPage'
+import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
             <Route path='/editProfile' Component={EditProfilePage}/>
             <Route path='/notification' Component={NotificationPage}/>
+            <Route path='/work-items' Component={AllWorkItemsPage}/>
           </Route>
 
         </Routes>

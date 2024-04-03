@@ -1,0 +1,60 @@
+.comment-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .comment-container {
+    max-height: 300px;
+    overflow-y: scroll;
+    width: 100%;
+    padding: 10px;
+    background-color: #E5E7EB;
+    border-radius: 10px;
+  }
+  
+  .comment {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .comment > .MuiAvatar-root {
+    margin-right: 10px;
+  }
+  
+  .comment-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  
+  .comment-header > strong {
+    margin-right: 5px;
+  }
+  
+  .comment-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .comment-input {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  
+  .comment-input > .MuiInput-root {
+    flex: 1;
+    margin-right: 10px;
+  }
+  

@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 
 
 
-const errorHandle =(AxiosError) =>{
+const errorHandler =(AxiosError) =>{
     const axiosError = AxiosError;
 
     if(axiosError.response?.data  && axiosError.response){
@@ -22,4 +22,4 @@ const errorHandle =(AxiosError) =>{
         throw(axiosError)
     }
 }
-export default errorHandle;
+export default errorHandler;
