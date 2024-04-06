@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { validate } from "../Auth/Validation";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails, update_UserDetails, uploadProfileImage } from "../../Api/User";
-import { CameraAlt, Cameraswitch, Edit } from "@mui/icons-material";
+import { CameraAlt } from "@mui/icons-material";
 function EditProfile() {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState();

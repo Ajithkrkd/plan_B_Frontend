@@ -7,12 +7,10 @@ import { Provider } from "react-redux";
 import { UrlProvider } from "./store/urlContext.jsx";
 import reduxStore from "./store/redux/reduxStore.js";
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <UrlProvider>
-      <Provider store={reduxStore}>
-               <App />
-      </Provider>
-      <Toaster position="top-right" reverseOrder={false} />
-    </UrlProvider>
-  </React.StrictMode>
+  <UrlProvider>
+    <Provider store={reduxStore}>
+      <App />
+    </Provider>
+    <Toaster position="top-right" reverseOrder={false} />
+  </UrlProvider>
 );

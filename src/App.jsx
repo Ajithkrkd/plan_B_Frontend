@@ -13,6 +13,7 @@ import ViewSingleProjectPage from './Pages/projects/ViewSingleProjectPage'
 import AllProjectsPage from './Pages/projects/AllProjectsPage'
 import NotificationPage from './Pages/notification/NotificationPage'
 import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
+import KanbanBoardPage from './Pages/board/KanbanBoardPage'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
             <Route path='/editProfile' Component={EditProfilePage}/>
             <Route path='/notification' Component={NotificationPage}/>
             <Route path='/work-items' Component={AllWorkItemsPage}/>
+            <Route path='/board/:id' Component={KanbanBoardPage}/>
           </Route>
 
         </Routes>

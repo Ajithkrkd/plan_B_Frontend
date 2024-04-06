@@ -188,7 +188,7 @@ function CreateWorkItem({ creationDetials }) {
             placeholder="Add a short description "
           />
         </div>
-        {activeSection === "comments" ? <CommentSection workItemId={workItemId} workItemDetails={workItemDetails} /> : <AttachmentSection />}
+        {activeSection === "comments" ? <CommentSection workItemId={workItemId} workItemDetails={workItemDetails} /> : <AttachmentSection workItemId={workItemId} />}
       </div>
     </div>
    </>

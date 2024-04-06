@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 export async function refreshToken() {
-  const refreshToken = localStorage.getItem('refreshToken');
+  const refreshToken = localStorage.getItem('reffreshToken');
   console.log(refreshToken ,'from utils')
   const refreshTokenUrl = 'http://localhost:8080/user/api/auth/refreshToken';
 
@@ -20,7 +20,7 @@ export async function refreshToken() {
   
     const { access_token, refresh_token } = response.data;
     localStorage.setItem("accessToken", access_token);
-    localStorage.setItem("refreshToken", refresh_token);
+    localStorage.setItem("reffreshToken", refresh_token);
   } catch (error) {
     console.error('Error refreshing access token:', error);
   }

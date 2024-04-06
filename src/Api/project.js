@@ -40,3 +40,13 @@ export const sentInvitaionForMember = async(projectId,_invitationRequest)=>{
         return errorHandler(error);
     }
 }
+
+
+export const addProfileImageForProject = async(projectId,file ,config)=>{
+    try {
+        const response = customAxios.post(`${projectRoutes.addProfileImageForProject_URL}/${projectId}`,file ,config);
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}
