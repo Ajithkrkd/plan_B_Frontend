@@ -14,6 +14,11 @@ import AllProjectsPage from './Pages/projects/AllProjectsPage'
 import NotificationPage from './Pages/notification/NotificationPage'
 import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 import KanbanBoardPage from './Pages/board/KanbanBoardPage'
+import { pdfjs } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.js",
+  import.meta.url
+).toString();
 
 function App() {
 
@@ -33,7 +38,7 @@ function App() {
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
             <Route path='/editProfile' Component={EditProfilePage}/>
             <Route path='/notification' Component={NotificationPage}/>
-            <Route path='/work-items' Component={AllWorkItemsPage}/>
+            <Route path='/project/:projectId/work-items' Component={AllWorkItemsPage}/>
             <Route path='/board/:id' Component={KanbanBoardPage}/>
           </Route>
 

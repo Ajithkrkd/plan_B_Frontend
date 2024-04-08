@@ -1,19 +1,18 @@
-import {
-  CameraAltOutlined,
-  Edit,
-  ListAlt,
-} from "@mui/icons-material";
-import { Button } from "@mui/material";
+// ViewSingleProject.js
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Button } from "@mui/material";
+import { CameraAltOutlined, Edit, ListAlt } from "@mui/icons-material";
 import InviteMemberModal from "./members/InviteMemberModal";
 import {
   addProfileImageForProject,
   getProjectDetailsByProjectId,
 } from "../../Api/project";
-import { useParams , } from "react-router-dom";
-import Loader from "../../common/Loader";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import SingleProjectSkeleton from "./SingleProjectSkeleton";
+import AssignedMembers from "./members/AssignedMembers"
+
 function ViewSingleProject() {
   const [projectDetails, setProjectDetails] = useState({});
   const baseUrl = "http://localhost:8082";
@@ -26,7 +25,6 @@ function ViewSingleProject() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(id, "from here");
     const fetchProjectDetails = async () => {
       try {
         setIsLoading(true);
@@ -37,7 +35,6 @@ function ViewSingleProject() {
         if (response.data.project_profile_url != null) {
           setProfilePic(baseUrl + response.data.project_profile_url);
         }
-        
       } catch (error) {
         console.log(error);
       }
@@ -45,7 +42,6 @@ function ViewSingleProject() {
     fetchProjectDetails(id);
   }, [id]);
 
-  
   useEffect(() => {
     calculateFinishedAndUnFinishedWorkItems(projectDetails.workItems);
   }, [projectDetails]);
@@ -61,7 +57,6 @@ function ViewSingleProject() {
       console.log(totalFinishedWorkItem, totalUnFinishedWorkItems);
     }
   };
-
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -99,15 +94,12 @@ function ViewSingleProject() {
     }
   };
 
-  const showBoard = (projectId) =>{
-    console.log(projectId)
-    
-  }
+
 
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <SingleProjectSkeleton />
       ) : (
         <>
           <div className="project-container">
@@ -124,8 +116,7 @@ function ViewSingleProject() {
                       htmlFor="fileInput"
                       className="edit-icon absolute bottom-0 right-5"
                     >
-                      <CameraAltOutlined fontSize="small" color="primary" />{" "}
-                      {/* Material UI styling */}
+                      <CameraAltOutlined fontSize="small" color="primary" />
                     </label>
                   </div>
                   <input
@@ -190,43 +181,13 @@ function ViewSingleProject() {
                 </div>
               </div>
               <div className="flex items-end">
-                <Button 
-                onClick={()=>showBoard(projectDetails.projectId)}
-                variant="outlined">
-                  <Edit /> 
+                <Button onClick={()=>navigate(`/project/${projectDetails.projectId}/work-items`)} variant="outlined">
+                  manage
                 </Button>
               </div>
             </div>
 
-            <div className="flex flex-row items-center justify-between pr-3 border px-5 py-3">
-              <div>
-                <p className="text-2xl py-2 font-semibold">Members</p>
-                {projectDetails.assignedMembersDetailsList &&
-                  projectDetails.assignedMembersDetailsList.map((member) => (
-                    <div
-                      key={member.id}
-                      className="flex flex-row gap-5 items-center py-2"
-                    >
-                      <div>
-                        <img
-                          src={`http://localhost:8081${member.profile_image_url}`}
-                          alt={"img"}
-                          className="profile"
-                        />
-                      </div>
-                      <div className="flex row-12 d-flex justify-content-between items-center">
-                        {/* <p className="col">{member.fullName}</p> */}
-                        <p className="col">{member.email}</p>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-              {/* <div className=" flex items-end">
-       <Button variant="outlined">
-         <Edit /> 
-       </Button>
-     </div> */}
-            </div>
+            <AssignedMembers assignedMembers={projectDetails.assignedMembersDetailsList} /> {/* Use the new component */}
           </div>
         </>
       )}

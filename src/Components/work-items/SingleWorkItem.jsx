@@ -6,7 +6,6 @@ import { Attachment, Close, MessageOutlined, Save, SaveOutlined } from "@mui/ico
 import CommentSection from "./CommentSection";
 import { TextField, Typography } from "@mui/material";
 import AttachmentSection from "./AttachmentSection";
-import WorkItemCategorySelector from "./WorkItemCategorySelctor";
 import toast from 'react-hot-toast'
 import { changeStateOfWorkItem, createWorkItem, getWorkItemById } from "../../Api/workItem";
 import { createLabel, deletLabelByLabelId } from "../../Api/labels";
@@ -86,13 +85,15 @@ function CreateWorkItem({ creationDetials }) {
       }));      
     } catch (error) {
       console.log(error);
+      toast.error(error.response.data.message);
     }
   }
 
-  const handleDeleteLabel = async (labelId) => {
+  const handleDeleteLabel = async (labelId,workID) => {
 
       try {
-        const response = await deletLabelByLabelId(workItemId,labelId);
+        console.log(workID,labelId + 'from here')
+        const response = await deletLabelByLabelId(workID,labelId);
         console.log(response.data);
 
         setWorkItemDetails(prevState => ({
@@ -101,6 +102,7 @@ function CreateWorkItem({ creationDetials }) {
         }));
 
       } catch (error) {
+        toast.error(error.response.data.message);
         console.log(error)
 
       }
@@ -147,7 +149,7 @@ function CreateWorkItem({ creationDetials }) {
         </div>
         <div className="flex gap-3">
           <AssignMembers />
-          <StateSelector onStateSelector={handleStateOfWorkItem} />
+          <StateSelector onStateSelector={handleStateOfWorkItem}  initialState={workItemDetails.state}/>
           <Input
             variant="outlined"
             placeholder="Add tag +"
@@ -172,8 +174,8 @@ function CreateWorkItem({ creationDetials }) {
           {/* Display labels */}
           {workItemDetails.labels.map((label, index) => (
            
-            <span className="bg-blue-200 px-2 py-1 rounded-md mr-2">{label.labelName}
-            <Close onClick={() => handleDeleteLabel(label.labelId)} style={{ cursor: 'pointer', fontSize: '16px', verticalAlign: 'middle' ,paddingLeft:"5px" }} />
+            <span key={label.labelId} className="bg-blue-200 px-2 py-1 rounded-md mr-2">{label.labelName}
+            <Close onClick={() => handleDeleteLabel(label.labelId ,workItemDetails.workItemId)} style={{ cursor: 'pointer', fontSize: '16px', verticalAlign: 'middle' ,paddingLeft:"5px" }} />
             </span>
             
         

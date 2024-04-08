@@ -1,18 +1,45 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTitle, Menu, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@mui/material";
-import { MoreVert, Delete, Visibility, CloudDownload, Edit, Add } from "@mui/icons-material";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Menu,
+  MenuItem,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
+import {
+  MoreVert,
+  Delete,
+  Visibility,
+  CloudDownload,
+  Edit,
+  Add,
+} from "@mui/icons-material";
 import { Button } from "@mui/joy";
-import { addAttachmentToWorkItem, getAllAttachmentByWorkItem } from "../../Api/attachment";
-import toast from 'react-hot-toast'
+import {
+  addAttachmentToWorkItem,
+  getAllAttachmentByWorkItem,
+} from "../../Api/attachment";
+import toast from "react-hot-toast";
+import AttachmentPreview from "./AttachmentPreview";
+import { Viewer } from "@react-pdf-viewer/core";
+
 function AttachmentSection({ workItemId }) {
   // State to manage attachments and their details
   const [attachments, setAttachments] = useState([]);
-  const [selectedAttachment, setSelectedAttachment] = useState(null);
+  const [selectedAttachment, setSelectedAttachment] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [addAttachmentOpen, setAddAttachmentOpen] = useState(false);
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [attachmentDescription, setAttachmentDescription] = useState("");
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
     const getAllAttachmentsForPerticularWorkItem = async (workId) => {
@@ -43,15 +70,18 @@ function AttachmentSection({ workItemId }) {
 
   // Function to delete an attachment
   const handleDeleteAttachment = (id) => {
-    setAttachments(attachments.filter((attachment) => attachment.attachmentId !== id));
+    setAttachments(
+      attachments.filter((attachment) => attachment.attachmentId !== id)
+    );
     handleMenuClose();
   };
 
   // Function to open the attachment preview modal
-  const handleOpenPreview = (attachment) => () => {
-    setSelectedAttachment(attachment);
+
+  const handleOpenPreview = (attachment) => (event) => {
     setPreviewOpen(true);
-    handleMenuClose();
+    setAnchorEl(event.currentTarget);
+    setSelectedAttachment(attachment); // Set the selected attachment here
   };
 
   // Function to close the attachment preview modal
@@ -83,10 +113,10 @@ function AttachmentSection({ workItemId }) {
   };
 
   // Function to handle adding attachment
-  const handleAddAttachment = async() => {
+  const handleAddAttachment = async () => {
     // Perform logic to add attachment (upload file and description)
     console.log("Adding attachment:", attachmentFile, attachmentDescription);
-    
+
     try {
       const formData = new FormData();
       formData.append("file", attachmentFile);
@@ -95,20 +125,37 @@ function AttachmentSection({ workItemId }) {
           "Content-Type": "multipart/form-data",
         },
       };
+      setFetching(true);
       const response = await addAttachmentToWorkItem(
-        workItemId,formData,attachmentDescription,config
+        workItemId,
+        formData,
+        attachmentDescription,
+        config
       );
-      toast.success("profile pic updated");
-
+      setFetching(false);
+      toast.success("attachment uploaded");
     } catch (error) {
+      setFetching(false);
       console.log(error);
     }
     // Clear input fields
     setAttachmentFile(null);
     setAttachmentDescription("");
     // Close modal
+
     handleCloseAddAttachment();
   };
+// Function to check if the file is an image based on the file extension
+const isImage = (url) => {
+  const extension = url.split('.').pop().toLowerCase();
+  return ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(extension);
+};
+
+// Function to check if the file is a PDF based on the file extension
+const isPdf = (url) => {
+  const extension = url.split('.').pop().toLowerCase();
+  return extension === 'pdf';
+};
 
   return (
     <div>
@@ -116,7 +163,11 @@ function AttachmentSection({ workItemId }) {
       <b className="py-3">Attachments</b>
       <div className="flex items-center gap-2 mb-3">
         {/* Add attachment button */}
-        <Button variant="outlined" color="neutral" onClick={handleOpenAddAttachment}>
+        <Button
+          variant="outlined"
+          color="neutral"
+          onClick={handleOpenAddAttachment}
+        >
           <Add /> Add Attachment
         </Button>
       </div>
@@ -139,7 +190,9 @@ function AttachmentSection({ workItemId }) {
                 <TableCell>{attachment.attachmentId}</TableCell>
                 <TableCell>{attachment.attachment_name}</TableCell>
                 <TableCell>{attachment.attachment_size}</TableCell>
-                <TableCell>{new Date(attachment.createdAt).toLocaleString()}</TableCell>
+                <TableCell>
+                  {new Date(attachment.createdAt).toLocaleString()}
+                </TableCell>
                 <TableCell>{attachment.attachment_description}</TableCell>
                 <TableCell>
                   <Button onClick={handleAttachmentMenuOpen(attachment)}>
@@ -152,38 +205,56 @@ function AttachmentSection({ workItemId }) {
         </Table>
       </TableContainer>
       {/* Attachment operations menu */}
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
         <MenuItem onClick={handleOpenPreview(selectedAttachment)}>
           <Visibility /> Preview
         </MenuItem>
         <MenuItem onClick={() => {}}>
           <CloudDownload /> Download
         </MenuItem>
-        <MenuItem onClick={()=>{}}>
+        <MenuItem onClick={() => {}}>
           <Edit /> Edit Description
         </MenuItem>
-        <MenuItem onClick={() => handleDeleteAttachment(selectedAttachment.attachmentId)}>
+        <MenuItem onClick={() => handleDeleteAttachment(selectedAttachment)}>
           <Delete /> Delete
         </MenuItem>
       </Menu>
 
-      {/* Attachment preview modal */}
-      <Dialog open={previewOpen} onClose={handleClosePreview} maxWidth="lg">
+      <Dialog open={previewOpen} onClose={handleClosePreview} style={{ wizdth: '100%' }}>
         <DialogTitle>Attachment Preview</DialogTitle>
-        <DialogContent>
-          {/* Display attachment preview */}
-          {selectedAttachment && (
-            <img
-              src={`http://localhost:8084${selectedAttachment.attachment_url}`}
-              alt="Attachment Preview"
-              style={{ width: '80%', height: 'auto' }}
-            />
-          )}
+        <DialogContent >
+       <div >
+       {selectedAttachment &&
+            selectedAttachment.attachment_url &&
+            isImage(selectedAttachment.attachment_url) && (
+              <img
+                src={`http://localhost:8084${selectedAttachment.attachment_url}`}
+                alt="Attachment Preview"
+                style={{ width: "100%", height: "auto" }}
+              />
+            )}
+          {/* Render PDF preview if it's a PDF */}
+          {selectedAttachment &&
+            selectedAttachment.attachment_url &&
+            isPdf(selectedAttachment.attachment_url) && (
+              <div>    
+              <Viewer fileUrl={`http://localhost:8084${selectedAttachment.attachment_url}`} />
+              </div>
+            )}
+       </div>
         </DialogContent>
       </Dialog>
 
       {/* Add attachment modal */}
-      <Dialog open={addAttachmentOpen} onClose={handleCloseAddAttachment} maxWidth="sm">
+      <Dialog
+        open={addAttachmentOpen}
+        onClose={handleCloseAddAttachment}
+        maxWidth="sm"
+      >
         <DialogTitle>Add Attachment</DialogTitle>
         <DialogContent>
           {/* File input */}
@@ -196,10 +267,15 @@ function AttachmentSection({ workItemId }) {
             fullWidth
             value={attachmentDescription}
             onChange={handleAttachmentDescriptionChange}
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: "16px" }}
           />
           {/* Add button */}
-          <Button variant="contained" color="primary" onClick={handleAddAttachment} style={{ marginTop: '16px' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleAddAttachment}
+            style={{ marginTop: "16px" }}
+          >
             Add Attachment
           </Button>
         </DialogContent>

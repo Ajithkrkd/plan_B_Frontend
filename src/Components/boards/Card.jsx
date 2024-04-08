@@ -32,15 +32,15 @@ function bgcolorChange(props) {
         : props.isDraggable
             ? props.isBacklog
                 ? "#F2D7D5"
-                : "#DCDCDC"
+                : "#FFFFF"
             : props.isBacklog
                 ? "#F2D7D5"
-                : "#EAF4FC";
+                : "#FFFFFF";
 }
 
 export default function Card({ task, index }) {
     return (
-        <Draggable draggableId={`${task.id}`} key={task.id} index={index}>
+        <Draggable draggableId={`${task.workItemId}`} key={task.workItemId} index={index}>
             {(provided, snapshot) => (
                 <Container
                     {...provided.draggableProps}
@@ -51,7 +51,7 @@ export default function Card({ task, index }) {
                     <div style={{ display: "flex", justifyContent: "start", padding: 2 }}>
             <span>
               <small>
-                #{task.id}
+                #{task.workItemId}
                   {"  "}
               </small>
             </span>
@@ -63,10 +63,15 @@ export default function Card({ task, index }) {
                     </div>
                     <Icons>
                         <div>
-                            <Avatar
-                                onClick={() => console.log(task)}
-                                src={"https://joesch.moe/api/v1/random?key=" + task.id}
-                            />
+                            {
+                                task.membersAssigned.map(member => (
+
+                                    <Avatar
+                                    onClick={() => console.log(task)}
+                                    src={member? "http://localhost:8081" + member.profile_image_path: "/src/assets/workers.jpg"}
+                                />
+                                ))
+                            }
                         </div>
                     </Icons>
                     {provided.placeholder}
@@ -75,3 +80,4 @@ export default function Card({ task, index }) {
         </Draggable>
     );
 }
+

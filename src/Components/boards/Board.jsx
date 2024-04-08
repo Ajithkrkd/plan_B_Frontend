@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
+import toast from 'react-hot-toast'
 import '../../Components/Project/project.css'
-export default function Board() {
-    const [completed, setCompleted] = useState([]);
-    const [incomplete, setIncomplete] = useState([]);
-    const [backlog, setBacklog] = useState([]);
-    const [inReview, setInReview] = useState([]);
-
+import { changeStateOfWorkItem } from "../../Api/workItem";
+export default function Board({workItems}) {
+    const [done, setDone] = useState([]);
+    const [todo, setTodo] = useState([]);
+    const [doing, setDoing] = useState([]);
     useEffect(() => {
-        fetch("https://jsonplaceholder.typicode.com/todos")
-            .then((response) => response.json())
-            .then((json) => {
-                setCompleted(json.filter((task) => task.completed));
-                setIncomplete(json.filter((task) => !task.completed));
-            });
+       if(workItems){
+        setTodo( workItems.filter((item) => item.state === "TODO"));
+        setDoing(workItems.filter((item) => item.state === "DOING"));
+        setDone(workItems.filter((item) => item.state === "DONE"));
+       }
     }, []);
 
     const handleDragEnd = (result) => {
@@ -24,26 +23,27 @@ export default function Board() {
 
         deletePreviousState(source.droppableId, draggableId);
 
-        const task = findItemById(draggableId, [...incomplete, ...completed, ...inReview, ...backlog]);
-
+        const task = findItemById(draggableId, [...todo, ...done, ...doing]);
+        
         setNewState(destination.droppableId, task);
+        const workItemID = task.workItemId;
+        const updatedTask = { taskId: workItemID, state: destination.droppableId };
+        makeServerRequest(updatedTask); 
 
     };
 
     function deletePreviousState(sourceDroppableId, taskId) {
         switch (sourceDroppableId) {
             case "1":
-                setIncomplete(removeItemById(taskId, incomplete));
+                setTodo(removeItemById(taskId, todo));
                 break;
             case "2":
-                setCompleted(removeItemById(taskId, completed));
+                setDone(removeItemById(taskId, done));
                 break;
             case "3":
-                setInReview(removeItemById(taskId, inReview));
+                setDoing(removeItemById(taskId, doing));
                 break;
-            case "4":
-                setBacklog(removeItemById(taskId, backlog));
-                break;
+        
         }
 
     }
@@ -51,29 +51,60 @@ export default function Board() {
         let updatedTask;
         switch (destinationDroppableId) {
             case "1":   // TO DO
-                updatedTask = { ...task, completed: false };
-                setIncomplete([updatedTask, ...incomplete]);
+                updatedTask = { ...task, done: false };
+                setTodo([updatedTask, ...todo]);
                 break;
             case "2":  // DONE
-                updatedTask = { ...task, completed: true };
-                setCompleted([updatedTask, ...completed]);
+                updatedTask = { ...task, done: true };
+                setDone([updatedTask, ...done]);
                 break;
             case "3":  // IN REVIEW
-                updatedTask = { ...task, completed: false };
-                setInReview([updatedTask, ...inReview]);
+                updatedTask = { ...task, done: false };
+                setDoing([updatedTask, ...doing]);
                 break;
-            case "4":  // BACKLOG
-                updatedTask = { ...task, completed: false };
-                setBacklog([updatedTask, ...backlog]);
-                break;
+           
         }
     }
+
+    function findState (state){
+        let newState = ''
+       if(state == '1' ){
+        newState = "TODO"
+       }else if(state == '3'){
+        newState = "DOING"
+       }else if(state == '2') {
+        newState = "DONE"
+       }
+       return newState;
+    }
+    
+      
+    const  makeServerRequest = async (updatedTask) => {
+       const {taskId ,state} =updatedTask;
+       console.log(taskId,state)
+       const newState = findState(state);
+       if(newState == ''){
+        toast.error('state is not getting');
+        return;
+       }
+       try {
+        
+        const response = await changeStateOfWorkItem(newState,taskId);
+        console.log(response.data)
+        toast.success("you have changed state to " +newState)
+      } catch (error) {
+        console.log(error)
+      }
+        console.log("Making server request to update task state:", updatedTask);
+
+      }
+
     function findItemById(id, array) {
-        return array.find((item) => item.id == id);
+        return array.find((item) => item.workItemId == id);
     }
 
     function removeItemById(id, array) {
-        return array.filter((item) => item.id != id);
+        return array.filter((item) => item.workItemId != id);
     }
 
     return (
@@ -92,9 +123,9 @@ export default function Board() {
                     margin: "0 auto"
                 }}
             >
-                <Column title={"TO DO"} tasks={incomplete} id={"1"} />
-                <Column title={"DOING"} tasks={inReview} id={"3"} />
-                <Column title={"DONE"} tasks={completed} id={"2"} />
+                <Column title={"TODO"} tasks={todo} id={"1"} />
+                <Column title={"DOING"} tasks={doing} id={"3"} />
+                <Column title={"DONE"} tasks={done} id={"2"} />
             </div>
         </DragDropContext>
 

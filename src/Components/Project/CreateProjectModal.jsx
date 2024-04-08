@@ -61,7 +61,7 @@ export default function CreateProjectModal() {
       setIsLoading(true);
       const response = await createProject(formData);
       setIsLoading(false);
-
+      window.location.reload();
       console.log(response.data);
       
       toast.success("Created project successfully");
