@@ -3,9 +3,10 @@ import { attachmentRoutes } from "../services/endpoints/attachmentEndpoints";
 import errorHandler from "./error";
 
 
-export const addAttachmentToWorkItem = async (workItemId,formData,attachmentDescription,config) =>{
+export const addAttachmentToWorkItem = async (workItemId,attachmentDetailsDTO) =>{
+    console.log(attachmentDetailsDTO)
     try {
-        const response = await customAxios.post(`${attachmentRoutes.createAttachment_URL}/${workItemId}?attachment_description=${attachmentDescription}`,formData,config);
+        const response = await customAxios.post(`${attachmentRoutes.createAttachment_URL}/${workItemId}`,attachmentDetailsDTO);
         return response;
     } catch (error) {
        return errorHandler(error)

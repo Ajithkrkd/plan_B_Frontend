@@ -27,8 +27,17 @@ import {
   getAllAttachmentByWorkItem,
 } from "../../Api/attachment";
 import toast from "react-hot-toast";
-import AttachmentPreview from "./AttachmentPreview";
 import { Viewer } from "@react-pdf-viewer/core";
+//firebase
+
+import {
+  getDownloadURL,
+  getMetadata,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import Loader from "../../common/Loader";
 
 function AttachmentSection({ workItemId }) {
   // State to manage attachments and their details
@@ -39,8 +48,14 @@ function AttachmentSection({ workItemId }) {
   const [addAttachmentOpen, setAddAttachmentOpen] = useState(false);
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [attachmentDescription, setAttachmentDescription] = useState("");
-  const [fetching, setFetching] = useState(false);
-
+  const [isloading, setLoading] = useState(false);
+  const [attachmentDetailsDTO, setAttachmentDetailsDTO] = useState({
+    attachment_name: "",
+    attachment_size: "",
+    attachment_url: "",
+    attachment_description: "",
+    attachment_contentType: "",
+  });
   useEffect(() => {
     const getAllAttachmentsForPerticularWorkItem = async (workId) => {
       try {
@@ -112,175 +127,197 @@ function AttachmentSection({ workItemId }) {
     setAttachmentDescription(event.target.value);
   };
 
-  // Function to handle adding attachment
   const handleAddAttachment = async () => {
-    // Perform logic to add attachment (upload file and description)
     console.log("Adding attachment:", attachmentFile, attachmentDescription);
-
+    if (attachmentFile == null) {
+      toast.error("please select a file !!");
+      return;
+    }
+    const storage = getStorage();
+    const storageRef = ref(storage, attachmentFile.name);
+    console.log(storageRef);
     try {
-      const formData = new FormData();
-      formData.append("file", attachmentFile);
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      setFetching(true);
-      const response = await addAttachmentToWorkItem(
-        workItemId,
-        formData,
-        attachmentDescription,
-        config
-      );
-      setFetching(false);
-      toast.success("attachment uploaded");
+      await uploadBytes(storageRef, attachmentFile);
+      console.log("image uploaded");
+      const url = await getDownloadURL(storageRef);
+      console.log(url);
+
+      const metadata = await getMetadata(storageRef).then((metadata) => {
+        const { name, bucket, timeCreated, size, contentType } = metadata;
+
+        setAttachmentDetailsDTO({
+          attachment_url: url,
+          attachment_name: name,
+          attachment_size: size,
+          attachment_description: attachmentDescription,
+          attachment_contentType: contentType,
+        });
+      });
+
+      await uploadFileDetailsToBackend(attachmentDetailsDTO);
     } catch (error) {
-      setFetching(false);
       console.log(error);
     }
-    // Clear input fields
-    setAttachmentFile(null);
-    setAttachmentDescription("");
-    // Close modal
-
-    handleCloseAddAttachment();
   };
-// Function to check if the file is an image based on the file extension
-const isImage = (url) => {
-  const extension = url.split('.').pop().toLowerCase();
-  return ['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(extension);
-};
 
-// Function to check if the file is a PDF based on the file extension
-const isPdf = (url) => {
-  const extension = url.split('.').pop().toLowerCase();
-  return extension === 'pdf';
-};
+  const uploadFileDetailsToBackend = async (attachmentDetailsDTO) => {
+    if (
+      attachmentDetailsDTO.attachment_url == null ||
+      attachmentDetailsDTO.attachment_description == null
+    ) {
+      toast.error("upload failed ");
+      return;
+    }
+    try {
+      setLoading(true);
+      const response = await addAttachmentToWorkItem(
+        workItemId,
+        attachmentDetailsDTO
+      );
+      console.log(response);
+      setLoading(false);
+      setAddAttachmentOpen(false);
+      toast.success("attachment uploaded");
+    } catch (error) {
+      toast.error(error.response.data.message);
+      setLoading(false);
+      setAddAttachmentOpen(false);
+      console.log(error);
+    }
+  };
 
   return (
-    <div>
-      {/* Attachment input */}
-      <b className="py-3">Attachments</b>
-      <div className="flex items-center gap-2 mb-3">
-        {/* Add attachment button */}
-        <Button
-          variant="outlined"
-          color="neutral"
-          onClick={handleOpenAddAttachment}
-        >
-          <Add /> Add Attachment
-        </Button>
-      </div>
-      {/* Attachment list */}
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Size</TableCell>
-              <TableCell>Date Attached</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {attachments.map((attachment) => (
-              <TableRow key={attachment.attachmentId}>
-                <TableCell>{attachment.attachmentId}</TableCell>
-                <TableCell>{attachment.attachment_name}</TableCell>
-                <TableCell>{attachment.attachment_size}</TableCell>
-                <TableCell>
-                  {new Date(attachment.createdAt).toLocaleString()}
-                </TableCell>
-                <TableCell>{attachment.attachment_description}</TableCell>
-                <TableCell>
-                  <Button onClick={handleAttachmentMenuOpen(attachment)}>
-                    <MoreVert />
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {/* Attachment operations menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleOpenPreview(selectedAttachment)}>
-          <Visibility /> Preview
-        </MenuItem>
-        <MenuItem onClick={() => {}}>
-          <CloudDownload /> Download
-        </MenuItem>
-        <MenuItem onClick={() => {}}>
-          <Edit /> Edit Description
-        </MenuItem>
-        <MenuItem onClick={() => handleDeleteAttachment(selectedAttachment)}>
-          <Delete /> Delete
-        </MenuItem>
-      </Menu>
-
-      <Dialog open={previewOpen} onClose={handleClosePreview} style={{ wizdth: '100%' }}>
-        <DialogTitle>Attachment Preview</DialogTitle>
-        <DialogContent >
-       <div >
-       {selectedAttachment &&
-            selectedAttachment.attachment_url &&
-            isImage(selectedAttachment.attachment_url) && (
-              <img
-                src={`http://localhost:8084${selectedAttachment.attachment_url}`}
-                alt="Attachment Preview"
-                style={{ width: "100%", height: "auto" }}
-              />
-            )}
-          {/* Render PDF preview if it's a PDF */}
-          {selectedAttachment &&
-            selectedAttachment.attachment_url &&
-            isPdf(selectedAttachment.attachment_url) && (
-              <div>    
-              <Viewer fileUrl={`http://localhost:8084${selectedAttachment.attachment_url}`} />
-              </div>
-            )}
-       </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Add attachment modal */}
-      <Dialog
-        open={addAttachmentOpen}
-        onClose={handleCloseAddAttachment}
-        maxWidth="sm"
-      >
-        <DialogTitle>Add Attachment</DialogTitle>
-        <DialogContent>
-          {/* File input */}
-          <input type="file" onChange={handleAttachmentFileChange} />
-          <br />
-          {/* Description input */}
-          <TextField
-            label="Description"
-            variant="outlined"
-            fullWidth
-            value={attachmentDescription}
-            onChange={handleAttachmentDescriptionChange}
-            style={{ marginTop: "16px" }}
-          />
-          {/* Add button */}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddAttachment}
-            style={{ marginTop: "16px" }}
+    <>
+      {isloading && isloading ? (
+        <>
+          <Loader />
+        </>
+      ) : (
+        <div>
+          {/* Attachment input */}
+          <b className="py-3">Attachments</b>
+          <div className="flex items-center gap-2 mb-3">
+            {/* Add attachment button */}
+            <Button
+              variant="outlined"
+              color="neutral"
+              onClick={handleOpenAddAttachment}
+            >
+              <Add /> Add Attachment
+            </Button>
+          </div>
+          {/* Attachment list */}
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Size</TableCell>
+                  <TableCell>Date Attached</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {attachments.map((attachment) => (
+                  <TableRow key={attachment.attachmentId}>
+                    <TableCell>{attachment.attachmentId}</TableCell>
+                    <TableCell>{attachment.attachment_name}</TableCell>
+                    <TableCell>
+                      {Math.round(attachment.attachment_size / 1000) + "K"}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(attachment.createdAt).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{attachment.attachment_description}</TableCell>
+                    <TableCell>
+                      <Button onClick={handleAttachmentMenuOpen(attachment)}>
+                        <MoreVert />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          {/* Attachment operations menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
           >
-            Add Attachment
-          </Button>
-        </DialogContent>
-      </Dialog>
-    </div>
+            <MenuItem onClick={handleOpenPreview(selectedAttachment)}>
+              <Visibility /> Preview
+            </MenuItem>
+            <MenuItem onClick={() => {}}>
+              <CloudDownload /> Download
+            </MenuItem>
+            <MenuItem onClick={() => {}}>
+              <Edit /> Edit Description
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleDeleteAttachment(selectedAttachment)}
+            >
+              <Delete /> Delete
+            </MenuItem>
+          </Menu>
+
+          <Dialog
+            open={previewOpen}
+            onClose={handleClosePreview}
+            style={{padding: "20px"}}
+             // Add fullScreen prop here
+          >
+            <DialogTitle>Attachment Preview</DialogTitle>
+            <DialogContent>
+              <div>
+                {selectedAttachment && selectedAttachment.attachment_url && (
+                  <embed
+                    type={selectedAttachment.attachment_contentType}
+                    src={selectedAttachment.attachment_url}
+                    alt="Attachment Preview"
+                    style={{ width: "100vh", height: "100vh", }} // Set height to 100vh for full screen
+                  />
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Add attachment modal */}
+          <Dialog
+            open={addAttachmentOpen}
+            onClose={handleCloseAddAttachment}
+            maxWidth="sm"
+          >
+            <DialogTitle>Add Attachment</DialogTitle>
+            <DialogContent>
+              {/* File input */}
+              <input type="file" onChange={handleAttachmentFileChange} />
+              <br />
+              {/* Description input */}
+              <TextField
+                label="Description"
+                variant="outlined"
+                fullWidth
+                value={attachmentDescription}
+                onChange={handleAttachmentDescriptionChange}
+                style={{ marginTop: "16px" }}
+              />
+              {/* Add button */}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddAttachment}
+                style={{ marginTop: "16px" }}
+              >
+                Add Attachment
+              </Button>
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
+    </>
   );
 }
 

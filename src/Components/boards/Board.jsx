@@ -108,10 +108,10 @@ export default function Board({workItems}) {
     }
 
     return (
-        <div className="project-container">
+        <div className="project-container p-0">
             
         <DragDropContext onDragEnd={handleDragEnd}>
-            <h2 style={{ textAlign: "center" }}>PROGRESS BOARD</h2>
+            <p className="text-center text-2xl p-2 font-semibold" >PROGRESS BOARD</p>
 
             <div
                 style={{
@@ -119,7 +119,7 @@ export default function Board({workItems}) {
                     justifyContent: "space-between",
                     alignItems: "center",
                     flexDirection: "row",
-                    width: "1100",
+                    width: "100%",
                     margin: "0 auto"
                 }}
             >
