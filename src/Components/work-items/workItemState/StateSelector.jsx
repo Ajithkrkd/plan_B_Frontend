@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormControl,
-  InputLabel,
   MenuItem,
   Select as MuiSelect,
 } from "@mui/material";
 import { Circle } from "@mui/icons-material";
-import KeyboardArrowDown from "@mui/icons-material/KeyboardArrowDown";
 
 const StateSelector = ({ onStateSelector ,initialState}) => {
-  const [selectedState, setSelectedState] = useState(initialState);
-
+  const [selectedState, setSelectedState] = useState("");
+  const state = {initialState}
+  useEffect(() => {
+    console.log(state)
+    setSelectedState(initialState)
+  },[])
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSelectedState(newValue);

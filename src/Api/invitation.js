@@ -22,3 +22,12 @@ export const acceptMemberInvitation  = async (token) =>{
         return errorHandle(error);
     }
 }
+
+export const assignProjectMemberToWorkItem = async (workItemId ,memberId) =>{
+    try {
+        const response = await customAxios.post(`${invitationRoutes.assignProjectMemberToWorkItem_URL}?workItemId=${workItemId}&memberId=${memberId}`);
+        return response;
+    } catch (error) {
+       return errorHandle(error)
+    }
+}

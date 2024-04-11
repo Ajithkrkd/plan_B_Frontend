@@ -20,16 +20,16 @@ import {
   CloudDownload,
   Edit,
   Add,
+  AttachFile,
 } from "@mui/icons-material";
 import { Button } from "@mui/joy";
 import {
   addAttachmentToWorkItem,
   getAllAttachmentByWorkItem,
-} from "../../Api/attachment";
+} from "../../../Api/attachment";
 import toast from "react-hot-toast";
-import { Viewer } from "@react-pdf-viewer/core";
-//firebase
 
+//fire base
 import {
   getDownloadURL,
   getMetadata,
@@ -37,7 +37,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-import Loader from "../../common/Loader";
+import Loader from "../../../common/Loader";
 
 function AttachmentSection({ workItemId }) {
   // State to manage attachments and their details
@@ -49,13 +49,7 @@ function AttachmentSection({ workItemId }) {
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [attachmentDescription, setAttachmentDescription] = useState("");
   const [isloading, setLoading] = useState(false);
-  const [attachmentDetailsDTO, setAttachmentDetailsDTO] = useState({
-    attachment_name: "",
-    attachment_size: "",
-    attachment_url: "",
-    attachment_description: "",
-    attachment_contentType: "",
-  });
+
   useEffect(() => {
     const getAllAttachmentsForPerticularWorkItem = async (workId) => {
       try {
@@ -130,40 +124,43 @@ function AttachmentSection({ workItemId }) {
   const handleAddAttachment = async () => {
     console.log("Adding attachment:", attachmentFile, attachmentDescription);
     if (attachmentFile == null) {
-      toast.error("please select a file !!");
+      toast.error("Please select a file!!");
       return;
     }
+    setLoading(true);
     const storage = getStorage();
     const storageRef = ref(storage, attachmentFile.name);
-    console.log(storageRef);
+    
     try {
       await uploadBytes(storageRef, attachmentFile);
-      console.log("image uploaded");
+      console.log("Image uploaded");
       const url = await getDownloadURL(storageRef);
-      console.log(url);
-
-      const metadata = await getMetadata(storageRef).then((metadata) => {
-        const { name, bucket, timeCreated, size, contentType } = metadata;
-
-        setAttachmentDetailsDTO({
-          attachment_url: url,
-          attachment_name: name,
-          attachment_size: size,
-          attachment_description: attachmentDescription,
-          attachment_contentType: contentType,
-        });
-      });
-
-      await uploadFileDetailsToBackend(attachmentDetailsDTO);
+      console.log("URL:", url);
+      const metadata = await getMetadata(storageRef);
+      console.log("Metadata:", metadata);
+      const { name, size, contentType } = metadata;
+  
+      // Update attachmentDetailsDTO with metadata
+      const updatedAttachmentDetailsDTO = {
+        attachment_url: url,
+        attachment_name: name,
+        attachment_size: size,
+        attachment_description: attachmentDescription,
+        attachment_contentType: contentType,
+      };
+  
+      // Pass updatedAttachmentDetailsDTO to uploadFileDetailsToBackend
+      await uploadFileDetailsToBackend(updatedAttachmentDetailsDTO);
     } catch (error) {
-      console.log(error);
+      console.log("Error:", error);
     }
   };
+  
 
   const uploadFileDetailsToBackend = async (attachmentDetailsDTO) => {
     if (
-      attachmentDetailsDTO.attachment_url == null ||
-      attachmentDetailsDTO.attachment_description == null
+      attachmentDetailsDTO.attachment_url == '' ||
+      attachmentDetailsDTO.attachment_description == ''
     ) {
       toast.error("upload failed ");
       return;
@@ -193,54 +190,70 @@ function AttachmentSection({ workItemId }) {
           <Loader />
         </>
       ) : (
-        <div>
-          {/* Attachment input */}
-          <b className="py-3">Attachments</b>
-          <div className="flex items-center gap-2 mb-3">
-            {/* Add attachment button */}
-            <Button
+        <div className="">
+           <Button
               variant="outlined"
-              color="neutral"
+              color="primary"
+              style={{float: "align-end",width: "18%" ,marginBottom: "10px"}}
               onClick={handleOpenAddAttachment}
             >
               <Add /> Add Attachment
             </Button>
-          </div>
-          {/* Attachment list */}
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Size</TableCell>
-                  <TableCell>Date Attached</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {attachments.map((attachment) => (
-                  <TableRow key={attachment.attachmentId}>
-                    <TableCell>{attachment.attachmentId}</TableCell>
-                    <TableCell>{attachment.attachment_name}</TableCell>
-                    <TableCell>
-                      {Math.round(attachment.attachment_size / 1000) + "K"}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(attachment.createdAt).toLocaleString()}
-                    </TableCell>
-                    <TableCell>{attachment.attachment_description}</TableCell>
-                    <TableCell>
-                      <Button onClick={handleAttachmentMenuOpen(attachment)}>
-                        <MoreVert />
-                      </Button>
-                    </TableCell>
+          <div className="flex items-center gap-2 mb-3"
+           style={{
+            height: "300px",
+            overflowY: "scroll",
+            padding: "10px",
+            border: "1px solid black" ,
+            
+          }}
+          >
+  
+          {attachments.length === 0 ? (
+         
+             <p className="font-semibold italic" style={{textAlign:'start'}} >No Attachments <AttachFile/></p>
+          
+          ) : (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Size</TableCell>
+                    <TableCell>Date Attached</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {attachments.map((attachment) => (
+                    <TableRow key={attachment.attachmentId}>
+                      <TableCell>{attachment.attachmentId}</TableCell>
+                      <TableCell>{attachment.attachment_name}</TableCell>
+                      <TableCell>
+                        {Math.round(attachment.attachment_size / 1000) + "K"}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(attachment.createdAt).toLocaleString()}
+                      </TableCell>
+                      <TableCell>
+                        {attachment.attachment_description}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          onClick={handleAttachmentMenuOpen(attachment)}
+                        >
+                          <MoreVert />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+
           {/* Attachment operations menu */}
           <Menu
             anchorEl={anchorEl}
@@ -292,10 +305,9 @@ function AttachmentSection({ workItemId }) {
           >
             <DialogTitle>Add Attachment</DialogTitle>
             <DialogContent>
-              {/* File input */}
-              <input type="file" onChange={handleAttachmentFileChange} />
-              <br />
-              {/* Description input */}
+              <input className="form-control" type="file" onChange={handleAttachmentFileChange} />
+             
+              <label className="pt-3 text-gray font-semibold italic">write a descripion about the attachment</label>
               <TextField
                 label="Description"
                 variant="outlined"
@@ -304,17 +316,18 @@ function AttachmentSection({ workItemId }) {
                 onChange={handleAttachmentDescriptionChange}
                 style={{ marginTop: "16px" }}
               />
-              {/* Add button */}
               <Button
-                variant="contained"
+                
+                variant="soft"
                 color="primary"
                 onClick={handleAddAttachment}
-                style={{ marginTop: "16px" }}
+                style={{ marginTop: "16px",float: "right"}}
               >
                 Add Attachment
               </Button>
             </DialogContent>
           </Dialog>
+          </div>
         </div>
       )}
     </>

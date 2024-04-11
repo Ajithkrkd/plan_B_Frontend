@@ -29,3 +29,11 @@ export const deleteAttachment = async (attachmentId) =>{
        return errorHandler(error)
     }
 }
+export const updateDescrition = async (attachmentId ,descriptionn) =>{
+    try {
+        const response = await customAxios.post(`${attachmentRoutes.deleteAttachment_URL}?attachmentId${attachmentId}&description=${descriptionn}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}

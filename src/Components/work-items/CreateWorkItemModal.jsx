@@ -9,7 +9,7 @@ import DialogTitle from '@mui/joy/DialogTitle';
 
 import Stack from '@mui/joy/Stack';
 import Add from '@mui/icons-material/Add';
-import WorkItemCategorySelector from './WorkItemCategorySelctor';
+import WorkItemCategorySelector from './category/WorkItemCategorySelctor';
 import toast from 'react-hot-toast';
 import { createWorkItem } from '../../Api/workItem';
 

@@ -47,3 +47,19 @@ export const getWorkItemById = async (workItemId) =>{
        return errorHandler(error)
     }
 }
+export const updateWorkItemTitle = async (title , workItemId) =>{
+    try {
+        const response = await customAxios.post(`${workItemRoutes.update_title_or_description}?workItemId=${workItemId}&title=${title}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}
+export const updateWorkItemDescription = async (description , workItemId) =>{
+    try {
+        const response = await customAxios.post(`${workItemRoutes.update_title_or_description}?workItemId=${workItemId}&description=${description}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}
