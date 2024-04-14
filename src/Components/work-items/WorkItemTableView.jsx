@@ -8,7 +8,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import "./work.css";
 import { Button } from "@mui/joy";
-export default function WorkItemTableView({ workItems ,setSingleWorkItemDetails,setShowCreateWorkItemModal,projectId}) {
+import { CropTwoTone, SyncProblem, Task } from "@mui/icons-material";
+
+export default function WorkItemTableView({
+                        workItems ,
+                        setSingleWorkItemDetails,
+                        setShowCreateWorkItemModal,
+                        projectId
+                        }) {
     
     const handleViewWorkItem = (workItemId, projectId) => {
         setSingleWorkItemDetails({
@@ -20,12 +27,15 @@ export default function WorkItemTableView({ workItems ,setSingleWorkItemDetails,
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
             <TableCell className="table_header">ID </TableCell>
             <TableCell className="table_header" align="left">
               Title
+            </TableCell>
+            <TableCell className="table_header" align="left">
+              Category
             </TableCell>
             <TableCell className="table_header" align="left">
               Created Time
@@ -46,6 +56,14 @@ export default function WorkItemTableView({ workItems ,setSingleWorkItemDetails,
             >
               <TableCell align="left">{workItem.workItemId}</TableCell>
               <TableCell align="left">{workItem.title}</TableCell>
+
+              <TableCell align="left">
+                  <span>
+                    {workItem.category === "EPIC" && <CropTwoTone color="error" />}
+                    {workItem.category === "ISSUE" && (<SyncProblem color="warning" />)}
+                    {workItem.category === "TASK" && <Task color="success" />}
+                  </span>
+                {workItem.category}</TableCell>
               <TableCell align="left">
                 {new Date(workItem.createdAt).toLocaleString()}
               </TableCell>

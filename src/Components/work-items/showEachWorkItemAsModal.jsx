@@ -13,6 +13,7 @@ const ShowEachWorkItemAsModal = ({ isOpen, onClose, creationDetials }) => {
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>
+      
     </Dialog>
   );
 }

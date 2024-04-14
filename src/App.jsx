@@ -14,11 +14,7 @@ import AllProjectsPage from './Pages/projects/AllProjectsPage'
 import NotificationPage from './Pages/notification/NotificationPage'
 import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 import KanbanBoardPage from './Pages/board/KanbanBoardPage'
-import { pdfjs } from "react-pdf";
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.js",
-  import.meta.url
-).toString();
+
 
 function App() {
 

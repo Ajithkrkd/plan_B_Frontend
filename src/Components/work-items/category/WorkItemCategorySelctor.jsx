@@ -27,9 +27,9 @@ export default function WorkItemCategorySelector({onCategorySelect}) {
       }}
       onChange={handleChange}
     >
-      <Option value="EPIC"><CropTwoTone color='error'/> Epic</Option>
+      <Option value="EPIC"> <CropTwoTone color='error'/>  Epic</Option>
       <Option value="ISSUE"><SyncProblem color='warning'/>Issue</Option>
-      <Option value="TASK"><Task color='success'/>Task</Option>
+      <Option value="TASK"> <Task color='success'/>       Task</Option>
     </Select>
   );
 }

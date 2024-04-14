@@ -1,11 +1,14 @@
 // ViewSingleProject.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Input } from "@mui/material";
+import { Button } from "@mui/joy";
 import { CameraAltOutlined, Edit, ListAlt } from "@mui/icons-material";
 import InviteMemberModal from "./members/InviteMemberModal";
 import {
   addProfileImageForProject,
+  editProjectDescription,
+  editProjectTitle,
   getProjectDetailsByProjectId,
 } from "../../Api/project";
 import toast from "react-hot-toast";
@@ -22,8 +25,13 @@ function ViewSingleProject() {
   const [profilePic, setProfilePic] = useState("");
   const [totalFinishedWorkItem, setTotalFinishedWorkItem] = useState(0);
   const [totalUnFinishedWorkItems, setTotalUnFinishedWorkItems] = useState(0);
+  const [titleEditing, setTitleEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState();
+  const [editedDescription, setEditedDescription] = useState("");
+  const [descriptionEditing, setDescriptionEditing] = useState(false)
   const navigate = useNavigate();
-
+  const titleEditingInputRef = useRef(null);
+  const descriptionEditingInputRef = useRef(null);
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
@@ -41,6 +49,60 @@ function ViewSingleProject() {
     };
     fetchProjectDetails(id);
   }, [id]);
+
+  useEffect(()=>{
+
+  if (descriptionEditingInputRef.current) {
+    descriptionEditingInputRef.current.focus(); 
+  }
+  if (titleEditingInputRef.current) {
+    titleEditingInputRef.current.focus(); 
+  }
+
+  },[titleEditing,descriptionEditing])
+
+   const handleTitleEditing = (title) =>{
+    setEditedTitle(title);
+    setTitleEditing(true);
+   }
+
+   const saveEditedTitle = async (projectId) => {
+    try {
+      
+      const response = await editProjectTitle(projectId, editedTitle)
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+   }
+   const cancelTitleEdit = () =>{
+    setTitleEditing(false);
+    setEditedTitle("");
+   }
+
+   const handleDescriptionEditing = (title) =>{
+    setEditedDescription(title);
+    setDescriptionEditing(true);
+   }
+
+   const saveEditedDescription = async (projectId) => {
+    if (editedDescription.trim() == "") {
+      return;
+    }
+    try {
+      setIsLoading(true);
+      const response = await editProjectDescription(projectId,editedDescription)
+      setIsLoading(false);
+      console.log(response)
+      setDescriptionEditing(false)
+    } catch (error) {
+      console.log(error)
+    }
+   }
+   const cancelDescriptioneEdit = () =>{
+    setDescriptionEditing(false);
+    setEditedDescription("");
+   }
 
   useEffect(() => {
     calculateFinishedAndUnFinishedWorkItems(projectDetails.workItems);
@@ -135,9 +197,44 @@ function ViewSingleProject() {
                     Upload Image
                   </Button>
                 </div>
-                <p className="text-3xl font-bold   p-5">
-                  {projectDetails.title}
-                </p>
+                {titleEditing ? (
+                <div className="">
+                  <Input
+                  fullWidth
+                    style={{ padding: 0 ,}}
+                    inputRef={titleEditingInputRef}
+                    value={editedTitle}
+                    onChange={(e) => setEditedTitle(e.target.value)}
+                  />
+                  <Button
+                    variant="soft"
+                    color="success"
+                    className="py-2 mt-2"
+                    onClick={()=>saveEditedTitle(projectDetails.projectId)}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="soft"
+                    color="danger"
+                    className="py-2 mt-2"
+                    onClick={cancelTitleEdit}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div className=" flex justify-start gap-2">
+                  <p className="text-xl font-bold italic p-0">
+                    {projectDetails.title}
+                  </p>
+                  <Edit
+                    className="comment_icons"
+                    onClick={() => handleTitleEditing(projectDetails.title)}
+                  />
+                </div>
+              )}
+             
               </div>
               <div className=" flex items-end">
                 <InviteMemberModal
@@ -150,13 +247,46 @@ function ViewSingleProject() {
             <div className="flex flex-row items-center justify-between pr-3 border px-5   py-3">
               <div>
                 <p className="text-2xl py-2 font-semibold">About the Project</p>
-                <p className="opacity-12">{projectDetails.description}</p>
+                {descriptionEditing ? (
+                <div className="">
+                  <Input
+                  fullWidth
+                    style={{ padding: 0 , width:'100%'}}
+                    inputRef={descriptionEditingInputRef}
+                    value={editedDescription}
+                    onChange={(e) => setEditedDescription(e.target.value)}
+                  />
+                  <Button
+                    variant="soft"
+                    color="success"
+                    className="py-2 mt-2"
+                    onClick={()=>saveEditedDescription(projectDetails.projectId)}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    variant="soft"
+                    color="danger"
+                    className="py-2 mt-2"
+                    onClick={cancelDescriptioneEdit}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              ) : (
+                <div className=" flex  gap-2">
+                  <p className="text   p-0">
+                    {projectDetails.description}
+                  </p>
+                  <Edit
+                    className="comment_icons"
+                    
+                    onClick={() => handleDescriptionEditing(projectDetails.description)}
+                  />
+                </div>
+              )}
               </div>
-              <div className=" flex items-end">
-                <Button variant="outlined">
-                  <Edit />
-                </Button>
-              </div>
+             
             </div>
             <div className="flex flex-row items-center justify-between pr-3 border px-5 py-3">
               <div>

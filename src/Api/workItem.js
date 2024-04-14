@@ -11,6 +11,15 @@ export const createWorkItem = async (title, workItemCategory,projectId) => {
     }
 }
 
+export const createChildWorkItem = async (title, workItemCategory,projectId,parentWorkItemId) => {
+    try {
+        const response = await customAxios.post(`${workItemRoutes.createWorkItemURL}?title=${title}&workItemCategory=${workItemCategory}&parentWorkItemId=${parentWorkItemId}&projectId=${projectId}`);
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}
+
 export const createWorkItemWithParent = async (title, workItemCategory, parentWorkItemId, projectId) => {
     try {
     
@@ -58,6 +67,15 @@ export const updateWorkItemTitle = async (title , workItemId) =>{
 export const updateWorkItemDescription = async (description , workItemId) =>{
     try {
         const response = await customAxios.post(`${workItemRoutes.update_title_or_description}?workItemId=${workItemId}&description=${description}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}
+
+export const getAllChildWorkItemsByParentWorkItemId = async (workItemId) =>{
+    try {
+        const response = await customAxios.get(`${workItemRoutes.getChildWorkItems_URL}/${workItemId}`);
         return response;
     } catch (error) {
        return errorHandler(error)

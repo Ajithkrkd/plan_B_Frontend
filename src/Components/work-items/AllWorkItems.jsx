@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ".././Project/project.css";
-import CreateWorkItemModal from "./CreateWorkItemModal";
-import { getAllWorkItems } from "../../Api/workItem";
+import CreateWorkItemModal from "./CreateWorkItemModal";;
 import { Button } from "@mui/joy";
 import { useParams } from "react-router-dom";
 import ShowEachWorkItemAsModal from "./showEachWorkItemAsModal";
 import Board from "../.././Components/boards/Board"; // Import the Board component
 import WorkItemTableView from "./WorkItemTableView";
-
+import { useDispatch, useSelector } from "react-redux";
+import { allWorkItems, getWorkItemErrors, getWorkItemStatus,fetchWorkItems } from "./slices/workItemSlice";
 function AllWorkItems() {
   const [workItems, setWorkItems] = useState([]);
   const { projectId } = useParams();
@@ -19,19 +19,26 @@ function AllWorkItems() {
     projectId: ''
   });
   
+  const dispatch = useDispatch();
+  const workItemsList = useSelector(allWorkItems);
+  const workItemsStatus = useSelector(getWorkItemStatus);
+  const workItemsError = useSelector(getWorkItemErrors);
   useEffect(() => {
-    getAllWorkItemByProjectId(projectId);
-  }, [projectId]);
-
-  const getAllWorkItemByProjectId = async (projectId) => {
-    try {
-      const response = await getAllWorkItems(projectId);
-      console.log(response)
-      setWorkItems(response.data)
-    } catch (error) {
-      console.log(response)
+    if (workItemsStatus === "idle") {
+      dispatch(fetchWorkItems(projectId));
+      setWorkItems(workItemsList)
     }
-  }
+  }, [dispatch, projectId]);
+
+  // const getAllWorkItemByProjectId = async (projectId) => {
+  //   try {
+  //     const response = await getAllWorkItems(projectId);
+  //     console.log(response)
+  //     setWorkItems(response.data)
+  //   } catch (error) {
+  //     console.log(response)
+  //   }
+  // }
  
 
   return (
@@ -65,11 +72,11 @@ function AllWorkItems() {
         {selectedLink === "work-item-table" ? (
           <>
           
-          <WorkItemTableView workItems={workItems}  setSingleWorkItemDetails={setSingleWorkItemDetails} setShowCreateWorkItemModal={setShowCreateWorkItemModal} projectId={projectId} />
+          <WorkItemTableView workItems={workItemsList}  setSingleWorkItemDetails={setSingleWorkItemDetails} setShowCreateWorkItemModal={setShowCreateWorkItemModal} projectId={projectId} />
           
           </>
         ) : selectedLink === "boards" ? (
-          <Board  workItems={workItems}/> // Render the board component
+          <Board  workItems={workItemsList}/> // Render the board component
         ) : null}
       </div>
       <ShowEachWorkItemAsModal

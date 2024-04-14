@@ -69,11 +69,11 @@ function SideBar() {
               <span class="tooltip">notificationsv</span>
             </li>
             <li>
-              <a onClick={()=>{navigate('/work-items')}}>
+              <a onClick={()=>{navigate('/work-life-cycle')}}>
                 <i class="bx bxs-file-doc btnx"></i>
-                <span class="link_name">My work items</span>
+                <span class="link_name">Work life cycles</span>
               </a>
-              <span class="tooltip">My work items</span>
+              <span class="tooltip">work life cycle</span>
             </li>
             <li>
               <a  onClick={()=>{navigate('/privacy-settings')}}>

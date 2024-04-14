@@ -1,8 +1,15 @@
 import { Button } from "@mui/joy";
 import React, { useEffect, useRef, useState } from "react";
 import AssignMembers from "./members/AssignMembers";
-import StateSelector from "./workItemState/StateSelector";
-import { Attachment, Close, Edit, MessageOutlined } from "@mui/icons-material";
+import StateSelector from "./state/StateSelector";
+import {
+  Assignment,
+  Attachment,
+  Close,
+  CropTwoTone,
+  Edit,
+  MessageOutlined,
+} from "@mui/icons-material";
 import { Input, TextField } from "@mui/material";
 import CommentSection from "./comments/CommentSection";
 import AttachmentSection from "./attachments/AttachmentSection";
@@ -17,6 +24,7 @@ import {
 import { createLabel, deletLabelByLabelId } from "../../Api/labels";
 import Loader from "../../common/Loader";
 import "./comments/comment.css";
+import ChildWorkItemSection from "./childWorkItems/ChildWorkItemSection";
 
 function CreateWorkItem({ creationDetials }) {
   const [tag, setTag] = useState("");
@@ -39,7 +47,7 @@ function CreateWorkItem({ creationDetials }) {
     workItemId: null,
     workingLifeCycle: null,
   });
-  
+
   const { projectId, workItemId } = creationDetials;
   const [isLoading, setIsLoading] = useState(true);
   const [editedTitle, setEditedTitle] = useState("");
@@ -57,7 +65,7 @@ function CreateWorkItem({ creationDetials }) {
         const workitems = response.data;
         setWorkItemDetails(workitems);
         setAssignedMemberId(workitems.memberAssigned);
-        console.log(response.data)
+        console.log(response.data);
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -91,8 +99,6 @@ function CreateWorkItem({ creationDetials }) {
         console.log(error);
       }
   };
-
-
 
   const handleTagInputChange = (event) => {
     setTag(event.target.value);
@@ -228,6 +234,10 @@ function CreateWorkItem({ creationDetials }) {
     <>
       {isLoading && isLoading ? <Loader /> : <></>}
       <>
+        <p style={{ float: "right", padding: 10 }}>
+          <CropTwoTone color="error" />
+          {workItemDetails.category}
+        </p>
         <div className="pl-5 py-3 px-3 border">
           <div>
             <div className="flex pb-3">
@@ -327,20 +337,17 @@ function CreateWorkItem({ creationDetials }) {
                   </>
                 )}
               </div>
-           
             </div>
             <div className="flex gap-3">
-            {
-              workItemDetails.state && 
-              <StateSelector
-                initialState={workItemDetails && workItemDetails.state}
-                onStateSelector={handleStateOfWorkItem}
-              />
-            }
-            {
-              workItemDetails.projectId &&
-              <AssignMembers workItemDetails={workItemDetails}/>
-            }
+              {workItemDetails.state && (
+                <StateSelector
+                  initialState={workItemDetails && workItemDetails.state}
+                  onStateSelector={handleStateOfWorkItem}
+                />
+              )}
+              {workItemDetails.projectId && (
+                <AssignMembers workItemDetails={workItemDetails} />
+              )}
 
               <TextField
                 variant="outlined"
@@ -354,19 +361,26 @@ function CreateWorkItem({ creationDetials }) {
                 color="neutral"
                 variant="outlined"
                 onClick={() => setActiveSection("comments")}
-                style={{ flex: 1 }}
+                style={{ flex: 1, minWidth: 0 }}
               >
-                <MessageOutlined color="primary" /> Comments
+                <MessageOutlined color="primary" fontSize="small" /> Comments
               </Button>
               <Button
                 color="neutral"
                 variant="outlined"
                 onClick={() => setActiveSection("attachments")}
-                style={{ flex: 1 }}
+                style={{ flex: 1, minWidth: 0 }}
               >
-                <Attachment color="info" /> Attachments
+                <Attachment color="info" fontSize="small" /> Attachments
               </Button>
-             
+              <Button
+                color="neutral"
+                variant="outlined"
+                onClick={() => setActiveSection("childComponent")}
+                style={{ flex: 1, minWidth: 0 }}
+              >
+                <Assignment color="info" fontSize="small" /> Child workItems
+              </Button>
             </div>
             <div className="p-3">
               {/* Display labels */}
@@ -395,19 +409,23 @@ function CreateWorkItem({ creationDetials }) {
               ))}
             </div>
             <div className="py-3">
-              {activeSection === "comments" ? (
-                <p className="text-lg font-semibold underline">Discussions</p>
-              ) : (
-                <p className="text-lg font-semibold underline">Attachment</p>
-              )}
+              <p className="text-lg font-semibold underline">
+                Child Work Items
+              </p>
             </div>
-            {activeSection === "comments" ? (
-              <CommentSection
-                workItemId={workItemId}
-                workItemDetails={workItemDetails}
-              />
+            {activeSection === "childComponent" ? (
+              <ChildWorkItemSection workItem={workItemDetails} />
             ) : (
-              <AttachmentSection workItemId={workItemId} />
+              <div className="pl-5 py-3 px-3 border">
+                {activeSection === "comments" ? (
+                  <CommentSection
+                    workItemId={workItemId}
+                    workItemDetails={workItemDetails}
+                  />
+                ) : activeSection === "attachments" ? (
+                  <AttachmentSection workItemId={workItemId} />
+                ) : null}
+              </div>
             )}
           </div>
         </div>

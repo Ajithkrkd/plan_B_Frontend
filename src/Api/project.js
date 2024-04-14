@@ -50,3 +50,20 @@ export const addProfileImageForProject = async(projectId,file ,config)=>{
         return errorHandler(error);
     }
 }
+
+export const editProjectTitle = async(projectId,title)=>{
+    try {
+        const response = await customAxios.post(`${projectRoutes.editProjectTitleOrDescription_URL}?projectId=${projectId}&title=${title}`);
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}
+export const editProjectDescription = async(projectId,description)=>{
+    try {
+        const response = await customAxios.post(`${projectRoutes.editProjectTitleOrDescription_URL}?projectId=${projectId}&description=${description}`);
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}
