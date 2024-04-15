@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import customAxios from "../../../services/customAxios";
-import { workItemRoutes } from "../../../services/endpoints/workItemEndpoints";
-import errorHandler from "../../../Api/error";
-import { getAllWorkItems } from "../../../Api/workItem";
+import customAxios from "../../../../services/customAxios";
+import { workItemRoutes } from "../../../../services/endpoints/workItemEndpoints";
+import errorHandler from "../../../../Api/error";
+import { getAllWorkItems } from "../../../../Api/workItem";
 
 
 const initialState = {

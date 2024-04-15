@@ -9,25 +9,29 @@ import {
   TableRow,
   Table,
   FormHelperText,
-  TextField
+  TextField,
 } from "@mui/material";
 import { Button, Input } from "@mui/joy";
 import React, { useEffect, useState } from "react";
-import { createChildWorkItem, getAllChildWorkItemsByParentWorkItemId } from "../../../Api/workItem";
 import {
-  Add,
-  CropTwoTone,
-  SyncProblem,
-  Task,
-} from "@mui/icons-material";
+  createChildWorkItem,
+  getAllChildWorkItemsByParentWorkItemId,
+} from "../../../Api/workItem";
+import { Add, CropTwoTone, SyncProblem, Task } from "@mui/icons-material";
+import ShowEachWorkItemAsModal from "../showEachWorkItemAsModal";
 
-function ChildWorkItemSection({ workItem}) {
+function ChildWorkItemSection({ workItem }) {
   const [workItems, setWorkItems] = useState([]);
   const [title, setTitle] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCategory,setSelectedCategory] = useState("ISSUE");
-  const [showError,setShowError] = useState(false);
-  const {workItemId,projectId} = workItem;
+  const [selectedCategory, setSelectedCategory] = useState("ISSUE");
+  const [showError, setShowError] = useState(false);
+  const { workItemId, projectId } = workItem;
+  const [showCreateWorkItemModal, setShowCreateWorkItemModal] = useState(false);
+  const [singleWorkItemDetails, setSingleWorkItemDetails] = useState({
+    workItemId: "",
+    projectId: "",
+  });
   useEffect(() => {
     getAllChildWorkItems(workItemId);
   }, [workItemId]);
@@ -58,28 +62,40 @@ function ChildWorkItemSection({ workItem}) {
       setShowError(false);
     }
     setTitle(inputValue);
-    
-  }
+  };
 
-  const handleSubmition =async()=>{
-    if(title.trim() === ""){
-        setShowError(true)
-        return;
+  const handleSubmition = async () => {
+    if (title.trim() === "") {
+      setShowError(true);
+      return;
     }
     try {
-        const response = await createChildWorkItem(title, selectedCategory,workItem.projectId,workItem.workItemId);
-        console.log(response.data)
+      const response = await createChildWorkItem(
+        title,
+        selectedCategory,
+        workItem.projectId,
+        workItem.workItemId
+      );
+      console.log(response.data);
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-  }
+  };
+
+  const handleShowWorkItemModal = (workItemId, projectId) => {
+    setShowCreateWorkItemModal(true);
+    setSingleWorkItemDetails({
+      workItemId: workItemId,
+      projectId: projectId,
+    });
+  };
   return (
     <div
       style={{
         height: "300px",
         overflowY: "scroll",
         padding: "10px",
-        backgroundColor: "#F1F1F1",
+        backgroundColor: "#FFF",
       }}
     >
       <div>
@@ -148,6 +164,12 @@ function ChildWorkItemSection({ workItem}) {
                     <Button
                       variant="outlined"
                       className="cursor-pointer underline"
+                      onClick={() =>
+                        handleShowWorkItemModal(
+                          workItem.workItemId,
+                          workItem.projectId
+                        )
+                      }
                     >
                       View
                     </Button>
@@ -173,24 +195,20 @@ function ChildWorkItemSection({ workItem}) {
         >
           <TextField
             fullWidth
-            style={{borderRadius:0,
-                width: 210,
-                marginTop: 20,
-            }}
+            style={{ borderRadius: 0, width: 210, marginTop: 20 }}
             value={title}
-            
             onChange={(e) => {
-              handleTitleChange(e)
+              handleTitleChange(e);
             }}
             placeholder="Enter a title"
             error={showError}
-            helperText={showError && 'title must not be empty'}
+            helperText={showError && "title must not be empty"}
           />
-          
+
           <Select
             style={{
-              height:40,
-              borderRadius:0,
+              height: 40,
+              borderRadius: 0,
               marginTop: "10px",
               width: 210,
               outline: "none",
@@ -198,25 +216,39 @@ function ChildWorkItemSection({ workItem}) {
             }}
             value={selectedCategory}
             defaultValue="ISSUE" // Set default value
-            onChange={(e) => {setSelectedCategory(e.target.value)}}                                                
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+            }}
           >
-            <MenuItem value="ISSUE"  sx={{ fontSize: "12px" }}>
+            <MenuItem value="ISSUE" sx={{ fontSize: "12px" }}>
               <SyncProblem color="warning" />
               ISSUE
             </MenuItem>
-            <MenuItem value="TASK"  sx={{ fontSize: "12px" }}>
+            <MenuItem value="TASK" sx={{ fontSize: "12px" }}>
               <Task color="success" />
               TASK
             </MenuItem>
           </Select>
-        <Button 
-        variant="soft"
-        fullWidth
-        style={{width:210 ,borderRadius:0 , marginTop: 20, marginBottom: 20,}}
-         onClick={handleSubmition}
-        >create</Button>
+          <Button
+            variant="soft"
+            fullWidth
+            style={{
+              width: 210,
+              borderRadius: 0,
+              marginTop: 20,
+              marginBottom: 20,
+            }}
+            onClick={handleSubmition}
+          >
+            create
+          </Button>
         </div>
       </Menu>
+      <ShowEachWorkItemAsModal
+        isOpen={showCreateWorkItemModal}
+        onClose={() => setShowCreateWorkItemModal(false)}
+        creationDetials={singleWorkItemDetails}
+      />
     </div>
   );
 }

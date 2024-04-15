@@ -14,6 +14,7 @@ import AllProjectsPage from './Pages/projects/AllProjectsPage'
 import NotificationPage from './Pages/notification/NotificationPage'
 import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 import KanbanBoardPage from './Pages/board/KanbanBoardPage'
+import WorkLifeCyclePage from './Pages/work-item/WorkLifeCyclePage'
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
             <Route path='/notification' Component={NotificationPage}/>
             <Route path='/project/:projectId/work-items' Component={AllWorkItemsPage}/>
             <Route path='/board/:id' Component={KanbanBoardPage}/>
+            <Route path='/work-life-cycle' Component={WorkLifeCyclePage}/>
           </Route>
 
         </Routes>

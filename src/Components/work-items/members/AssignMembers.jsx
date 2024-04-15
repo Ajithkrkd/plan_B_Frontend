@@ -14,6 +14,8 @@ const AssignMembers = ({ workItemDetails }) => {
     console.log(projectId, workItemId, "here",selectedMember);
     getProject(projectId);
     getWorkItemByIdForDistplay(workItemId);
+
+    setSelectedMember(workItemDetails.memberAssigned)
   }, []);
 
   const getWorkItemByIdForDistplay = async (projectId) => {
@@ -65,6 +67,7 @@ const AssignMembers = ({ workItemDetails }) => {
         // ... other props
         labelId="state-select-label"
         id="state-select"
+        placeholder="select member"
         value={selectedMember}
         onChange={handleChange}
         sx={{ width: 300, height:57, transition: "0.2s" }}
@@ -85,7 +88,15 @@ const AssignMembers = ({ workItemDetails }) => {
           </MenuItem>
         ) : (
           <MenuItem value="" key="placeholder">
-            Please Select a Member
+            <div className="flex items-center"> {/* Added flexbox for alignment */}
+              <Avatar
+                alt="Remy Sharp"
+                src={'/src/assets/workers.jpg'}
+              />
+              <div className="ml-4 pl-2 font-semibold"> {/* Adjusted styles for spacing */}
+                Unassigned
+              </div>
+            </div>
           </MenuItem>
         )}
         {assignedMembersList.map((member) => (

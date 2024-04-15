@@ -7,7 +7,7 @@ import ShowEachWorkItemAsModal from "./showEachWorkItemAsModal";
 import Board from "../.././Components/boards/Board"; // Import the Board component
 import WorkItemTableView from "./WorkItemTableView";
 import { useDispatch, useSelector } from "react-redux";
-import { allWorkItems, getWorkItemErrors, getWorkItemStatus,fetchWorkItems } from "./slices/workItemSlice";
+import { allWorkItems, getWorkItemErrors, getWorkItemStatus,fetchWorkItems } from "./slices/workitem/workItemSlice";
 function AllWorkItems() {
   const [workItems, setWorkItems] = useState([]);
   const { projectId } = useParams();

@@ -9,6 +9,8 @@ import {
   CropTwoTone,
   Edit,
   MessageOutlined,
+  SyncProblem,
+  Task,
 } from "@mui/icons-material";
 import { Input, TextField } from "@mui/material";
 import CommentSection from "./comments/CommentSection";
@@ -234,10 +236,12 @@ function CreateWorkItem({ creationDetials }) {
     <>
       {isLoading && isLoading ? <Loader /> : <></>}
       <>
-        <p style={{ float: "right", padding: 10 }}>
-          <CropTwoTone color="error" />
+        <span style={{ float: "right", padding: 10 }}>
+          {workItemDetails.category === "EPIC" && <CropTwoTone color="error" />}
+          {workItemDetails.category === "ISSUE" && <SyncProblem color="warning" />}
+          {workItemDetails.category === "TASK" && <Task color="success" />}
           {workItemDetails.category}
-        </p>
+        </span>
         <div className="pl-5 py-3 px-3 border">
           <div>
             <div className="flex pb-3">
