@@ -54,7 +54,7 @@ body {
   
   .chat-content{
     width:80%;
-    margin-left: 10px;
+    margin-left: 100px;
   }
   
   .chat-messages{
@@ -100,6 +100,10 @@ body {
     background: grey;
     color:#fff;
   }
+  .center-message {
+    text-align: center;
+  }
+  
   
   .avatar{
     background-color: cornflowerblue;
