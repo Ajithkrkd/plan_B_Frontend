@@ -11,10 +11,10 @@ export const creatWorkLifeCycle = async (workingLifeCycleDto)=>{
         return errorHandler(error);
     }
 }
-export const editWorkLifeCycle = async (workingLifeCycleDto,_workLifeCycleId)=>{
+export const editWorkLifeCycle = async (workingLifeCycleDto,workingLifeCycleId)=>{
     try {
-        console.log(workingLifeCycleDto , 'from here')
-        const response = await customAxios.post(`${workLifeCycleRoutes.editWorkLifeCycle_URL}/${_workLifeCycleId}`,workingLifeCycleDto);
+        console.log(workingLifeCycleDto , 'from here', workingLifeCycleId);
+        const response = await customAxios.post(`${workLifeCycleRoutes.editWorkLifeCycle_URL}/${workingLifeCycleId}`,workingLifeCycleDto);
         return response;
     } catch (error) {
         return errorHandler(error);

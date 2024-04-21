@@ -42,9 +42,9 @@ export const sentInvitaionForMember = async(projectId,_invitationRequest)=>{
 }
 
 
-export const addProfileImageForProject = async(projectId,file ,config)=>{
+export const addProfileImageForProject = async(projectId,imageUrl ,config)=>{
     try {
-        const response = customAxios.post(`${projectRoutes.addProfileImageForProject_URL}/${projectId}`,file ,config);
+        const response = customAxios.post(`${projectRoutes.addProfileImageForProject_URL}/${projectId}?imageUrl=${imageUrl}`,config);
         return response;
     } catch (error) {
         return errorHandler(error);

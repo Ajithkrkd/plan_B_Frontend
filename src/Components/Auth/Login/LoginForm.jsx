@@ -76,12 +76,8 @@ const LoginForm = () => {
   }
   return (
    <>
-   {isLoading ?
-  <>
-  <Loader/>
-  </> 
-  :
-  <>
+   {isLoading &&
+  <Loader/>}
    <form onSubmit={handleSubmit}>
      <CardContent>
      <TextField
@@ -134,9 +130,7 @@ const LoginForm = () => {
 
   
   </>
-  }
-   </>
-  );
+  )
 };
 
 export default LoginForm;

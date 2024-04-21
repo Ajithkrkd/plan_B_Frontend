@@ -6,7 +6,6 @@ import EditProfile from './EditProfile';
 function UserProfile() {
 
 
-  const imgUrl = `http://localhost:8081`;
   const [profilePic, setProfilePic] = useState(null);
   const [userDetails, setUserDetails] = useState({
     userId: "",
@@ -39,7 +38,7 @@ function UserProfile() {
       fullName: data.fullName,
       phoneNumber: data.phoneNumber,
     });
-    setProfilePic(`${imgUrl}${data.profile_image_path}`);
+    setProfilePic(`${data.profile_image_path}`);
   };
 
   useEffect(() => {

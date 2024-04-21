@@ -12,10 +12,9 @@
     width: 100px;
     gap: 6px;
     height: 100px;
-}
 
+}
 .loading span {
-    z-index: 1000;
     width: 4px;
     height: 50px;
     background: var(--first-color);

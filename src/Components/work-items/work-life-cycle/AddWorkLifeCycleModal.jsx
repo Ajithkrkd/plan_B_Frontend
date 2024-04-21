@@ -10,9 +10,11 @@ import {
   addWorkLifeCycle,
   getWorkLifeCycleErrors,
   getWorkLifeCycleStatus,
+  updateWorkLifeCycle,
 } from "../slices/workLifeCycle/workLifeCycleSlice";
+import { setLoading } from "../../../store/redux/slices/userDetailsSlice";
 
-export default function AddWorkLifeCycleModal() {
+export default function AddWorkLifeCycleModal({setEditing,editing,editData}) {
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [showTitleError,SetShowTitleError] = useState(false);
@@ -24,10 +26,26 @@ export default function AddWorkLifeCycleModal() {
   });
   const [dateError, setDateErrors] = useState(null);
 
-  const dispatch = useDispatch();
   const workLifeCycleStatus = useSelector(getWorkLifeCycleStatus);
   const workLifeCycleError = useSelector(getWorkLifeCycleErrors);
-
+  const dispatch = useDispatch();
+  const [workingLifeCycleId ,setWorkingLifeCycleId] = useState(null);
+  useEffect(() => {
+    if (editData) {
+      setFormData({
+        title: editData.title,
+        startDate: editData.startDate,
+        endDate: editData.endDate,
+      });
+      setWorkingLifeCycleId(editData.workingLifeCycleId);
+      if(editing){
+        setOpen(true);
+      }else{
+        setOpen(false);
+      }
+      console.log(editData)
+    }
+  }, [editData]);
 
   const handleTitleChange = (e) => {
     let inputValue = e.target.value;
@@ -54,6 +72,54 @@ export default function AddWorkLifeCycleModal() {
     }
     console.log(e.target.value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditSubmition = async () => {
+    if (
+      (formData && formData.startDate === "") ||
+      (formData && formData.endDate === "")
+    ) {
+      setShowError(true);
+      return;
+    } else {
+      setShowError(false);
+    }
+    if(formData && formData.title === ""){
+        SetShowTitleError(true);
+    }else{
+        SetShowTitleError(false)
+    }
+
+    const today = new Date(); 
+    const startDate = new Date(formData.startDate);
+    const endDate = new Date(formData.endDate);
+    if (startDate < today) {
+        setShowError(true);
+        console.log(" ajith is here")
+        setDateErrors( "Start date cannot be before today" ); 
+        return;
+      }
+    if (startDate >= endDate) {
+      setShowError(true);
+      console.log(startDate)
+      setDateErrors( "Start date must be before end date");
+      return;
+    }
+
+
+    console.log(dateError)
+    try {
+      setLoading(true);
+     const response =  dispatch(updateWorkLifeCycle({ workLifeCycleDto: formData, workingLifeCycleId: editData.workingLifeCycleId }));
+      console.log(response);
+      setOpen(false);
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      console.log(error);
+    }
+
+    console.log(" printing");
   };
 
 
@@ -93,17 +159,32 @@ export default function AddWorkLifeCycleModal() {
 
     console.log(dateError)
     try {
+      setLoading(true);
       const response  = dispatch(addWorkLifeCycle(formData));
       console.log(response);
-
+      setOpen(false);
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       console.log(error);
     }
 
     console.log(" printing");
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding leading zero if necessary
+    let day = date.getDate().toString().padStart(2, '0'); // Adding leading zero if necessary
+    return `${year}-${month}-${day}`;
+};
 
+
+const handleCloseModal = ()=>{
+  setOpen(false);
+  setEditing(false);
+}
   return (
     <>
       {isLoading ? (
@@ -117,7 +198,7 @@ export default function AddWorkLifeCycleModal() {
             aria-labelledby="modal-title"
             aria-describedby="modal-desc"
             open={open}
-            onClose={() => setOpen(false)}
+            onClose={handleCloseModal}
             sx={{ display: "flex", justifyContent: "end", alignItems: "top" }}
           >
             <Sheet
@@ -130,7 +211,21 @@ export default function AddWorkLifeCycleModal() {
               }}
             >
               <ModalClose variant="plain" sx={{ m: 1 }} />
-              <Typography
+              {
+                editing ?(
+                <Typography
+                component="h2"
+                id="modal-title"
+                level="h3"
+                textColor="inherit"
+                fontWeight="lg"
+                mb={1}
+              >
+                Update Your Working Life Cycle
+              </Typography>
+
+                ):
+             ( <Typography
                 component="h2"
                 id="modal-title"
                 level="h3"
@@ -139,7 +234,8 @@ export default function AddWorkLifeCycleModal() {
                 mb={1}
               >
                 Create Your Working Life Cycle
-              </Typography>
+              </Typography>)
+              }
               <div>
                 <TextField
                   label="Title"
@@ -150,7 +246,6 @@ export default function AddWorkLifeCycleModal() {
                   fullWidth
                   margin="normal"
                   type="text"
-                  required
                   error={showTitleError}
                   helperText={showTitleError && "title must not be empty"}
                 />
@@ -166,8 +261,8 @@ export default function AddWorkLifeCycleModal() {
                       paddingRight: "25px",
                       paddingLeft: "25px",
                     }}
-                    value={formData.startDate}
-                    onChange={handleStartDateChange}
+                    value={formData.startDate ? formatDate(formData.startDate) : ''}
+                    onChange={(e)=>handleStartDateChange(e)}
                   />
                   <input
                     error={dateError && dateError}
@@ -181,13 +276,30 @@ export default function AddWorkLifeCycleModal() {
                       paddingRight: "25px",
                       paddingLeft: "25px",
                     }}
-                    value={formData.endDate}
-                    onChange={handleEndDateChange}
+                    value={formData.endDate ? formatDate(formData.endDate) : ''}
+                    onChange={(e)=>handleEndDateChange(e)}
                   />
                 </div>
                 <p className="text-small " style={{color:'#D32F2F' ,fontSize:"13px" ,paddingBottom:"10px"}}>{showError && dateError}</p>
 
-                <Button
+              
+                {
+                  editing ? (
+                    <Button
+                    style={{
+                      float: "right",
+                      paddingLeft: 100,
+                      paddingRight: 100,
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleEditSubmition}
+                  >
+                    Edit
+                  </Button>
+                 
+                  ):
+                (  <Button
                   style={{
                     float: "right",
                     paddingLeft: 100,
@@ -198,7 +310,8 @@ export default function AddWorkLifeCycleModal() {
                   onClick={handleSubmition}
                 >
                   create
-                </Button>
+                </Button>)
+                }
               </div>
             </Sheet>
           </Modal>

@@ -23,6 +23,7 @@ import {
   Add,
   AttachFile,
   MoreVertOutlined,
+  LogoDev,
 } from "@mui/icons-material";
 import { Button } from "@mui/joy";
 import {
@@ -55,6 +56,7 @@ function AttachmentSection({ workItemId }) {
   const [showMessage, setShowMessage] = useState(false);
   const [descriptionEditing,setDescriptionEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState()
+  const [editingAttachmentId,setEditingAttachmetId] = useState(null);
   const descriptionEditingRef = useRef(null);
   useEffect(() => {
     const getAllAttachmentsForPerticularWorkItem = async (workId) => {
@@ -165,9 +167,11 @@ function AttachmentSection({ workItemId }) {
       };
 
       // Pass updatedAttachmentDetailsDTO to uploadFileDetailsToBackend
-      await uploadFileDetailsToBackend(updatedAttachmentDetailsDTO);
+     const response = await uploadFileDetailsToBackend(updatedAttachmentDetailsDTO);
     } catch (error) {
       console.log("Error:", error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -198,6 +202,7 @@ function AttachmentSection({ workItemId }) {
   };
 
  const handleDescriptionEditing = (selectedAttachment)=>{
+  setEditingAttachmetId(selectedAttachment.attachmentId);
   setEditedDescription(selectedAttachment.attachment_description);
   setDescriptionEditing(true);
  }
@@ -244,12 +249,9 @@ function AttachmentSection({ workItemId }) {
 
   return (
     <>
-      {isloading && isloading ? (
-        <>
-          <Loader />
-        </>
-      ) : (
+    
         <div className="">
+       {isloading &&  <Loader/>}
           <Button
             variant="outlined"
             color="primary"
@@ -299,7 +301,7 @@ function AttachmentSection({ workItemId }) {
                           {new Date(attachment.createdAt).toLocaleString()}
                         </TableCell>
 
-                        {descriptionEditing ? (
+                        {descriptionEditing && editingAttachmentId === attachment.attachmentId ? (
                           <>
                             <div className="">
                               <Input
@@ -427,7 +429,7 @@ function AttachmentSection({ workItemId }) {
             </Dialog>
           </div>
         </div>
-      )}
+    
     </>
   );
 

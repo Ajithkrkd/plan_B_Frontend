@@ -77,7 +77,7 @@ const AssignMembers = ({ workItemDetails }) => {
             <div className="flex items-center"> {/* Added flexbox for alignment */}
               <Avatar
                 alt="Remy Sharp"
-                src={`http://localhost:8081${assignedMembersList.find(
+                src={`${assignedMembersList.find(
                   (m) => m.id === selectedMember
                 )?.profile_image_url}`}
               />
@@ -104,7 +104,7 @@ const AssignMembers = ({ workItemDetails }) => {
             <div className="flex items-center"> {/* Added flexbox for alignment */}
               <Avatar
                 alt="Remy Sharp"
-                src={`http://localhost:8081${member.profile_image_url}`}
+                src={`${member.profile_image_url}`}
               />
               <div className="ml-4 pl-2 "> {/* Adjusted styles for spacing */}
                 <p className="font-semibold italic">   {member.fullName}</p>

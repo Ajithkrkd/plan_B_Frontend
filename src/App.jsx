@@ -15,6 +15,7 @@ import NotificationPage from './Pages/notification/NotificationPage'
 import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 import KanbanBoardPage from './Pages/board/KanbanBoardPage'
 import WorkLifeCyclePage from './Pages/work-item/WorkLifeCyclePage'
+import CommunityPage from './Pages/Community/CommunityPage'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path='/register' Component={RegisterPage}/>
             <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
             <Route path='/project/:id' Component={ViewSingleProjectPage}/>
+            <Route path='/community' Component={CommunityPage}/>
 
           <Route element={<UserRoutes/>}>
             <Route path='/projects' Component={AllProjectsPage}/>

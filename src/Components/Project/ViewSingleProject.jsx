@@ -15,10 +15,11 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import SingleProjectSkeleton from "./SingleProjectSkeleton";
 import AssignedMembers from "./members/AssignedMembers"
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import Loader from "../../common/Loader";
 
 function ViewSingleProject() {
   const [projectDetails, setProjectDetails] = useState({});
-  const baseUrl = "http://localhost:8082";
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -29,6 +30,7 @@ function ViewSingleProject() {
   const [editedTitle, setEditedTitle] = useState();
   const [editedDescription, setEditedDescription] = useState("");
   const [descriptionEditing, setDescriptionEditing] = useState(false)
+  const [fetching ,setFetching] = useState(false);
   const navigate = useNavigate();
   const titleEditingInputRef = useRef(null);
   const descriptionEditingInputRef = useRef(null);
@@ -41,7 +43,7 @@ function ViewSingleProject() {
         console.log(response.data);
         setProjectDetails(response.data);
         if (response.data.project_profile_url != null) {
-          setProfilePic(baseUrl + response.data.project_profile_url);
+          setProfilePic(response.data.project_profile_url);
         }
       } catch (error) {
         console.log(error);
@@ -68,11 +70,18 @@ function ViewSingleProject() {
 
    const saveEditedTitle = async (projectId) => {
     try {
-      
+      setFetching(true)
       const response = await editProjectTitle(projectId, editedTitle)
-      console.log(response)
+      setProjectDetails((prevProjectDetails) => ({
+        ...prevProjectDetails,
+        title: editedTitle,
+      }));
+      setTitleEditing(false);
+
     } catch (error) {
       console.log(error)
+    }finally{
+      setFetching(false)
     }
    }
    const cancelTitleEdit = () =>{
@@ -90,13 +99,18 @@ function ViewSingleProject() {
       return;
     }
     try {
-      setIsLoading(true);
+      setFetching(true);
       const response = await editProjectDescription(projectId,editedDescription)
-      setIsLoading(false);
+      setProjectDetails((prevProjectDetails) => ({
+        ...prevProjectDetails,
+        description: editedDescription,
+      }));
       console.log(response)
       setDescriptionEditing(false)
     } catch (error) {
       console.log(error)
+    }finally{
+      setFetching(false)
     }
    }
    const cancelDescriptioneEdit = () =>{
@@ -135,9 +149,21 @@ function ViewSingleProject() {
   };
 
   const handleUpload = async () => {
+
+    if (selectedFile == null) {
+      toast.error('select a image');
+      return;
+    }
+    
+    const storage = getStorage();
+    const storageRef = ref(storage,selectedFile.name);
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      setFetching(true);
+        await uploadBytes(storageRef,selectedFile);
+        const url = await getDownloadURL(storageRef);
+        console.log(url)
+
+
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -146,13 +172,15 @@ function ViewSingleProject() {
       const projectId = projectDetails.projectId;
       const response = await addProfileImageForProject(
         projectId,
-        formData,
+        url,
         config
       );
       toast.success("profile pic updated");
       console.log("Profile picture uploaded:", response.data);
     } catch (error) {
       console.log("Profile picture uploaded:", error.message);
+    }finally{
+      setFetching(false);
     }
   };
 
@@ -164,6 +192,7 @@ function ViewSingleProject() {
         <SingleProjectSkeleton />
       ) : (
         <>
+        {fetching && <Loader/>}
           <div className="project-container">
             <div className="flex flex-row items-center justify-between pr-3  py-2">
               <div className="flex flex-wrap items-center">

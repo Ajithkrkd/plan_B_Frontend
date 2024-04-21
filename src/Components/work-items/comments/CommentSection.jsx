@@ -133,7 +133,7 @@ function CommentSection({ workItemId }) {
               <Avatar
                 src={
                   comment.commentedBy.profile_image_path
-                    ? `http://localhost:8081${comment.commentedBy.profile_image_path}`
+                    ? `${comment.commentedBy.profile_image_path}`
                     : "/src/assets/workers.jpg"
                 }
                 alt="Profile Picture"

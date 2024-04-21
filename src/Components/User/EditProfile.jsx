@@ -7,15 +7,22 @@ import { validate } from "../Auth/Validation";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails, update_UserDetails, uploadProfileImage } from "../../Api/User";
 import { CameraAlt } from "@mui/icons-material";
+//fire base
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
+import Loader from "../../common/Loader";
 function EditProfile() {
   const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState();
-
+  const [isloading ,setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
   });
-  const imgUrl = `http://localhost:8081`;
   const [errors, setErrors] = useState({});
   const [profilePic, setProfilePic] = useState(null);
   const [userDetails, setUserDetails] = useState({
@@ -49,7 +56,7 @@ function EditProfile() {
       fullName: data.fullName,
       phoneNumber: data.phoneNumber,
     });
-    setProfilePic(`${imgUrl}${data.profile_image_path}`);
+    setProfilePic(`${data.profile_image_path}`);
   };
 
   useEffect(() => {
@@ -63,20 +70,33 @@ function EditProfile() {
   };
 
   const handleUpload = async () => {
+    if(selectedFile  == null){
+      toast.error('please select a image ')
+      return;
+    }
+    const storage = getStorage();
+    const storageRef = ref(storage,selectedFile.name)
+
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
+      setIsLoading(true);
+      await uploadBytes(storageRef, selectedFile);
+      const url = await getDownloadURL(storageRef);
+      console.log("URL:", url);
+
+      
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       };
-      const response = await uploadProfileImage(formData, config);
+      const response = await uploadProfileImage(url, config);
       toast.success("profile pic updated");
-      console.log("Profile picture uploaded:", response.data);
+      console.log("Profile picture uploaded:", response);
       fetchUserDetails(setUserDetails);
     } catch (error) {
-      console.log("Profile picture uploaded:", error.message);
+      console.log("Profile picture uploaded:", error);
+    }finally{
+      setIsLoading(false);
     }
   };
 
@@ -125,6 +145,7 @@ function EditProfile() {
 
   return (
     <>
+    {isloading && <Loader/>}
       <div className="profile-container  ">
         <div className="max-w-4xl max-w-2sm mx-auto">
           <p className=" font-semibold profile-text ">Edit Profile</p>

@@ -14,7 +14,6 @@ function ProfileHead({ userDetails }) {
     backgroundPosition: "center",
   };
   const formatedDate = formateJoiningDateTime(userDetails.joinDate);
-  const imgUrl = `http://localhost:8081`;
 
   const navigate = useNavigate()
 
@@ -30,7 +29,7 @@ function ProfileHead({ userDetails }) {
               <img
                 src={
                   userDetails.profile_image_path
-                    ? imgUrl + userDetails.profile_image_path
+                    ? userDetails.profile_image_path
                     : `/src/assets/workers.jpg`
                 }
                 alt=""

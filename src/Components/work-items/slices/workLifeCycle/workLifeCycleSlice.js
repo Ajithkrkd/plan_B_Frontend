@@ -1,5 +1,6 @@
 import { createSlice ,createAsyncThunk} from "@reduxjs/toolkit";
-import { creatWorkLifeCycle, getAllWorkLifeCycle } from "../../../../Api/workLifeCycle";
+import { creatWorkLifeCycle, editWorkLifeCycle, getAllWorkLifeCycle } from "../../../../Api/workLifeCycle";
+import errorHandler from "../../../../Api/error";
 
 const initialState = {
     workLifeCycles:[],
@@ -29,6 +30,20 @@ export const addWorkLifeCycle = createAsyncThunk(
     }
 )
 
+export const updateWorkLifeCycle = createAsyncThunk(
+    "workLifeCycle/updateWorkLifeCycle",
+    async ({workLifeCycleDto,workingLifeCycleId}) =>{
+        console.log(workingLifeCycleId)
+        try {
+            const response = await editWorkLifeCycle(workLifeCycleDto,workingLifeCycleId);
+            return response.data;
+
+        } catch (error) {
+            return Promise.reject(error)
+        }
+    }
+)
+
 export const workLifeCycleSlice = createSlice({
     name:'workLifeCycle',
     initialState:initialState,
@@ -49,8 +64,9 @@ export const workLifeCycleSlice = createSlice({
             state.error = action.error.message || 'Failed to fetch work life cycle data'; 
           });
           //adding worklife cyle 
-        addCase(addWorkLifeCycle.fulfilled,(state,action)=>{
+        builder.addCase(addWorkLifeCycle.fulfilled,(state,action)=>{
             state.status = "Succeeded";
+            console.log(action.payload)
             state.workLifeCycles.push(action.payload);
         })
         .addCase(addWorkLifeCycle.pending , (state)=>{
@@ -61,6 +77,27 @@ export const workLifeCycleSlice = createSlice({
             state.status = "failed"
             state.error = action.error.message || "Error while adding message";
         })
+
+
+        builder.addCase(updateWorkLifeCycle.fulfilled, (state, action) => {
+            state.status = "succeeded";
+          
+            const updatedIndex = state.workLifeCycles.findIndex(
+                cycle => cycle.workingLifeCycleId === action.payload.workingLifeCycleId
+            );
+            if (updatedIndex !== -1) {
+                state.workLifeCycles[updatedIndex] = action.payload;
+            }
+        })
+        .addCase(updateWorkLifeCycle.pending, (state) => {
+            state.status = "loading";
+            state.error = null;
+        })
+        .addCase(updateWorkLifeCycle.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message || "Error while updating work life cycle";
+        });
+        
     }
 })
 

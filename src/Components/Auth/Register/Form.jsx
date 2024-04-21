@@ -69,10 +69,7 @@ const Form = () => {
 
   return (
     <>
-    {loading ?
-    
-    <Loader/> :
-
+    {loading && <Loader/>}
         <form onSubmit={handleSubmit}>
           <CardContent>
             <TextField
@@ -155,7 +152,7 @@ const Form = () => {
             already have an account?
           </p>
         </form>
-          }
+          
       
     </>
   );

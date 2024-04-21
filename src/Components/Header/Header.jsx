@@ -33,7 +33,7 @@ function Header() {
         console.log(error)
       }
     }
-    const imgUrl = `http://localhost:8081${profilePic}`;
+    const imgUrl = `${profilePic}`;
   return (
     <div>
       <link

@@ -82,6 +82,13 @@ function SideBar() {
               </a>
               <span class="tooltip">Privacy</span>
             </li>
+            <li>
+              <a  onClick={()=>{navigate('/community')}}>
+                <i class="bx bxs-chat btnx "></i>
+                <span class="link_name ">Chat</span>
+              </a>
+              <span class="tooltip">Chat</span>
+            </li>
             {/* <li>
               <a href="" onClick={()=>navigate("/bin")}>
                 <i class="bx bx-trash btnx"></i>

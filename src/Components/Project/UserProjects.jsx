@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import LazyProjectsSkeleton from "./LazyProjectsSkeleton";
 
 function UserProjects() {
-  const baseUrl = `http://localhost:8082`;
   const [isLoading, setLoading] = useState(false);
 
 
@@ -61,13 +60,13 @@ function UserProjects() {
                             className="profile-img"
                             src={
                               project.project_profile_url &&
-                              baseUrl + project.project_profile_url
+                              project.project_profile_url
                             }
                             alt={project.title}
                           />
                         </div>
                         <div className="max-w-full mt-4">
-                          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-black">
+                          <h5 className="mb-2 text-2xl font-semibold tracking-tight text-center text-gray-900 dark:text-black">
                             {project.title}
                           </h5>
                           <p className="font-normal text-gray-700 dark:text-400">

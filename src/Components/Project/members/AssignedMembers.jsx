@@ -10,7 +10,7 @@ function AssignedMembers({ assignedMembers }) {
           <div key={member.id} className="flex flex-row gap-5 items-center py-2">
             <div>
               <img
-                src={`http://localhost:8081${member.profile_image_url}`}
+                src={`${member.profile_image_url}`}
                 alt={"img"}
                 className="profile"
               />
