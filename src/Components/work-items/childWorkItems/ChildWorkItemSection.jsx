@@ -76,7 +76,9 @@ function ChildWorkItemSection({ workItem }) {
         workItem.projectId,
         workItem.workItemId
       );
+      setAnchorEl(null);
       console.log(response.data);
+      setWorkItems((prevState)=>[...prevState, response.data]);
     } catch (error) {
       console.log(error);
     }
@@ -96,6 +98,7 @@ function ChildWorkItemSection({ workItem }) {
         overflowY: "scroll",
         padding: "10px",
         backgroundColor: "#FFF",
+        border: "1px solid black",
       }}
     >
       <div>
@@ -205,30 +208,57 @@ function ChildWorkItemSection({ workItem }) {
             helperText={showError && "title must not be empty"}
           />
 
-          <Select
-            style={{
-              height: 40,
-              borderRadius: 0,
-              marginTop: "10px",
-              width: 210,
-              outline: "none",
-              fontSize: "12px",
-            }}
-            value={selectedCategory}
-            defaultValue="ISSUE" // Set default value
-            onChange={(e) => {
-              setSelectedCategory(e.target.value);
-            }}
-          >
-            <MenuItem value="ISSUE" sx={{ fontSize: "12px" }}>
-              <SyncProblem color="warning" />
-              ISSUE
-            </MenuItem>
-            <MenuItem value="TASK" sx={{ fontSize: "12px" }}>
-              <Task color="success" />
-              TASK
-            </MenuItem>
-          </Select>
+          {workItem.category === "EPIC" && (
+            <Select
+              style={{
+                height: 40,
+                borderRadius: 0,
+                marginTop: "10px",
+                width: 210,
+                outline: "none",
+                fontSize: "12px",
+              }}
+              value={selectedCategory}
+              defaultValue="ISSUE" // Set default value
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+              }}
+            >
+              <MenuItem value="ISSUE" sx={{ fontSize: "12px" }}>
+                <SyncProblem color="warning" />
+                ISSUE
+              </MenuItem>
+              <MenuItem value="TASK" sx={{ fontSize: "12px" }}>
+                <Task color="success" />
+                TASK
+              </MenuItem>
+            </Select>
+          )
+          }
+           {
+              workItem.category === "ISSUE"
+              &&
+              <Select
+              style={{
+                height: 40,
+                borderRadius: 0,
+                marginTop: "10px",
+                width: 210,
+                outline: "none",
+                fontSize: "12px",
+              }}
+              value={selectedCategory}
+              defaultValue="TASK" 
+              onChange={(e) => {
+                setSelectedCategory(e.target.value);
+              }}
+            >
+              <MenuItem value="TASK" sx={{ fontSize: "12px" }}>
+                <Task color="success" />
+                TASK
+              </MenuItem>
+            </Select>
+            }
           <Button
             variant="soft"
             fullWidth

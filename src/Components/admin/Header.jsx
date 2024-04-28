@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../SideBar/SideBarScript";
-import "../SideBar/SideBar.css";
-import "./Header.css";
-import { useNavigate } from "react-router-dom";
-import { getUserDetails } from "../../Api/User";
-import Loader from "../../common/Loader";
-
-function Header() {
-
-
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { getUserDetails } from '../../Api/User';
+import Loader from '../../common/Loader';
+const Header = () => {
   const navigate = useNavigate();
   const [profilePic ,setProfilePic] = useState(null);
   const [loading,setLoading] = useState(false);
@@ -73,7 +66,7 @@ function Header() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default Header;
+export default Header

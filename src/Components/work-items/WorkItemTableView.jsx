@@ -44,6 +44,9 @@ export default function WorkItemTableView({
               Status
             </TableCell>
             <TableCell className="table_header" align="left">
+              Created Member
+            </TableCell>
+            <TableCell className="table_header" align="left">
                 Actions
             </TableCell>
           </TableRow>
@@ -68,6 +71,7 @@ export default function WorkItemTableView({
                 {new Date(workItem.createdAt).toLocaleString()}
               </TableCell>
               <TableCell align="left">{workItem.state}</TableCell>
+              <TableCell align="left" key={workItem.createdBy.userId}>{workItem.createdBy.fullName}</TableCell>
               <TableCell align="left">
                 <Button
                   variant="outlined"

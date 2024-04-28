@@ -116,17 +116,20 @@ export default function Card({ task, index }) {
 
               
 
+            
             <div className="flex justify-between">
             <section className="flex">
               <span className="text-gray-600">
                 State
               </span>
+            
               <span className="pl-4">
                     <span>
                       {task.state === "TODO" && <Circle   style={{fontSize:'15px'}}  color="error" />}
                       {task.state === "DOING" && (<Circle style={{fontSize:'15px'}}   color="warning" />)}
                       {task.state === "DONE" && <Circle   style={{fontSize:'15px'}}   color="success" />}
                     </span>
+                  
                   <span>{task.state.toLowerCase()}</span>
               </span>
             </section>
@@ -139,7 +142,7 @@ export default function Card({ task, index }) {
                     </span>
                     <Avatar
                       src={
-                        "http://localhost:8081" +
+                        
                         task.memberAssigned.profile_image_path
                       }
                     />

@@ -6,12 +6,12 @@ import { useParams } from "react-router-dom";
 import ShowEachWorkItemAsModal from "./showEachWorkItemAsModal";
 import Board from "../.././Components/boards/Board"; // Import the Board component
 import WorkItemTableView from "./WorkItemTableView";
-import { useDispatch, useSelector } from "react-redux";
-import { allWorkItems, getWorkItemErrors, getWorkItemStatus,fetchWorkItems } from "./slices/workitem/workItemSlice";
+import { getAllWorkItems } from "../../Api/workItem";
+import { getProjectDetailsByProjectId } from "../../Api/project";
 function AllWorkItems() {
   const [workItems, setWorkItems] = useState([]);
   const { projectId } = useParams();
-  
+  const [projectMembers, setProjectMembers] = useState({})
   const [showCreateWorkItemModal, setShowCreateWorkItemModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState("work-item-table"); // State to track the selected link
   const [singleWorkItemDetails, setSingleWorkItemDetails] = useState({
@@ -19,27 +19,31 @@ function AllWorkItems() {
     projectId: ''
   });
   
-  const dispatch = useDispatch();
-  const workItemsList = useSelector(allWorkItems);
-  const workItemsStatus = useSelector(getWorkItemStatus);
-  const workItemsError = useSelector(getWorkItemErrors);
-  useEffect(() => {
-    if (workItemsStatus === "idle") {
-      dispatch(fetchWorkItems(projectId));
-      setWorkItems(workItemsList)
-    }
-  }, [dispatch, projectId]);
 
-  // const getAllWorkItemByProjectId = async (projectId) => {
-  //   try {
-  //     const response = await getAllWorkItems(projectId);
-  //     console.log(response)
-  //     setWorkItems(response.data)
-  //   } catch (error) {
-  //     console.log(response)
-  //   }
-  // }
- 
+  useEffect(() => {
+    getAllWorkItemByProjectId(projectId)
+    getProjectDetails(projectId);
+  },[])
+
+
+  const getAllWorkItemByProjectId = async (projectId) => {
+    try {
+      const response = await getAllWorkItems(projectId);
+      console.log(response)
+      setWorkItems(response.data)
+    } catch (error) {
+      console.log(response)
+    }
+  }
+  const getProjectDetails = async (projectId) => {
+    try {
+      const response = await getProjectDetailsByProjectId(projectId);
+      console.log(response)
+      setProjectMembers(response.data.assignedMembersDetailsList);
+    } catch (error) {
+      console.log(response)
+    }
+  }
 
   return (
     <>
@@ -49,7 +53,7 @@ function AllWorkItems() {
             <p className="text-xl font-semibold ">{projectId}</p>
           </div>
           <div className="flex space-x-4">
-            <CreateWorkItemModal projectId={projectId}/>
+            <CreateWorkItemModal projectId={projectId} setWorkItems={setWorkItems}/>
            
             <Button
               variant="outlined"
@@ -72,11 +76,11 @@ function AllWorkItems() {
         {selectedLink === "work-item-table" ? (
           <>
           
-          <WorkItemTableView workItems={workItemsList}  setSingleWorkItemDetails={setSingleWorkItemDetails} setShowCreateWorkItemModal={setShowCreateWorkItemModal} projectId={projectId} />
+          <WorkItemTableView workItems={workItems}  setSingleWorkItemDetails={setSingleWorkItemDetails} setShowCreateWorkItemModal={setShowCreateWorkItemModal} projectId={projectId} />
           
           </>
         ) : selectedLink === "boards" ? (
-          <Board  workItems={workItemsList}/> // Render the board component
+          <Board  workItemList={workItems} projectMembers={projectMembers}/> // Render the board component
         ) : null}
       </div>
       <ShowEachWorkItemAsModal

@@ -28,6 +28,7 @@ import {
 import { Button } from "@mui/joy";
 import {
   addAttachmentToWorkItem,
+  deleteAttachment,
   getAllAttachmentByWorkItem,
   updateDescrition,
 } from "../../../Api/attachment";
@@ -45,14 +46,25 @@ import Loader from "../../../common/Loader";
 
 function AttachmentSection({ workItemId }) {
   // State to manage attachments and their details
-  const [attachments, setAttachments] = useState([]);
+  const [attachments, setAttachments] = useState([
+    {
+      attachmentId:"",
+      attachment_name:"",
+      attachment_size:"",
+      attachment_url:"",
+      attachment_description:"",
+      attachment_contentType:"",
+      createdAt:""
+
+    }
+  ]);
   const [selectedAttachment, setSelectedAttachment] = useState({});
   const [anchorEl, setAnchorEl] = useState(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [addAttachmentOpen, setAddAttachmentOpen] = useState(false);
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [attachmentDescription, setAttachmentDescription] = useState("");
-  const [isloading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showMessage, setShowMessage] = useState(false);
   const [descriptionEditing,setDescriptionEditing] = useState(false);
   const [editedDescription, setEditedDescription] = useState()
@@ -88,11 +100,24 @@ function AttachmentSection({ workItemId }) {
   };
 
   // Function to delete an attachment
-  const handleDeleteAttachment = (id) => {
-    setAttachments(
-      attachments.filter((attachment) => attachment.attachmentId !== id)
-    );
-    handleMenuClose();
+  const handleDeleteAttachment = async (attachment) => {
+    const {attachmentId} = attachment
+
+    try {
+      setLoading(true);
+      const response = await deleteAttachment(attachmentId);
+      console.log(response);
+      toast.success(response.data.message);
+      setAttachments(
+        attachments.filter((attachment) => attachment.attachmentId !== attachmentId)
+      );
+    } catch (error) {
+      console.log(error.response.data)
+    }
+    finally {
+      setLoading(false);
+      handleMenuClose();
+    }
   };
 
   // Function to open the attachment preview modal
@@ -167,7 +192,21 @@ function AttachmentSection({ workItemId }) {
       };
 
       // Pass updatedAttachmentDetailsDTO to uploadFileDetailsToBackend
+      setLoading(true);
      const response = await uploadFileDetailsToBackend(updatedAttachmentDetailsDTO);
+     const newAttachment = {
+      attachmentId:response.data.attachmentId,
+      attachment_name:response.data.attachment_name,
+      attachment_size:response.data.attachment_size,
+      attachment_url:response.data.attachment_url,
+      attachment_description:response.data.attachment_description,
+      attachment_contentType:response.data.attachment_contentType,
+      createdAt:response.data.createdAt,
+     }
+     setAttachments((prevState) => [...prevState, newAttachment]);
+    
+     toast.success("attachment uploaded");
+
     } catch (error) {
       console.log("Error:", error);
     }finally{
@@ -189,10 +228,9 @@ function AttachmentSection({ workItemId }) {
         workItemId,
         attachmentDetailsDTO
       );
-      console.log(response);
       setLoading(false);
       setAddAttachmentOpen(false);
-      toast.success("attachment uploaded");
+      return response;
     } catch (error) {
       toast.error(error.response.data.message);
       setLoading(false);
@@ -251,7 +289,7 @@ function AttachmentSection({ workItemId }) {
     <>
     
         <div className="">
-       {isloading &&  <Loader/>}
+       {loading &&  <Loader/>}
           <Button
             variant="outlined"
             color="primary"
@@ -353,18 +391,21 @@ function AttachmentSection({ workItemId }) {
               onClose={handleMenuClose}
             >
               <MenuItem onClick={handleOpenPreview(selectedAttachment)}>
-                <Visibility /> Preview
+                <Visibility 
+                color="secondary"
+                /> Preview
               </MenuItem>
 
               <MenuItem  onClick={()=>handleDescriptionEditing(selectedAttachment)}>
                 <Edit
+                color="info"
                 />{" "}
                 Edit Description
               </MenuItem>
               <MenuItem
                 onClick={() => handleDeleteAttachment(selectedAttachment)}
               >
-                <Delete /> Delete
+                <Delete color="error"/> Delete
               </MenuItem>
             </Menu>
 

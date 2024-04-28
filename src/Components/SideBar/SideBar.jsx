@@ -4,11 +4,19 @@ import "../SideBar/SideBar.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from "react-router-dom";
 import { UrlContext } from "../../store/urlContext";
-
-
+import { jwtDecode } from "jwt-decode";
 
 function SideBar() {
-
+  const [role, setRole] = useState("")
+    useEffect(() => {
+      const accessToken = localStorage.getItem('accessToken');
+        if(accessToken){
+            const decode = jwtDecode(accessToken)
+            const userRole = decode.role;
+            console.log(userRole)
+            setRole(userRole);
+        }
+    },[])
     const currentURL = useContext(UrlContext);
     console.log(currentURL + '---------------------------------------------------url')
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,7 +49,7 @@ function SideBar() {
       onMouseLeave={() => setIsSidebarOpen(false)}
     >
       <ul class="nav-list">
-        {currentURL == '/profile-settings' || '/privacy-settings' ? (
+        {role === "ROLE_MEMBER" ? (
           <>
           <li>
               <a onClick={()=>{navigate('/projects')}}>
@@ -100,25 +108,35 @@ function SideBar() {
         ) : (
           <>
             <li>
-              <a  onClick={() => navigate("/register")}>
-                <i className="bx bx-notepad btnx"></i>
-                <span class="link_name">Register</span>
+              <a onClick={()=>{navigate('/profile-settings')}}>
+                <i className="bx bx-user btnx"></i>
+                <span class="link_name">
+                  My profile
+                </span>
               </a>
-              <span class="tooltip">Register</span>
+              <span class="tooltip">my profile</span>
             </li>
             <li>
-              <a onClick={() => navigate("/login")}>
-                <i class="bx bxs-notepad btnx " onClick={toggleSideBar}></i>
-                <span class="link_name">Login</span>
+              <a onClick={() => navigate("/admin/users")}>
+                
+                <i class="bx bxs-group btnx" onClick={toggleSideBar}></i>
+                <span class="link_name">users</span>
               </a>
-              <span class="tooltip">Login</span>
+              <span class="tooltip">users</span>
             </li>
             <li>
-              <a  onClick={() => navigate("/")}>
-                <i class="bx bx-edit-alt btnx " onClick={toggleSideBar}></i>
-                <span class="link_name">forgotten password</span>
+              <a  onClick={() => navigate("/admin/projects")}>
+                <i class="bx bxs-file btnx " onClick={toggleSideBar}></i>
+                <span class="link_name">projects</span>
               </a>
-              <span class="tooltip">Forgotten password</span>
+              <span class="tooltip">projects</span>
+            </li>
+            <li>
+              <a  onClick={()=>{navigate('/community')}}>
+                <i class="bx bxs-chat btnx "></i>
+                <span class="link_name ">Chat</span>
+              </a>
+              <span class="tooltip">Chat</span>
             </li>
           </>
         )}

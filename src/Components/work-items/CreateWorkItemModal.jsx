@@ -13,9 +13,11 @@ import WorkItemCategorySelector from './category/WorkItemCategorySelctor';
 import toast from 'react-hot-toast';
 import { createWorkItem } from '../../Api/workItem';
 
-export default function CreateWorkItemModal({projectId}) {
+export default function CreateWorkItemModal({projectId,setWorkItems}) {
     const [workItemCategory,setWorkItemCategory]=React.useState('')
-    const [title,setTitle] = React.useState('')
+      const [title,setTitle] = React.useState('')
+
+    
     const handleCategorySelect = (category) => {
         console.log(category)
         if(category ==''){
@@ -43,6 +45,7 @@ export default function CreateWorkItemModal({projectId}) {
     
     try {
       const response = await createWorkItem(title,workItemCategory,projectId);
+      setWorkItems((prevState)=>[...prevState,response.data])
       console.log(response);
       setOpen(false)
     } catch (error) {

@@ -58,15 +58,18 @@ function AllWorkLifeCycle() {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear();
-        let month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding leading zero if necessary
-        let day = date.getDate().toString().padStart(2, '0'); // Adding leading zero if necessary
+        let month = (date.getMonth() + 1).toString().padStart(2, '0'); 
+        let day = date.getDate().toString().padStart(2, '0');
         return `${day}-${month}-${year}`;
     };
 
   return (
     <div className="project-container">
       <div className="flex justify-between py-3 px-3">
+        <div>
         <p className="text-xl font-semibold underline pt-2 ">Work Life Cycle</p>
+        <p>A work life cycle is time limit for completing a task you have to select a start date and end date</p>
+        </div>
         {editing && <AddWorkLifeCycleModal 
             setEditing={setEditing}
             editing={editing}

@@ -159,6 +159,10 @@ const ChatRoom = () => {
         publicChats.push(payloadData);
         setPublicChats([...publicChats]);
         break;
+      case "LEAVE":
+        publicChats.push(payloadData);
+        setPublicChats([...publicChats])
+        break;
     }
     scrollBottom();
     focusInput();

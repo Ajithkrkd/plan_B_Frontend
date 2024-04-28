@@ -16,6 +16,12 @@ import AllWorkItemsPage from './Pages/work-item/AllWorkItemsPage'
 import KanbanBoardPage from './Pages/board/KanbanBoardPage'
 import WorkLifeCyclePage from './Pages/work-item/WorkLifeCyclePage'
 import CommunityPage from './Pages/Community/CommunityPage'
+import NotFount from './Pages/errorPage/NotFount'
+import AdminRoutes from './Components/PrivateRoutes/AdminRoutes'
+import AdminManagment from './Components/admin/AdminManagment'
+import AdminUsers from './Components/admin/AdminUsers'
+import AdminProjects from './Components/admin/AdminProjects'
+
 
 
 function App() {
@@ -29,9 +35,10 @@ function App() {
           <Route path='/register' Component={RegisterPage}/>
             <Route path='/forgotten-password' Component={ForgotPasswordPage}/>
             <Route path='/project/:id' Component={ViewSingleProjectPage}/>
-            <Route path='/community' Component={CommunityPage}/>
+            <Route path='/error' Component={NotFount}/>
 
           <Route element={<UserRoutes/>}>
+            <Route path='/community' Component={CommunityPage}/>
             <Route path='/projects' Component={AllProjectsPage}/>
             <Route path='/profile-settings' Component={UserProfilePage}/>
             <Route path='/privacy-settings' Component={PrivacyDetailsPage}/>
@@ -41,7 +48,11 @@ function App() {
             <Route path='/board/:id' Component={KanbanBoardPage}/>
             <Route path='/work-life-cycle' Component={WorkLifeCyclePage}/>
           </Route>
-
+          <Route element={<AdminRoutes/>}>
+          <Route path='/admin' Component={AdminManagment}/>
+          <Route path='/admin/users' Component={AdminUsers}/>
+          <Route path='/admin/projects' Component={AdminProjects}/>
+          </Route>
         </Routes>
       </Router>
     </>

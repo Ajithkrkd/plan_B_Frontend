@@ -65,12 +65,15 @@ function UserProjects() {
                             alt={project.title}
                           />
                         </div>
-                        <div className="max-w-full mt-4">
+                        <div className="max-w-full flex-col flex  items-center  mt-4">
                           <h5 className="mb-2 text-2xl font-semibold tracking-tight text-center text-gray-900 dark:text-black">
                             {project.title}
                           </h5>
                           <p className="font-normal text-gray-700 dark:text-400">
                             {project.description}
+                          </p>
+                          <p className="font-semibold italic text-gray-700 dark:text-400">
+                           <span className="font-normal">Created By {" "}</span> {project.projectRootAdministratorEmail}
                           </p>
                         </div>
                  

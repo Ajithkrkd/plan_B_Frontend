@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, Outlet, useNavigate } from 'react-router-dom'
 import {jwtDecode} from 'jwt-decode';
-const UserRoutes = () => {
+const AdminRoutes = () => {
 
     const navigate = useNavigate();
     const [role, setRole] = useState(null);
@@ -10,7 +10,8 @@ const UserRoutes = () => {
         const accessToken = localStorage.getItem('accessToken');
         if(accessToken){
             const decode = jwtDecode(accessToken)
-            const userRole = decode.role[0];
+            const userRole = decode.role;
+            console.log(userRole)
             setRole(userRole);
         }
         else{
@@ -25,10 +26,10 @@ const UserRoutes = () => {
 
     return (
         <>
-            {role && role === 'ROLE_ADMIN' || 'ROLE_MEMBER' ? <Outlet /> : <Navigate to="/login" />}
+            {role && role === "ROLE_ADMIN" ? <Outlet /> : <Navigate to="/error" />}
         </>
     );
 
 }
 
-export default UserRoutes
+export default AdminRoutes

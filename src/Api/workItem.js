@@ -81,3 +81,29 @@ export const getAllChildWorkItemsByParentWorkItemId = async (workItemId) =>{
        return errorHandler(error)
     }
 }
+
+export const getAllWorkItemBySpecificMember = async (memberId) =>{
+    try {
+        const response = await customAxios.get(`${workItemRoutes.getAllWorkItemBySpecificMember_URL}?userId=${memberId}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}
+export const assignToWorkLifeCycle = async (workItemId,workLifeCycleId,projectId) =>{
+    try {
+        const response = await customAxios.post(`${workItemRoutes.assignToWorkLifeCycle_URL}?workItemId=${workItemId}&workLifeCycleId=${workLifeCycleId}&projectId=${projectId}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}
+
+export const requestForChangingWorkItemDeadLine = async (workItemId,reason) =>{
+    try {
+        const response = await customAxios.post(`${workItemRoutes.changeDeadLineOfWorkItemRequest_URL}?reason=${reason}&workItemId=${workItemId}`);
+        return response;
+    } catch (error) {
+       return errorHandler(error)
+    }
+}

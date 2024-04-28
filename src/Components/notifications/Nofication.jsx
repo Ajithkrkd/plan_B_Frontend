@@ -10,7 +10,6 @@ const Nofication = () => {
   const token = searchParams.get("token");
   const [invitations, setInvitations] = useState([]);
   //TODO : dynamic project image url
-  const imgUrl = `http://localhost:8081/uploads/candile1.jpg`;
 
   useEffect(() => {
     const fetchInvitationDetails = async () => {
@@ -30,7 +29,7 @@ const Nofication = () => {
           <>
             <div className="flex flex-wrap border p-3 mr-4 gap-10 shadow rounded">
               <img
-                src={imgUrl}
+                src={inv.project_image_url}
                 style={{ width: 50, shadow: "none" }}
                 alt="Project"
               />
@@ -46,9 +45,14 @@ const Nofication = () => {
                 <p>Project</p>
                 <p className="font-thin">{inv.project_title}</p>
               </div>
-              <div className="mx-2 flex flex-col">
+              {
+                inv.invitation_status === "ACCEPTED" ?
+                (<Button variant="contained">Already Accepted</Button>)
+                :
+                (<div className="mx-2 flex flex-col">
                 <NotificationModal notification={inv} />
-              </div>
+                </div>)
+              }
             </div>
           </>
         ))

@@ -29,7 +29,7 @@ const StateSelector = ({ onStateSelector ,initialState}) => {
         value={selectedState}
         onChange={handleChange}
         sx={{
-          width: 240,
+          width: 150,
           transform: selectedState ? "rotate(0deg)" : "rotate(0deg)",
           transition: "0.2s",
         }}

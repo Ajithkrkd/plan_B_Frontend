@@ -80,8 +80,10 @@ function ViewSingleProject() {
 
     } catch (error) {
       console.log(error)
+      toast.error(error.response.data.message);
     }finally{
       setFetching(false)
+      setTitleEditing(false);
     }
    }
    const cancelTitleEdit = () =>{
@@ -109,8 +111,10 @@ function ViewSingleProject() {
       setDescriptionEditing(false)
     } catch (error) {
       console.log(error)
+      toast.error(error.response.data.message);
     }finally{
       setFetching(false)
+      setDescriptionEditing(false)
     }
    }
    const cancelDescriptioneEdit = () =>{
@@ -346,7 +350,7 @@ function ViewSingleProject() {
               </div>
             </div>
 
-            <AssignedMembers assignedMembers={projectDetails.assignedMembersDetailsList} /> {/* Use the new component */}
+            <AssignedMembers assignedMembers={projectDetails.assignedMembersDetailsList} projectAdmins={projectDetails.projectAdministratorDetailsList} /> {/* Use the new component */}
           </div>
         </>
       )}
