@@ -12,6 +12,10 @@ const errorHandler =(AxiosError) =>{
             location.href('/login')
             throw(axiosError);
         }
+        if(axiosError && axiosError.response.data.status === 503){
+            location.href('/error')
+            throw(axiosError);
+        }
         else {
             console.log('Error response has no message');
             throw(axiosError)

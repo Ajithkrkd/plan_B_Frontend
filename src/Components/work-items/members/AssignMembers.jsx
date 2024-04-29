@@ -54,7 +54,7 @@ const AssignMembers = ({ workItemDetails }) => {
   const assignMemberToWorkItem = async (memberId, workItemId) => {
     console.log(memberId, workItemId);
     try {
-      const response = await assignProjectMemberToWorkItem(workItemId, memberId);
+      const response = await assignProjectMemberToWorkItem(workItemId,memberId,projectId);
       console.log(response);
     } catch (error) {
       console.log(error);

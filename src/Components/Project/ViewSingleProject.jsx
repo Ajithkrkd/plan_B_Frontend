@@ -14,9 +14,9 @@ import {
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import SingleProjectSkeleton from "./SingleProjectSkeleton";
-import AssignedMembers from "./members/AssignedMembers"
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import Loader from "../../common/Loader";
+import AssignedMembers from "./members/AssignedMembers";
 
 function ViewSingleProject() {
   const [projectDetails, setProjectDetails] = useState({});
@@ -350,7 +350,12 @@ function ViewSingleProject() {
               </div>
             </div>
 
-            <AssignedMembers assignedMembers={projectDetails.assignedMembersDetailsList} projectAdmins={projectDetails.projectAdministratorDetailsList} /> {/* Use the new component */}
+            <AssignedMembers
+             assignedMembers={projectDetails.assignedMembersDetailsList}
+             projectAdmins={projectDetails.projectAdministratorDetailsList} 
+             projectId={projectDetails.projectId} 
+             rootAdmin={projectDetails.projectRootAdministratorEmail}
+             /> {/* Use the new component */}
           </div>
         </>
       )}

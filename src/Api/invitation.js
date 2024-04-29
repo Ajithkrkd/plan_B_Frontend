@@ -23,9 +23,18 @@ export const acceptMemberInvitation  = async (token) =>{
     }
 }
 
-export const assignProjectMemberToWorkItem = async (workItemId ,memberId) =>{
+export const assignProjectMemberToWorkItem = async (workItemId,memberId,projectId) =>{
     try {
-        const response = await customAxios.post(`${invitationRoutes.assignProjectMemberToWorkItem_URL}?workItemId=${workItemId}&memberId=${memberId}`);
+        const response = await customAxios.post(`${invitationRoutes.assignProjectMemberToWorkItem_URL}?workItemId=${workItemId}&memberId=${memberId}&projectId=${projectId}`);
+        return response;
+    } catch (error) {
+       return errorHandle(error)
+    }
+}
+
+export const removeMemberFromProject = async (projectId ,memberId) =>{
+    try {
+        const response = await customAxios.post(`${invitationRoutes.removeMemberFromProject_URL}?projectId=${projectId}&memberId=${memberId}`);
         return response;
     } catch (error) {
        return errorHandle(error)

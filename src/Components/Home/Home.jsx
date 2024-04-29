@@ -1,13 +1,31 @@
-import React, {} from 'react'
+import React, { useEffect, useState } from 'react'
 import {} from '@mui/material';
 import './home.css'
 import './home.scss'
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 
 
 
 function Home() {
+const [role , setRole] = useState("");
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    console.log(accessToken);
+    const decode = jwtDecode(accessToken);
+    console.log(decode);
+    const userRole = decode.role;
+    setRole(userRole);
+  },[])
+
+  const handleNavigaton = () => {
+    if (role === "ROLE_ADMIN"){
+      navigate("/admin")
+    }else{
+      navigate("/projects")
+    }
+  }
 
 const navigate = useNavigate()
   return (
@@ -22,7 +40,7 @@ const navigate = useNavigate()
           </div>
           <div className='my-3'>
             <button className="button --shine"
-            onClick={()=>navigate('/projects')}
+            onClick={handleNavigaton}
             >Start Now</button>
           </div>
        </div>

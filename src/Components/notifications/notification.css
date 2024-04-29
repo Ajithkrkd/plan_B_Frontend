@@ -1,0 +1,19 @@
+.notification-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .notification-content {
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification-actions {
+    margin-left: auto;
+  }
+  .notification-accepted {
+    filter: blur(.4px) grayscale(80%);
+  }
+  
+  

@@ -8,3 +8,16 @@ body{
 .second-row{
     padding: 10px;
 }
+.remove-button{
+  margin-left: auto;
+}
+    .removeIcon{
+    cursor: pointer;
+    color: rgb(97, 161, 234);
+  }
+  .removeIcon :hover{
+    cursor: pointer;
+    color: #4B84BE;
+    transition: box-shadow 0.3s ease;
+
+  }

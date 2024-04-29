@@ -19,8 +19,8 @@ import CommunityPage from './Pages/Community/CommunityPage'
 import NotFount from './Pages/errorPage/NotFount'
 import AdminRoutes from './Components/PrivateRoutes/AdminRoutes'
 import AdminManagment from './Components/admin/AdminManagment'
-import AdminUsers from './Components/admin/AdminUsers'
-import AdminProjects from './Components/admin/AdminProjects'
+import AdminUsers from './Components/admin/users/AdminUsers'
+import AdminProjects from './Components/admin/projects/AdminProjects'
 
 
 

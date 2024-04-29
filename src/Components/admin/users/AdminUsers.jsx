@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress, Avatar, Skeleton } from '@mui/material';
-import { getAllUsers } from '../../Api/admin/adminApis';
-import Header from './Header';
-import SideBar from '../SideBar/SideBar';
-import Loader from '../../common/Loader';
-import UsersTableSkeleton from './skeltons/UsersTableSkeleton ';
+import { getAllUsers } from '../../../Api/admin/adminApis';
+import Header from '../Header';
+import SideBar from '../../SideBar/SideBar';
+import Loader from '../../../common/Loader';
+import UsersTableSkeleton from '../skeltons/UsersTableSkeleton ';
 
 const AdminUsers = () => {
     const [users, setUsers] = useState([]);

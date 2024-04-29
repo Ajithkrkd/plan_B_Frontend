@@ -8,10 +8,11 @@ import Stack from "@mui/joy/Stack";
 import Loader from '../../common/Loader'
 import { acceptMemberInvitation } from "../../Api/invitation";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function NotificationModal({ notification }) {
   console.log(notification && notification);
-
+  const navigate = useNavigate();
   const [isLoading ,setIsLoading] = React.useState(false);
 
   const handleAcceptButtonClick = async(token)=>{
@@ -24,7 +25,7 @@ export default function NotificationModal({ notification }) {
       setIsLoading(false);
       setOpen(false)
       toast.success(response.data.message)
-
+      navigate("/projects")
     } catch (error) {
       console.log(error.response.data)
       setIsLoading(false)
@@ -35,8 +36,8 @@ export default function NotificationModal({ notification }) {
   const [open, setOpen] = React.useState(false);
   return (
     <React.Fragment>
-      <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
-        details
+      <Button variant="solid" color="success" onClick={() => setOpen(true)}>
+        JOIN
       </Button>
       {
         isLoading
