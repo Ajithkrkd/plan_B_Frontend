@@ -31,10 +31,35 @@ export const assignProjectMemberToWorkItem = async (workItemId,memberId,projectI
        return errorHandle(error)
     }
 }
+export const unAssignMemberFromWorkItem = async (workItemId,projectId) =>{
+    try {
+        const response = await customAxios.post(`${invitationRoutes.unAssignMemberFromWorkItem_URL}?workItemId=${workItemId}&projectId=${projectId}`);
+        return response;
+    } catch (error) {
+       return errorHandle(error)
+    }
+}
 
 export const removeMemberFromProject = async (projectId ,memberId) =>{
     try {
         const response = await customAxios.post(`${invitationRoutes.removeMemberFromProject_URL}?projectId=${projectId}&memberId=${memberId}`);
+        return response;
+    } catch (error) {
+       return errorHandle(error)
+    }
+}
+
+export const removeAdminFromProject = async (projectId ,memberId) =>{
+    try {
+        const response = await customAxios.post(`${invitationRoutes.removeAdminFromProject_URL}?projectId=${projectId}&memberId=${memberId}`);
+        return response;
+    } catch (error) {
+       return errorHandle(error)
+    }
+}
+export const assignAdminToProject = async (projectId ,memberId) =>{
+    try {
+        const response = await customAxios.post(`${invitationRoutes.assignAdminToProject_URL}?projectId=${projectId}&memberId=${memberId}`);
         return response;
     } catch (error) {
        return errorHandle(error)

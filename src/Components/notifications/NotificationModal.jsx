@@ -6,7 +6,7 @@ import DialogTitle from "@mui/joy/DialogTitle";
 import Stack from "@mui/joy/Stack";
 
 import Loader from '../../common/Loader'
-import { acceptMemberInvitation } from "../../Api/invitation";
+import { acceptMemberInvitation } from "../../Api/member";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import "../project.css";
-import { AdminPanelSettings, Delete } from "@mui/icons-material";
+import { AdminPanelSettings, AdminPanelSettingsOutlined, Delete } from "@mui/icons-material";
 import { Alert, Box, Button, Modal, Tooltip } from "@mui/material";
 import toast from "react-hot-toast";
-import { removeMemberFromProject } from "../../../Api/invitation";
+import { assignAdminToProject, removeAdminFromProject, removeMemberFromProject } from "../../../Api/member";
 import Loader from "../../../common/Loader";
 const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin })=> {
 
   const [isLoading, setIsLoading] = useState(false);
   const [memberToRemove,setMemberToRemove]= useState(null);
+  const [adminToRemove,setAdminToRemove]= useState(null);
+  const [selectedAdmin,setSelectedAdmin]= useState(null);
   const [open, setOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
+  const [removeAdminOpen, setRemoveAdminOpen] = useState(false);
   const [assignedMembersList ,setAssignedMembersList] = useState(assignedMembers);
+  const [assignedAdminList ,setAssignedAdminList] = useState(projectAdmins);
 
   const handleRemoveMember = async (memberId) => {
     if(!projectId  || !memberId){
@@ -42,7 +47,73 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
       setMemberToRemove(null);
     }
   };
+  const handleMakeAdmin = async (memberId) => {
+    if(!projectId  || !memberId){
+      toast.error("Something went wrong try later");
+    }
+    setSelectedAdmin(memberId);
+    setAdminOpen(true);
 
+  };
+
+  const handleAdminCancel = () => {
+    setAdminOpen(false);
+    setSelectedAdmin(null)
+  };
+
+  const handleAdminConfirm = async() => {
+    try {
+      if (assignedAdminList.some(admin => admin.id === selectedAdmin)) {
+        toast.error("Member is already an administrator.");
+        return; 
+      }
+      setIsLoading(true);
+      const response = await assignAdminToProject(projectId, selectedAdmin);
+      console.log(response);
+      
+      const newAdmin = assignedMembersList.find(member => member.id === selectedAdmin);
+      setAssignedAdminList([...assignedAdminList, newAdmin]);
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message);
+    }finally{
+      setIsLoading(false);
+      console.log("Remove member with ID:", memberToRemove , projectId);
+      setAdminOpen(false);
+      setSelectedAdmin(null);
+    }
+  };
+
+  const handleRemoveAdmin = async (memberId) => {
+    if(!projectId  || !memberId){
+      toast.error("Something went wrong try later");
+    }
+   setAdminToRemove(memberId);
+   setRemoveAdminOpen(true);
+
+  };
+
+  const handleRemoveAdminCancel = () => {
+    setRemoveAdminOpen(false);
+    setAdminToRemove(null);
+  };
+  const handleRemoveAdminConfirm = async() => {
+    try {
+      setIsLoading(true);
+      const response = await removeAdminFromProject(projectId, adminToRemove);
+      console.log(response);
+      setAssignedAdminList(assignedAdminList.filter(admin => admin.id !== adminToRemove));
+      toast.success("Admin removed from the List");
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response.data.message);
+    }finally{
+      setIsLoading(false);
+      console.log("Remove member with ID:", memberToRemove , projectId);
+      setRemoveAdminOpen(false);
+      setAdminToRemove(null);
+    }
+  };
   const style = {
     position: 'absolute',
     top: '50%',
@@ -60,9 +131,12 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
     <>
     {isLoading && <Loader/>}
       <div className="flex flex-col  justify-between pr-3 border px-5 py-3">
+        <div>
         <p className="text-2xl py-2 font-semibold">Project Administrators</p>
-        {projectAdmins &&
-          projectAdmins.map((member) => (
+        
+        </div>
+        {assignedAdminList &&
+          assignedAdminList.map((member) => (
             <div key={member.id} className="flex  items-center py-2">
               <div className="flex items-start mr-5">
                 <img
@@ -119,7 +193,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
                       <Delete
                         color="error"
                         style={{ float: "right", fontSize: 35, cursor: "pointer" }}
-                        onClick={() => handleRemoveMember(member.id)}
+                        onClick={() => handleRemoveAdmin(member.id)}
                         className="remove-button"
                       />
                     </Tooltip>
@@ -174,6 +248,14 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
                   </span>
                 </div>
               </div>
+              <Tooltip title="Make Admin" arrow>
+                <AdminPanelSettingsOutlined
+                  color="success"
+                  style={{ float: "right", fontSize: 35, cursor: "pointer" }}
+                  onClick={() => handleMakeAdmin(member.id)}
+                  className="remove-button"
+                />
+              </Tooltip>
               <Tooltip title="Remove member" arrow>
                 <Delete
                   color="error"
@@ -182,6 +264,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
                   className="remove-button"
                 />
               </Tooltip>
+              
             </div>
           ))}
       </div>
@@ -193,6 +276,33 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
            <div style={{float:"right", marginTop:"10px"}}>
               <Button variant="outlined" color="error"   className="mx-2" onClick={handleCancel}>Cancel</Button>
               <Button variant="outlined" color="success" className="mx-2" onClick={handleConfirm}>Confirm</Button>
+           </div>
+          </div>
+        </Box>
+      </Modal>
+
+      <Modal open={adminOpen} onClose={handleAdminCancel}>
+        <Box sx={{ ...style, width: 200 ,outline: "none" }}> 
+          <div>
+            <p className="text-xl my-1 py-2" id="modal-title">Do you want to Add this member To This Project Administrator List?</p>
+            <Alert  severity="info">The member will get all the power to manage the project</Alert>
+           <div style={{float:"right", marginTop:"10px"}}>
+              <Button variant="outlined" color="error"   className="mx-2" onClick={handleAdminCancel}>Cancel</Button>
+              <Button variant="outlined" color="success" className="mx-2" onClick={handleAdminConfirm}>Confirm</Button>
+           </div>
+          </div>
+        </Box>
+      </Modal>
+
+      
+      <Modal open={removeAdminOpen} onClose={handleRemoveAdminCancel}>
+        <Box sx={{ ...style, width: 200 ,outline: "none" }}> 
+          <div>
+            <p className="text-xl my-1 py-2" id="modal-title">Do you want to Remove this member From This Project Administrator List?</p>
+            <Alert  severity="info">The member will Loose all the power to manage the project</Alert>
+           <div style={{float:"right", marginTop:"10px"}}>
+              <Button variant="outlined" color="error"   className="mx-2" onClick={handleRemoveAdminCancel}>Cancel</Button>
+              <Button variant="outlined" color="success" className="mx-2" onClick={handleRemoveAdminConfirm}>Confirm</Button>
            </div>
           </div>
         </Box>

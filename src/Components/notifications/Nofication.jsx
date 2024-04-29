@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../Components/Project/project.css";
 import { useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
-import { getAllInvitation } from "../../Api/invitation";
+import { getAllInvitation } from "../../Api/member";
 import NotificationModal from "./NotificationModal";
 import './notification.css'
 const Notification = () => {
