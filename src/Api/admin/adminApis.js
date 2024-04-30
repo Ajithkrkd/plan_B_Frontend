@@ -19,3 +19,12 @@ export const getAllProjects = async () => {
         return errorHandler(error);
     }
 }
+
+export const isProjectAdmin = async (projectId) => {
+    try {
+        const response = await customAxios.get(`${AdminRoutes.isAdminChek_URL}?projectId=${projectId}`)
+        return response;
+    } catch (error) {
+        return errorHandler(error);
+    }
+}

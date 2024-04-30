@@ -12,7 +12,7 @@ import {
   getWorkLifeCycleStatus,
   updateWorkLifeCycle,
 } from "../slices/workLifeCycle/workLifeCycleSlice";
-import { setLoading } from "../../../store/redux/slices/userDetailsSlice";
+
 
 export default function AddWorkLifeCycleModal({setEditing,editing,editData}) {
   const [isLoading, setIsLoading] = useState(false);

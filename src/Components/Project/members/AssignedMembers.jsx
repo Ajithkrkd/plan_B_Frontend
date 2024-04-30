@@ -31,8 +31,13 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
     setMemberToRemove(null);
   };
 
-  const handleConfirm = async() => {
+  const handleRemoveMemberConfirm = async() => {
     try {
+      if (assignedAdminList.some(admin => admin.id === memberToRemove)) {
+        toast.error("Member is project administrator, cannot remove");
+        setMemberToRemove(null);
+        return; 
+      }
       setIsLoading(true);
       const response = await removeMemberFromProject(projectId, memberToRemove);
       console.log(response);
@@ -61,7 +66,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
     setSelectedAdmin(null)
   };
 
-  const handleAdminConfirm = async() => {
+  const handleMakeAdminConfirm = async() => {
     try {
       if (assignedAdminList.some(admin => admin.id === selectedAdmin)) {
         toast.error("Member is already an administrator.");
@@ -275,7 +280,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
             <Alert  severity="info">The member is also un assigned from all related workItems</Alert>
            <div style={{float:"right", marginTop:"10px"}}>
               <Button variant="outlined" color="error"   className="mx-2" onClick={handleCancel}>Cancel</Button>
-              <Button variant="outlined" color="success" className="mx-2" onClick={handleConfirm}>Confirm</Button>
+              <Button variant="outlined" color="success" className="mx-2" onClick={handleRemoveMemberConfirm}>Confirm</Button>
            </div>
           </div>
         </Box>
@@ -288,7 +293,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
             <Alert  severity="info">The member will get all the power to manage the project</Alert>
            <div style={{float:"right", marginTop:"10px"}}>
               <Button variant="outlined" color="error"   className="mx-2" onClick={handleAdminCancel}>Cancel</Button>
-              <Button variant="outlined" color="success" className="mx-2" onClick={handleAdminConfirm}>Confirm</Button>
+              <Button variant="outlined" color="success" className="mx-2" onClick={handleMakeAdminConfirm}>Confirm</Button>
            </div>
           </div>
         </Box>

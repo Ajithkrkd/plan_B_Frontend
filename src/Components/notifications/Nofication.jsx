@@ -15,8 +15,9 @@ const Notification = () => {
     const fetchInvitationDetails = async () => {
       try {
         const response = await getAllInvitation();
+        const sortedInvitations = response.data.sort((a, b) => new Date(b.invitation_sent_time) - new Date(a.invitation_sent_time));
         setInvitations(response.data);
-        console.log(response.data);
+        console.log(sortedInvitations);
       } catch (error) {
         console.error("Error fetching invitations:", error);
       }
@@ -24,6 +25,29 @@ const Notification = () => {
     fetchInvitationDetails();
     console.log(token);
   }, []);
+
+
+  
+  const getTimeDifference = (timestamp) => {
+    const currentTime = new Date();
+    const messageTime = new Date(timestamp);
+    const differenceInMilliseconds = currentTime - messageTime;
+    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+    const differenceInMinutes = Math.floor(differenceInSeconds / 60);
+    const differenceInHours = Math.floor(differenceInMinutes / 60);
+
+    if (differenceInHours > 0) {
+      return `${differenceInHours} ${
+        differenceInHours === 1 ? "hour" : "hours"
+      } ago`;
+    } else if (differenceInMinutes > 0) {
+      return `${differenceInMinutes} ${
+        differenceInMinutes === 1 ? "minute" : "minutes"
+      } ago`;
+    } else {
+      return "Just now";
+    }
+  };
 
   return (
     <div className="project-container">
@@ -66,6 +90,7 @@ const Notification = () => {
                     <span className="font-semibold text-lg italic"> {inv.project_title} </span>
                   </div>
                
+                    <span className=" text-sm italic"> {getTimeDifference(inv.invitation_sent_time)} </span>
               </div>
             </div>
             <div className="notification-actions">

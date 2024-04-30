@@ -18,7 +18,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import Loader from "../../common/Loader";
 import AssignedMembers from "./members/AssignedMembers";
 
-function ViewSingleProject() {
+function ViewSingleProject({isAdmin}) {
   const [projectDetails, setProjectDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
@@ -37,6 +37,7 @@ function ViewSingleProject() {
   useEffect(() => {
     const fetchProjectDetails = async () => {
       try {
+        toast.success(isAdmin);
         setIsLoading(true);
         const response = await getProjectDetailsByProjectId(id);
         setIsLoading(false);
@@ -45,6 +46,7 @@ function ViewSingleProject() {
         if (response.data.project_profile_url != null) {
           setProfilePic(response.data.project_profile_url);
         }
+        console.log("------------------------------------",isAdmin + 'admin')
       } catch (error) {
         console.log(error);
       }
