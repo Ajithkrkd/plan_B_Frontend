@@ -162,7 +162,7 @@ function CreateWorkItem({ creationDetials }) {
         toast.error("please Enter label name !!");
         return;
       }
-      setLoading(true);
+      setIsLoading(true);
       const response = await createLabel(workItemId, tag);
       console.log(response);
       const newLabel = {
@@ -174,12 +174,13 @@ function CreateWorkItem({ creationDetials }) {
         ...prevState,
         labels: [...prevState.labels, newLabel],
       }));
+      toast.success("Label added Successfully ");
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     } finally {
       setTag("");
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -193,6 +194,7 @@ function CreateWorkItem({ creationDetials }) {
       }
       const response = await deletLabelByLabelId(workID, labelId);
       console.log(response.data);
+      toast.success("Label removed Successfully")
 
       setWorkItemDetails((prevState) => ({
         ...prevState,
@@ -305,7 +307,7 @@ function CreateWorkItem({ creationDetials }) {
       return;
     }
     try {
-      setLoading(true);
+      setIsLoading(true);
       const response = await assignToWorkLifeCycle(workItemId,selectedCycleId,projectId);
       console.log(response.data);
     } catch (error) {
@@ -313,7 +315,7 @@ function CreateWorkItem({ creationDetials }) {
       toast.error(error.response.data.message);
       setSelectedCycleId("");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -359,7 +361,7 @@ function CreateWorkItem({ creationDetials }) {
      const id = workItemDetails.workItemId;
     try {
 
-      setLoading(true);
+      setIsLoading(true);
       const response = await requestForChangingWorkItemDeadLine(id ,extendingReason);
       console.log(response);
       toast.success("request was sent successfully");
@@ -371,7 +373,7 @@ function CreateWorkItem({ creationDetials }) {
     finally{
       setPreviewOpen(false);
       setExtendingReason("");
-      setLoading(false);
+      setIsLoading(false);
     }
   }
 

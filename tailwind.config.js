@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Create a new color group named 'button_1'
+        customBlue: '#79B3FF',
         button_1: {
           DEFAULT: '#0067B8', 
           'hover': '#fff', 

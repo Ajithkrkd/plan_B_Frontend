@@ -6,7 +6,7 @@ import '../../Components/Project/project.css'
 import { changeStateOfWorkItem, getAllWorkItemBySpecificMember } from "../../Api/workItem";
 import Loader from "../../common/Loader";
 import { Button } from "@mui/joy";
-export default function Board({workItemList ,projectMembers}) {
+export default function Board({workItemList ,projectMembers ,projectId}) {
     const [done, setDone] = useState([]);
     const [todo, setTodo] = useState([]);
     const [doing, setDoing] = useState([]);
@@ -134,9 +134,14 @@ export default function Board({workItemList ,projectMembers}) {
     }
     const handleSubmition = async() =>{
         console.log(selectedMemberId)
+        console.log(projectId)
+        if(projectId === '' && selectedMemberId === ''){
+            toast.error("something went wrong")
+            return;
+        }
         try {
             setFetching(true);
-            const response = await getAllWorkItemBySpecificMember(selectedMemberId);
+            const response = await getAllWorkItemBySpecificMember(selectedMemberId,projectId);
             console.log(response);
             setWorokItemToBoard(response.data)
         } catch (error) {

@@ -109,13 +109,13 @@ export default function AddWorkLifeCycleModal({setEditing,editing,editData}) {
 
     console.log(dateError)
     try {
-      setLoading(true);
+      setIsLoading(true);
      const response =  dispatch(updateWorkLifeCycle({ workLifeCycleDto: formData, workingLifeCycleId: editData.workingLifeCycleId }));
       console.log(response);
       setOpen(false);
-      setLoading(false)
+      setIsLoading(false)
     } catch (error) {
-      setLoading(false)
+      setIsLoading(false)
       console.log(error);
     }
 
@@ -159,13 +159,13 @@ export default function AddWorkLifeCycleModal({setEditing,editing,editData}) {
 
     console.log(dateError)
     try {
-      setLoading(true);
+      setIsLoading(true);
       const response  = dispatch(addWorkLifeCycle(formData));
       console.log(response);
       setOpen(false);
-      setLoading(false)
+      setIsLoading(false)
     } catch (error) {
-      setLoading(false)
+      setIsLoading(false)
       console.log(error);
     }
 

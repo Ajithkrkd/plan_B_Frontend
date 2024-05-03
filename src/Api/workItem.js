@@ -82,9 +82,9 @@ export const getAllChildWorkItemsByParentWorkItemId = async (workItemId) =>{
     }
 }
 
-export const getAllWorkItemBySpecificMember = async (memberId) =>{
+export const getAllWorkItemBySpecificMember = async (memberId ,projectId) =>{
     try {
-        const response = await customAxios.get(`${workItemRoutes.getAllWorkItemBySpecificMember_URL}?userId=${memberId}`);
+        const response = await customAxios.get(`${workItemRoutes.getAllWorkItemBySpecificMember_URL}?userId=${memberId}&projectId=${projectId}`);
         return response;
     } catch (error) {
        return errorHandler(error)

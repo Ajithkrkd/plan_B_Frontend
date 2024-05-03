@@ -1,5 +1,6 @@
-.home-container{
-  padding-top: 70px;
+#home{
+  padding-top: 60px;
+  background-color: "red";
 }
 .main-header{
   font-size: 3rem;
@@ -11,6 +12,5 @@
   font-weight: 500;
   color: #fff;
 }
-.home-image{
-  width: 55%;
-}
+
+

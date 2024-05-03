@@ -5,11 +5,13 @@ import { getProjectDetailsByProjectId } from "../../../Api/project";
 import { assignProjectMemberToWorkItem, unAssignMemberFromWorkItem } from "../../../Api/member";
 import { getWorkItemById } from "../../../Api/workItem";
 import toast from "react-hot-toast";
+import Loader from "../../../common/Loader";
 
 const AssignMembers = ({ workItemDetails }) => {
   const { workItemId, projectId } = workItemDetails;
   const [assignedMembersList, setAssignedMembersList] = useState([]);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     getProject(projectId);
@@ -54,17 +56,25 @@ const AssignMembers = ({ workItemDetails }) => {
 
   const assignMemberToWorkItem = async (memberId, workItemId, projectId) => {
     try {
+      setLoading(true)
       const response = await assignProjectMemberToWorkItem(workItemId, memberId, projectId);
       console.log(response);
       toast.success("member assigned succesfully");
     } catch (error) {
       toast.error(error.response.data.message)
+      if(error.response.data.message === "only admin can Assign members"){
+        setSelectedMember("unAssigned")
+      }
       console.log(error);
+    }finally{
+      
+      setLoading(false);
     }
   };
 
   return (
     <FormControl>
+      {isLoading && <Loader/>}
       <MuiSelect
         labelId="state-select-label"
         id="state-select"

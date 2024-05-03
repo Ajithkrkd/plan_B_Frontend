@@ -80,7 +80,7 @@ function AllWorkItems() {
           
           </>
         ) : selectedLink === "boards" ? (
-          <Board  workItemList={workItems} projectMembers={projectMembers}/> // Render the board component
+          <Board  workItemList={workItems} projectMembers={projectMembers} projectId={projectId}/> // Render the board component
         ) : null}
       </div>
       <ShowEachWorkItemAsModal

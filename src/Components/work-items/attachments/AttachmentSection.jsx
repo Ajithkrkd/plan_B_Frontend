@@ -164,6 +164,7 @@ function AttachmentSection({ workItemId }) {
   };
 
   const handleAddAttachment = async () => {
+    setLoading(true);
     console.log("Adding attachment:", attachmentFile, attachmentDescription);
     if (attachmentFile == null) {
       toast.error("Please select a file!!");
@@ -174,6 +175,7 @@ function AttachmentSection({ workItemId }) {
     const storageRef = ref(storage, attachmentFile.name);
 
     try {
+      setLoading(true);
       await uploadBytes(storageRef, attachmentFile);
       console.log("Image uploaded");
       const url = await getDownloadURL(storageRef);

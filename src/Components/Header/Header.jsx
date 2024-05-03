@@ -53,10 +53,10 @@ function Header() {
             className="keep-img"
             rel="logo"
           />
-          <h5 className="keep-text" onClick={()=>{navigate('/')}}>PLAN-B</h5>
+          <h5 className=" font-semibold text-xl text-gray-500" onClick={()=>{navigate('/')}} style={{cursor:'pointer'}}>PLAN-B</h5>
         </div>
         <div className="d-flex align-items-center   ">
-          <i className="bx bx-cog mx-2"></i>
+     
           {profilePic
            ? 
            <>
