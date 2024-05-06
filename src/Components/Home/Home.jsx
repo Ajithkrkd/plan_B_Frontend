@@ -105,7 +105,7 @@ function Home() {
           <div className="w-full sm:w-2/3 px-4">
             <img
               className="sm:p-5 object-cover"
-              src="/src/assets/board.png"
+              src={'/src/assets/board.png' || "https://images.pexels.com/photos/19686909/pexels-photo-19686909/free-photo-of-colorful-umbrellas-hanging-over-a-street.jpeg"}
               alt="Boards"
             />
           </div>
