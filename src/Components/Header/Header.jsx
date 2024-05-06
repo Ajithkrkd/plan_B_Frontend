@@ -6,7 +6,7 @@ import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails } from "../../Api/User";
 import Loader from "../../common/Loader";
-
+import Logo from "../../assets/brain.png.avif";
 function Header() {
 
 
@@ -26,7 +26,7 @@ function Header() {
         const response = await getUserDetails();
         console.log(response.data.profile_image_path ,'profile Image path');
         if(response.data.profile_image_path === null){
-          setProfilePic('/src/assets/workers.jpg')
+          setProfilePic(Logo)
         }else{
           
           setProfilePic(response.data.profile_image_path)
@@ -49,7 +49,7 @@ function Header() {
         <div className="col d-flex align-items-center ">
           {/* <i className="bx bx-menu btnx" style={{ fontSize: "27px" }}></i> */}
           <img
-            src="/src/assets/workers.jpg"
+            src={Logo}
             className="keep-img"
             rel="logo"
           />
@@ -61,7 +61,7 @@ function Header() {
            ? 
            <>
           <img className="profile"
-          src={profilePic ? imgUrl : '/src/assets/workers.jpg'}
+          src={profilePic ? imgUrl : Logo}
           onClick={()=>navigate('/profile-settings')}
           />
           </>
