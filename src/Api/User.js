@@ -37,7 +37,7 @@ export const confirmEmail = async (_verificationToken) =>{
 
 export const getForgottenPasswordLink = async(userEmail) => {
     try {
-        const response = await axios.get(`${userRoutes.get_forgot_password_link}/${userEmail}`)
+        const response = await axios.post(`${userRoutes.get_forgot_password_link}/${userEmail}`)
         return response;
     } catch (error) {
         return errorHandler(error)

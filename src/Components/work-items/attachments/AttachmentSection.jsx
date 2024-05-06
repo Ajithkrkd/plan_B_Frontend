@@ -105,7 +105,7 @@ function AttachmentSection({ workItemId }) {
 
     try {
       setLoading(true);
-      const response = await deleteAttachment(attachmentId);
+      const response = await deleteAttachment(attachmentId,workItemId);
       console.log(response);
       toast.success(response.data.message);
       setAttachments(
@@ -113,6 +113,7 @@ function AttachmentSection({ workItemId }) {
       );
     } catch (error) {
       console.log(error.response.data)
+      toast.error(error.response.data.message)
     }
     finally {
       setLoading(false);
@@ -263,7 +264,7 @@ function AttachmentSection({ workItemId }) {
     try {
       
       setLoading(true);
-      const response = await updateDescrition(attachment.attachmentId,editedDescription);
+      const response = await updateDescrition(attachment.attachmentId,editedDescription,workItemId);
       console.log(response);
       toast.success(response.data.message);
       setAttachments((prevAttachments) =>
@@ -279,7 +280,11 @@ function AttachmentSection({ workItemId }) {
       setDescriptionEditing(false);
     } catch (error) {
       setLoading(false)
+      setDescriptionEditing(false);
       console.log(error.response.data.message);
+      toast.error(error.response.data.message)
+    }finally{
+      setLoading(false);
     }
   }
 

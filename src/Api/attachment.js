@@ -21,17 +21,17 @@ export const getAllAttachmentByWorkItem = async (workItemId) =>{
        return errorHandler(error)
     }
 }
-export const deleteAttachment = async (attachmentId) =>{
+export const deleteAttachment = async (attachmentId,workItemId) =>{
     try {
-        const response = await customAxios.post(`${attachmentRoutes.deleteAttachment_URL}/${attachmentId}`);
+        const response = await customAxios.post(`${attachmentRoutes.deleteAttachment_URL}/${attachmentId}?workItemId=${workItemId}`);
         return response;
     } catch (error) {
        return errorHandler(error)
     }
 }
-export const updateDescrition = async (attachmentId ,descriptionn) =>{
+export const updateDescrition = async (attachmentId ,descriptionn,workItemId) =>{
     try {
-        const response = await customAxios.post(`${attachmentRoutes.update_description_URL}?attachmentId=${attachmentId}&description=${descriptionn}`);
+        const response = await customAxios.post(`${attachmentRoutes.update_description_URL}?attachmentId=${attachmentId}&description=${descriptionn}&workItemId=${workItemId}`);
         return response;
     } catch (error) {
        return errorHandler(error)

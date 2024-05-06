@@ -4,6 +4,7 @@ import { CalendarMonth, Email, PhoneAndroid } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { formateJoiningDateTime } from "./userUtils";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../common/Loader";
 function ProfileHead({ userDetails }) {
   const divStyle = {
     backgroundImage: profileBG
@@ -16,9 +17,17 @@ function ProfileHead({ userDetails }) {
   const formatedDate = formateJoiningDateTime(userDetails.joinDate);
 
   const navigate = useNavigate()
-
+ const handleLogout = () => {
+  try {
+    localStorage.clear();
+    navigate("/login");
+  } catch (error) {
+    console.log(error)
+  }
+ }
   return (
     <div className="profile-container">
+      {userDetails === '' && <Loader/>}
       <div style={divStyle} className="h-52 relative">
         <div className="absolute inset-0 bg-black opacity-0"></div>
       </div>
@@ -32,6 +41,7 @@ function ProfileHead({ userDetails }) {
                     ? userDetails.profile_image_path
                     : `/src/assets/workers.jpg`
                 }
+                style={{width: "110px", height:100}}
                 alt=""
                 className="rounded-full w-28 sm:w-36"
               />
@@ -53,6 +63,7 @@ function ProfileHead({ userDetails }) {
                   className="m-1"
                   variant="contained"
                   style={{ backgroundColor: "#EA4437" }}
+                  onClick={handleLogout}
                 >
                   Logout
                 </Button>

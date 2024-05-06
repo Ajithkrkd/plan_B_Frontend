@@ -125,8 +125,11 @@ function EditProfile() {
     e.preventDefault();
     console.log(formData);
     if (!handleValidation()) {
-      console.log("not valid " + formData);
-      toast.error("not valid");
+      toast.error("please fill the form correctly")
+      return;
+    }
+    if(formData.fullName === '' || formData.phoneNumber === ''){
+      toast.error("please fill the form correctly")
       return;
     }
     try {

@@ -239,7 +239,7 @@ const ChatRoom = () => {
               <div className="flex justify-between my-2">
              <p className="text-left font-semibold text-2xl">PLAN-B COMMUNITY</p>
              <div className="flex gap-3">
-              <Button onClick={reconnect} variant="contained" color="success"><Refresh/> Reload</Button>
+              <Button onClick={reconnect} variant="contained" color="success"><Refresh/>Reconnect</Button>
               <Button onClick={leaveFromChat} variant="contained" color="error"><Close/> LEAVE</Button>
              </div>
               </div>
@@ -324,6 +324,7 @@ const ChatRoom = () => {
               src={userDetails.profile_image_path}
               alt="Profile"
               className="mx-auto h-20 mb-4 rounded-full"
+              style={{width:110,height:100}}
             />
             <h2 className="text-2xl mb-4 text-center">
               Do you want to join the chat?

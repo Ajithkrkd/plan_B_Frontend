@@ -12,11 +12,13 @@ function Home() {
   const [role, setRole] = useState("");
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    console.log(accessToken);
-    const decode = jwtDecode(accessToken);
-    console.log(decode);
-    const userRole = decode.role;
-    setRole(userRole);
+    if (accessToken) {
+      console.log(accessToken);
+      const decode = jwtDecode(accessToken);
+      console.log(decode);
+      const userRole = decode.role;
+      setRole(userRole);
+    }
   }, []);
 
   const handleNavigation = () => {
@@ -40,7 +42,11 @@ function Home() {
           </span>
           <span className="main-header italic">PLAN-B</span>
           <h3 className="my-3 pl-5">
-            Plan smarter, collaborate better, build your project with your plan
+            <span className="text-lg italic">Plan smarter,</span>
+            <span className="text-lg italic"> collaborate better,</span>
+            <span className="text-lg italic">
+              build your project with your plan
+            </span>
           </h3>
         </div>
         <div className="my-6 pl-5">
@@ -51,7 +57,7 @@ function Home() {
       </div>
       <div className="flex flex-col ">
         <div className="py-3 shadow-md text-center border">
-          <p className="text-2xl font-semibold  text-gray-800 lg:text-3xl">
+          <p className="text-2xl font-semibold  text-gray-800 lg:text-2xl">
             Boards
           </p>
         </div>
@@ -99,7 +105,7 @@ function Home() {
           <div className="w-full sm:w-2/3 px-4">
             <img
               className="sm:p-5 object-cover"
-              src="/src/assets/devops_boards.avif"
+              src="/src/assets/board.png"
               alt="Boards"
             />
           </div>
@@ -108,7 +114,7 @@ function Home() {
 
       <div className="flex flex-col ">
         <div className="py-3 shadow-md text-center">
-          <p className="text-2xl font-semibold  text-gray-800 lg:text-3xl">
+          <p className="text-2xl font-semibold  text-gray-800 lg:text-2xl">
             Work Items
           </p>
         </div>
@@ -150,11 +156,69 @@ function Home() {
                 <span className="text-lg font-semibold">Comments</span>
                 <span>
                   {" "}
-                  In a work item, comments serve as a platform for discussing the
-                  work item, where any member can contribute suggestions.
+                  In a work item, comments serve as a platform for discussing
+                  the work item, where any member can contribute suggestions.
                 </span>
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col ">
+        <div className="py-3 shadow-md text-center">
+          <p className="text-2xl font-semibold  text-gray-800 lg:text-2xl">
+            Community Chat
+          </p>
+        </div>
+        <div className="flex flex-wrap">
+          <div className="w-full sm:w-1/3 pt-4 px-4">
+            <p className="text-xl font-semibold italic py-2 border px-1 mb-3">
+              Purpose of Community Chat
+            </p>
+            <ul className="flex flex-wrap gap-3">
+              <li>
+                <Check />
+                <span className="text-lg font-semibold">
+                  {" "}
+                  Real-time Communication
+                </span>
+                <span>
+                  {" "}
+                  Engage in real-time conversations with Everyone s and foster
+                  collaboration.
+                </span>
+              </li>
+              <li>
+                <Check />
+                <span className="text-lg font-semibold">
+                  Discussions and Announcements{" "}
+                </span>
+                <span>
+                  {" "}
+                  Conduct discussions, share announcements, and keep everyone in
+                  the loop.
+                </span>
+              </li>
+              <li>
+                <Check />
+                <span className="text-lg font-semibold">
+                  Exploring Ideas Across Domains
+                </span>
+                <span>
+                  {" "}
+                  Utilize the platform to collaborate with developers and
+                  project managers from diverse domains, fostering innovation
+                  and sharing of insights.
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full sm:w-2/3 px-4">
+            <img
+              className="sm:p-5 object-cover"
+              src="/src/assets/chat.png"
+              alt="Boards"
+            />
           </div>
         </div>
         <FAQSection />
