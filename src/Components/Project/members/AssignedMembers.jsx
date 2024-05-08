@@ -303,6 +303,7 @@ const  AssignedMembers =({ assignedMembers, projectAdmins, projectId,rootAdmin }
       <Modal open={removeAdminOpen} onClose={handleRemoveAdminCancel}>
         <Box sx={{ ...style, width: 200 ,outline: "none" }}> 
           <div>
+            {isLoading && <Loader/>}
             <p className="text-xl my-1 py-2" id="modal-title">Do you want to Remove this member From This Project Administrator List?</p>
             <Alert  severity="info">The member will Loose all the power to manage the project</Alert>
            <div style={{float:"right", marginTop:"10px"}}>

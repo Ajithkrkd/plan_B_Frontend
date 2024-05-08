@@ -21,9 +21,9 @@ export const getAllCommentsByWorkItemId = async (workItemId)=>{
         return errorHandler(error);
     }
 }
-export const deleteCommentById = async (commentId)=>{
+export const deleteCommentById = async (commentId,workItemId)=>{
     try {
-        const response = await customAxios.post(`${commentRoutes.deleteCommentById_URL}/${commentId}`);
+        const response = await customAxios.post(`${commentRoutes.deleteCommentById_URL}/${commentId}?workItemId=${workItemId}`);
         return response;
     } catch (error) {
         return errorHandler(error);
@@ -31,10 +31,10 @@ export const deleteCommentById = async (commentId)=>{
 }
 
 
-export const editCommentById = async (commentId,content)=>{
+export const editCommentById = async (commentId,content,workItemId)=>{
     try {
         console.log(commentId)
-        const response = await customAxios.post(`${commentRoutes.editCommentById_URL}/${commentId}?content=${content}`);
+        const response = await customAxios.post(`${commentRoutes.editCommentById_URL}/${commentId}?content=${content}&workItemId=${workItemId}`);
         return response;
     } catch (error) {
         return errorHandler(error);

@@ -69,16 +69,18 @@ function CommentSection({ workItemId }) {
     try {
       const response = await editCommentById(
         editingCommentId,
-        editedCommentContent
+        editedCommentContent,
+        workItemId
       );
       console.log(response);
       fetchComments();
       cancelEdit();
     } catch (error) {
+      toast.error (error.response.data.message);
       console.error("Error editing comment:", error);
     }
   };
-
+  
   const handleDeleteComment = async (commentId) => {
     try {
       // Display confirmation toast
@@ -88,23 +90,26 @@ function CommentSection({ workItemId }) {
           <button
             className="px-3 btn"
             onClick={() => handleConfirmDelete(commentId, t.id)}
-          >
+            >
             Yes
           </button>
         </span>
       ));
-
+      
       // Function to handle confirmed deletion
       const handleConfirmDelete = async (commentId, toastId) => {
         try {
-          await deleteCommentById(commentId);
-          setComments((prevComments) =>
+         const response = await deleteCommentById(commentId ,workItemId);
+         console.log(response.data)
+            setComments((prevComments) =>
             prevComments.filter((comment) => comment.id !== commentId)
-          );
-          toast.dismiss(toastId);
-          fetchComments();
-        } catch (error) {
-          console.error("Error deleting comment:", error);
+
+        );
+        toast.dismiss(toastId);
+        fetchComments();
+      } catch (error) {
+        console.error("Error deleting comment:", error);
+        toast.error (error.response.data.message);
         }
       };
     } catch (error) {

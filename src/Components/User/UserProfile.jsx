@@ -3,6 +3,7 @@ import ProfileHead from './ProfileHead'
 import "./user.css";
 import { getUserDetails } from '../../Api/User';
 import EditProfile from './EditProfile';
+import ProfileHeadSkelton from './ProfileHeadSkelton';
 function UserProfile() {
 
 
@@ -52,7 +53,11 @@ function UserProfile() {
   return (
     <>
     <div className=''>
+      {userDetails ?
       <ProfileHead userDetails={userDetails}/>
+        :
+        <ProfileHeadSkelton/>
+    }
     </div>
     </>
   )
