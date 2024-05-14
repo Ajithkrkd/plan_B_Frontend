@@ -16,20 +16,7 @@ function ProfileHead({ userDetails }) {
     backgroundPosition: "center",
   };
 
-  const [userData , setUserData] = useState({
-      userId: userDetails.userId,
-      fullName: userDetails.fullName,
-      phoneNumber: userDetails.phoneNumber,
-      email: userDetails.email,
-      profile_image_path: userDetails.profile_image_path,
-      joinDate: userDetails.joinDate,
-      isEmailVerified: userDetails.isEmailVerified,
-      isBlocked: userDetails.isBlocked,
-      role: userDetails.role,
-    
-  })
-
-  const formatedDate = formateJoiningDateTime(userData.joinDate);
+  const formatedDate = formateJoiningDateTime(userDetails.joinDate);
 
   const navigate = useNavigate()
  const handleLogout = () => {
@@ -42,7 +29,7 @@ function ProfileHead({ userDetails }) {
  }
   return (
     <div className="profile-container">
-      {userData === '' && <Loader/>}
+      {userDetails === '' && <Loader/>}
       <div style={divStyle} className="h-52 relative">
         <div className="absolute inset-0 bg-black opacity-0"></div>
       </div>
@@ -52,8 +39,8 @@ function ProfileHead({ userDetails }) {
             <div className="border-4 sm:border-8 border-white rounded-full">
               <img
                 src={
-                  userData.profile_image_path
-                    ? userData.profile_image_path
+                  userDetails.profile_image_path
+                    ? userDetails.profile_image_path
                     : ProfileExample
                 }
                 style={{width: "110px", height:100}}
@@ -64,12 +51,12 @@ function ProfileHead({ userDetails }) {
             <div className="sm:flex  sm:justify-between sm:w-full pt-5">
               <div className="sm:mt-20 mt-4 flex flex-col justify-between items-center">
                 <h1 className="sm:text-6xl text-3xl font-semibold text-center">
-                  Hi, {userData.fullName}
+                  Hi, {userDetails.fullName}
                 </h1>
                 <div className="flex items-center flex-col sm:flex-row gap-2 sm:gap-10 pt-2 ">
-                  <Email /> {userData.email}
+                  <Email /> {userDetails.email}
                   <PhoneAndroid color="black" />{" "}
-                  <b>{userData.phoneNumber}</b>
+                  <b>{userDetails.phoneNumber}</b>
                   <CalendarMonth color="black" /> <b>Joined: {formatedDate}</b>
                 </div>
               </div>
