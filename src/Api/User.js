@@ -75,9 +75,9 @@ export const change_password_withCurrntPassword = async(_changePasswordRequest)=
     }
 }
 
-export const uploadProfileImage = async (imageUrl , _config) =>{
+export const uploadProfileImage = async (imageUrl) =>{
     try {
-        const response = await customAxios.post(`${userRoutes.add_profile_image}?imageUrl=${imageUrl}`,_config)
+        const response = await customAxios.post(`${userRoutes.add_profile_image}?imageUrl=${imageUrl}`)
         return response;
     } catch (error) {
         return errorHandler(error)

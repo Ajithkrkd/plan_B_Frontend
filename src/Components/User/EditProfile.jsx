@@ -82,14 +82,7 @@ function EditProfile() {
       await uploadBytes(storageRef, selectedFile);
       const url = await getDownloadURL(storageRef);
       console.log("URL:", url);
-
-      
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const response = await uploadProfileImage(url, config);
+      const response = await uploadProfileImage(url);
       toast.success("profile pic updated");
       console.log("Profile picture uploaded:", response);
       fetchUserDetails(setUserDetails);
