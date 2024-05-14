@@ -147,7 +147,9 @@ const ChatRoom = () => {
   };
 
   const reconnect = () => {
+    setLoading(true);
     connect();
+    setLoading(false);
   }
 
   const leaveFromChat = () => {
