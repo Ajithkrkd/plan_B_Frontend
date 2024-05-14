@@ -57,7 +57,7 @@ function Header() {
            ? 
            <>
           <img className="profile"
-          src={profilePic === null ? imgUrl : Logo}
+          src={profilePic !== null ? imgUrl : Logo}
           onClick={()=>navigate('/profile-settings')}
           />
           </>
