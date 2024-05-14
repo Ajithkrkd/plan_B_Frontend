@@ -5,6 +5,7 @@ import "./chat.css";
 import { getUserDetails } from "../../Api/User";
 import { getAllChatMessages } from "./chatApi";
 import { Button, Input } from "@mui/material";
+import Loader from "../../common/Loader";
 import { Close, Refresh, Send, TimeToLeaveOutlined } from "@mui/icons-material";
 var stompClient = null;
 const ChatRoom = () => {
@@ -28,6 +29,7 @@ const ChatRoom = () => {
   const [connected, setConnected] = useState(false);
   const sendMessageRef = useRef(null);
   const scrollRef = useRef(null);
+  const [loading , setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState({
     userId: "",
     fullName: "",
@@ -91,6 +93,7 @@ const ChatRoom = () => {
   };
 
   const connect = () => {
+    setLoading(true);
     let Sock = new SockJS("https://chat.planb-ajithkrkd.online/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
@@ -98,10 +101,12 @@ const ChatRoom = () => {
   };
 
   const disconnect = () => {
+
     "disconnected --------------------------------------"
   }
 
   const onConnected = () => {
+    setLoading(false);
     stompClient.subscribe("/chatroom/public", onMessageReceived);
     userJoin();
     setConnected(true);
@@ -232,6 +237,7 @@ const ChatRoom = () => {
 
   return (
     <div class="container project-container">
+    {loading && <Loader/>}
       {connected ? (
         <div class="chat-box">
           {tab === "CHATROOM" && (
