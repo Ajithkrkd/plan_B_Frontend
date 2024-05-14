@@ -24,13 +24,9 @@ function Header() {
       try {
         setLoading(true);
         const response = await getUserDetails();
-        console.log(response.data);
-        if(response.data.profile_image_path === null){
-          setProfilePic(Logo)
-        }else{
-          
+        console.log(response.data , 'details');   
           setProfilePic(response.data.profile_image_path)
-        }
+       
       } catch (error) {
         console.log(error)
       }finally{
@@ -61,7 +57,7 @@ function Header() {
            ? 
            <>
           <img className="profile"
-          src={profilePic ? imgUrl : Logo}
+          src={profilePic === null ? imgUrl : Logo}
           onClick={()=>navigate('/profile-settings')}
           />
           </>

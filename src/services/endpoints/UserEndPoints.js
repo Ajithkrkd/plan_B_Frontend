@@ -1,5 +1,4 @@
 
-const url = import.meta.env.API_GATEWAY_BASE_URL;
 const userRoutes = {
     register : 'https://planb-ajithkrkd.online/user/api/auth/register',
     login : 'https://planb-ajithkrkd.online/user/api/auth/login',
