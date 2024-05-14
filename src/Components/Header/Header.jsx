@@ -24,7 +24,7 @@ function Header() {
       try {
         setLoading(true);
         const response = await getUserDetails();
-        console.log(response.data.profile_image_path ,'profile Image path');
+        console.log(response.data);
         if(response.data.profile_image_path === null){
           setProfilePic(Logo)
         }else{
