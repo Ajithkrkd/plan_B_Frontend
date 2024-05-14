@@ -4,8 +4,7 @@ import axios from 'axios';
 import { refreshToken } from './tokenUtils';
 const backendUrl = import.meta.env.API_GATEWAY_BASE_URL;
 const customAxios = axios.create({
-  baseURL: backendUrl, 
-  
+  baseURL: 'https://planb-ajithkrkd.online',   
 });
 
 customAxios.interceptors.request.use(
