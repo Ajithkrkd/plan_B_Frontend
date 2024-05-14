@@ -91,7 +91,7 @@ const ChatRoom = () => {
   };
 
   const connect = () => {
-    let Sock = new SockJS("http://user-service/ws");
+    let Sock = new SockJS("https://chat.planb-ajithkrkd.online/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
     Sock.onclose({},disconnect)
