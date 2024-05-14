@@ -5,9 +5,6 @@ import { getUserDetails } from '../../Api/User';
 import EditProfile from './EditProfile';
 import ProfileHeadSkelton from './ProfileHeadSkelton';
 function UserProfile() {
-
-
-  const [profilePic, setProfilePic] = useState(null);
   const [userDetails, setUserDetails] = useState({
     userId: "",
     fullName: "",
@@ -35,11 +32,6 @@ function UserProfile() {
       isBlocked: data.isBlocked,
       role: data.role,
     });
-    setFormData({
-      fullName: data.fullName,
-      phoneNumber: data.phoneNumber,
-    });
-    setProfilePic(`${data.profile_image_path}`);
   };
 
   useEffect(() => {
