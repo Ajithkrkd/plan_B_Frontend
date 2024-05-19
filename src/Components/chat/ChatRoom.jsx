@@ -29,7 +29,7 @@ const ChatRoom = () => {
   const [connected, setConnected] = useState(false);
   const sendMessageRef = useRef(null);
   const scrollRef = useRef(null);
-  const [loading , setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [userDetails, setUserDetails] = useState({
     userId: "",
     fullName: "",
@@ -95,15 +95,15 @@ const ChatRoom = () => {
   const connect = () => {
     setLoading(true);
     let Sock = new SockJS("https://chat.planb-ajithkrkd.online/ws");
+    // let Sock = new SockJS("http://localhost:8081/ws");
     stompClient = over(Sock);
     stompClient.connect({}, onConnected, onError);
-    Sock.onclose({},disconnect)
+    Sock.onclose({}, disconnect);
   };
 
   const disconnect = () => {
-
-    "disconnected --------------------------------------"
-  }
+    "disconnected --------------------------------------";
+  };
 
   const onConnected = () => {
     setLoading(false);
@@ -150,11 +150,11 @@ const ChatRoom = () => {
     setLoading(true);
     connect();
     setLoading(false);
-  }
+  };
 
   const leaveFromChat = () => {
     userLeave();
-  }
+  };
   const onMessageReceived = (payload) => {
     var payloadData = JSON.parse(payload.body);
     switch (payloadData.status) {
@@ -168,7 +168,7 @@ const ChatRoom = () => {
         break;
       case "LEAVE":
         publicChats.push(payloadData);
-        setPublicChats([...publicChats])
+        setPublicChats([...publicChats]);
         break;
     }
     scrollBottom();
@@ -198,7 +198,7 @@ const ChatRoom = () => {
           chatMemberId: userDetails.userId,
           fullName: userDetails.fullName,
           profile_url: userDetails.profile_image_path,
-          connected:true
+          connected: true,
         },
         message: enteredMessage,
         date: new Date(),
@@ -238,101 +238,126 @@ const ChatRoom = () => {
   };
 
   return (
-    <div class="container project-container">
-    {loading && <Loader/>}
+    <div className="container project-container">
+      {loading && <Loader />}
       {connected ? (
-        <div class="chat-box">
-          {tab === "CHATROOM" && (
-            <div class="chat-content" >
-              <div className="flex justify-between my-2">
-             <p className="text-left font-semibold text-2xl">PLAN-B COMMUNITY</p>
-             <div className="flex gap-3">
-              <Button onClick={reconnect} variant="contained" color="success"><Refresh/>Reconnect</Button>
-              <Button onClick={leaveFromChat} variant="contained" color="error"><Close/> LEAVE</Button>
-             </div>
-              </div>
-              <ul className="chat-messages" ref={scrollRef}>
-  {publicChats.map((chat, index) => (
-    <li
-      className={`message flex items-center ${
-        chat.chatMember.fullName === userDetails.fullName && "self"
-      }`}
-      key={index}
-    >
-      {/* Show JOIN and LEAVE messages conditionally */}
-      {(chat.status === "JOIN" || chat.status === "LEAVE") && (
-        <div className="italic text-gray-500 mb-2 center-message">
-          {chat.chatMember.fullName === userDetails.fullName ? (
-            <span>{chat.status === "JOIN" ? "You joined the chat" : "You left the chat"}</span>
-          ) : (
-            <span>{chat.chatMember.fullName} {chat.status === "JOIN" ? "joined the chat" : "left the chat"}</span>
-          )}
-        </div>
-      )}
-      {/* Only show message content for non-JOIN and non-LEAVE messages */}
-      {chat.status !== "JOIN" && chat.status !== "LEAVE" && (
-        <div
-          className={`rounded-lg p-2 ${
-            chat.chatMember.fullName !== userDetails.fullName
-              ? "bg-blue-200"
-              : "bg-green-200"
-          }`}
-          style={{ minWidth: 200 }}
-        >
-          {chat.chatMember.fullName !== userDetails.fullName && (
-            <div
-              className="font-semibold text-blue-900 mb-1"
-              style={{ fontSize: 12 }}
-            >
-              {chat.chatMember.fullName}
+        <div className=" border p-0 md:p-5 md:m-4">
+          <div className="flex flex-col sm:flex-row justify-between items-center my-2 space-y-2 sm:space-y-0 sm:space-x-3">
+            <p className="text-left font-semibold text-2xl">PLAN-B COMMUNITY</p>
+            <div className="flex gap-3">
+              <Button
+                onClick={reconnect}
+                variant="contained"
+                color="success"
+                className="px-2 py-1 font-[9px]"
+              >
+                <Refresh className="text-base" /> Reconnect
+              </Button>
+              <Button
+                onClick={leaveFromChat}
+                variant="contained"
+                color="error"
+                className="px-2 py-1 text-sm"
+              >
+                <Close className="text-base" /> LEAVE
+              </Button>
             </div>
-          )}
-          <p
-            className={`italic ${
-              chat.chatMember.fullName !== userDetails.fullName
-                ? "text-blue-900 font-semibold"
-                : "text-green-900 font-normal"
-            }`}
-          >
-            {chat.status === "MESSAGE" && chat.message}
-          </p>
-          <div className="flex justify-between items-center mt-1">
-            <p className="text-sm text-gray-500">
-              {getTimeDifference(chat.date)}
-            </p>
           </div>
-        </div>
-      )}
-    </li>
-  ))}
-</ul>
 
+          {tab === "CHATROOM" && (
+            <div className="">
+              <ul className="" ref={scrollRef}>
+                {publicChats.map((chat, index) => (
+                  <li
+                    className={`message flex items-center ${
+                      chat.chatMember.fullName === userDetails.fullName &&
+                      "self"
+                    }`}
+                    key={index}
+                  >
+                    {(chat.status === "JOIN" || chat.status === "LEAVE") && (
+                      <div className="italic text-gray-500 mb-2 text-center w-full">
+                        {chat.chatMember.fullName === userDetails.fullName ? (
+                          <span>
+                            {chat.status === "JOIN"
+                              ? "You joined the chat"
+                              : "You left the chat"}
+                          </span>
+                        ) : (
+                          <span>
+                            {chat.chatMember.fullName}{" "}
+                            {chat.status === "JOIN"
+                              ? "joined the chat"
+                              : "left the chat"}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    {chat.status !== "JOIN" && chat.status !== "LEAVE" && (
+                      <div
+                        className={`rounded-lg p-2 w-full max-w-xs ${
+                          chat.chatMember.fullName !== userDetails.fullName
+                            ? "bg-blue-200"
+                            : "bg-green-200 self-end"
+                        }`}
+                      >
+                        {chat.chatMember.fullName !== userDetails.fullName && (
+                          <div
+                            className="font-semibold text-blue-900 mb-1"
+                            style={{ fontSize: 12 }}
+                          >
+                            {chat.chatMember.fullName}
+                          </div>
+                        )}
+                        <p
+                          className={`italic ${
+                            chat.chatMember.fullName !== userDetails.fullName
+                              ? "text-blue-900 font-semibold"
+                              : "text-green-900 font-normal"
+                          }`}
+                        >
+                          {chat.status === "MESSAGE" && chat.message}
+                        </p>
+                        <div className="flex justify-between items-center mt-1">
+                          <p className="text-sm text-gray-500">
+                            {getTimeDifference(chat.date)}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
 
-              <div class="send-message mt-3">
+              <div className="send-message mt-3 flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
                 <Input
                   fullWidth
                   type="text"
                   inputRef={sendMessageRef}
-                  class="input-message"
-                  placeholder="enter the message"
+                  className="input-message flex-grow"
+                  placeholder="Enter the message"
                   value={enteredMessage}
                   onChange={handleMessage}
                 />
-                <Button variant="contained" onClick={sendValue}>
-                  send <Send />
+                <Button
+                  variant="contained"
+                  onClick={sendValue}
+                  className="self-end sm:self-auto"
+                >
+                  Send <Send />
                 </Button>
               </div>
             </div>
           )}
         </div>
       ) : (
-        <div className="flex justify-center items-center h-screen">
-          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-96">
+        <div className="flex justify-center items-start mt-5 min-h-screen">
+          <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-md mx-3">
             <img
               src={userDetails.profile_image_path}
               alt="Profile"
               className="mx-auto h-20 mb-4 rounded-full"
-              style={{width:110,height:100}}
+              style={{ width: 110, height: 100 }}
             />
             <h2 className="text-2xl mb-4 text-center">
               Do you want to join the chat?

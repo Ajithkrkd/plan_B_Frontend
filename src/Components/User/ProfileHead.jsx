@@ -18,18 +18,18 @@ function ProfileHead({ userDetails }) {
 
   const formatedDate = formateJoiningDateTime(userDetails.joinDate);
 
-  const navigate = useNavigate()
- const handleLogout = () => {
-  try {
-    localStorage.clear();
-    navigate("/login");
-  } catch (error) {
-    console.log(error)
-  }
- }
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    try {
+      localStorage.clear();
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className="profile-container">
-      {userDetails === '' && <Loader/>}
+    <div className="project-container bg-[#f1f1f1] min-h-screen ">
+      {userDetails === "" && <Loader />}
       <div style={divStyle} className="h-52 relative">
         <div className="absolute inset-0 bg-black opacity-0"></div>
       </div>
@@ -43,24 +43,54 @@ function ProfileHead({ userDetails }) {
                     ? userDetails.profile_image_path
                     : ProfileExample
                 }
-                style={{width: "110px", height:100}}
-                alt=""
-                className="rounded-full w-28 sm:w-36"
+                alt="profile"
+                className="object-cover rounded-full"
+                style={{ width: "200px", height: "200px" }}
               />
             </div>
-            <div className="sm:flex  sm:justify-between sm:w-full pt-5">
-              <div className="sm:mt-20 mt-4 flex flex-col justify-between items-center">
-                <h1 className="sm:text-6xl text-3xl font-semibold text-center">
+            <div className="md:flex md:justify-between sm:w-full pt-5 ">
+              <div className="md:mt-20 mt-4 flex flex-col justify-between items-center">
+                <h1 className="md:text-6xl text-3xl font-semibold mb-3">
                   Hi, {userDetails.fullName}
                 </h1>
-                <div className="flex items-center flex-col sm:flex-row gap-2 sm:gap-10 pt-2 ">
-                  <Email /> {userDetails.email}
-                  <PhoneAndroid color="black" />{" "}
-                  <b>{userDetails.phoneNumber}</b>
-                  <CalendarMonth color="black" /> <b>Joined: {formatedDate}</b>
+
+                <div className="flex gap-4 flex-col md:flex-row">
+                  <div
+                    className="flex items-end justify-between border mb-2 sm:mb-0"
+                    
+                  >
+                    <span className="px-2 mr-2 py-1 bg-[#4B84BE] text-white">
+                      email
+                    </span>
+                    <span className="text-lg italic" >
+                      {userDetails.email}
+                    </span>
+                  </div>
+                  <div
+                    className="flex items-end justify-between border mb-2 sm:mb-0"
+                    
+                  >
+                    <span className="px-1 py-1 bg-[#4B84BE] text-white">
+                      Phone
+                    </span>
+                    <span className="text-lg italic" >
+                      {userDetails.phoneNumber}
+                    </span>
+                  </div>
+                  <div
+                    className="flex items-end justify-between border mb-2 sm:mb-0"
+                    
+                  >
+                    <span className="px-1 py-1 bg-[#4B84BE] text-white">
+                      Joined
+                    </span>
+                    <span className="text-lg italic" >
+                      {formateJoiningDateTime(userDetails.joinDate)}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="hidden felx flex-row  sm:block clear-left mt-28">
+              <div className=" felx flex-row  sm:block clear-left mt-28">
                 <Button
                   className="m-1"
                   variant="contained"
@@ -73,7 +103,9 @@ function ProfileHead({ userDetails }) {
                   className="px-4"
                   variant="contained"
                   style={{ backgroundColor: "#007FFF" }}
-                  onClick={()=>{navigate('/editProfile')}}
+                  onClick={() => {
+                    navigate("/editProfile");
+                  }}
                 >
                   Edit profile
                 </Button>

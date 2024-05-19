@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { Button } from "@mui/material";
 import { getAllInvitation } from "../../Api/member";
 import NotificationModal from "./NotificationModal";
+import notificationEmpty from "../../assets/notificationEmpty.svg"
 import './notification.css'
 const Notification = () => {
   const location = useLocation();
@@ -51,7 +52,7 @@ const Notification = () => {
 
   return (
     <div className="project-container">
-      <p className="font-semibold text-2xl underline my-3">Notifications</p>
+      <p className="font-semibold text-2xl underline my-3 p-2">Notifications</p>
       {invitations.length > 0 ? (
         invitations.map((inv) => (
           <div className={`notification-container border m-2 p-2 ${inv.invitation_status === 'ACCEPTED' ? 'notification-accepted' : ''}`} key={inv.id}>
@@ -105,7 +106,18 @@ const Notification = () => {
           </div>
         ))
       ) : (
-        <p>No Notifications</p>
+        <div className="items-center flex 
+        sm:flex-row flex-col
+        justify-center w-full"
+        
+        >
+         <img src={notificationEmpty} className="mt-5"
+          style={{width:'300px'}}
+         alt="project empty" />
+         <p className="text-2xl font-serif text-center">
+         "You haven't received any notifications."
+        </p>
+         </div>
       )}
     </div>
   );

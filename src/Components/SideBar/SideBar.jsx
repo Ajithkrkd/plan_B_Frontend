@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { UrlContext } from "../../store/urlContext";
 import { jwtDecode } from "jwt-decode";
 
-function SideBar() {
+function SideBar({isOpen ,setOpen}) {
   const [role, setRole] = useState("")
     useEffect(() => {
       const accessToken = localStorage.getItem('accessToken');
@@ -19,7 +19,7 @@ function SideBar() {
     },[])
     const currentURL = useContext(UrlContext);
     console.log(currentURL + '---------------------------------------------------url')
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(isOpen);
     const [userData , setUsreData] = useState(null);
     useEffect(()=>{
       const storedUserDetails = localStorage.getItem("userData");
@@ -44,7 +44,7 @@ function SideBar() {
       rel="stylesheet"
     ></link>
     <div
-      className={`sidebar ${isSidebarOpen ? "open" : ""}`}
+      className={`sidebar  ${isOpen ? "open" : "hidden"}`}
       onMouseEnter={() => setIsSidebarOpen(true)}
       onMouseLeave={() => setIsSidebarOpen(false)}
     >
@@ -61,7 +61,9 @@ function SideBar() {
               <span class="tooltip">projects</span>
             </li>
             <li>
-              <a onClick={()=>{navigate('/profile-settings')}}>
+              <a onClick={()=>{
+                setOpen(false);
+                navigate('/profile-settings')}}>
                 <i className="bx bx-user btnx"></i>
                 <span class="link_name">
                   profile
@@ -70,28 +72,36 @@ function SideBar() {
               <span class="tooltip">profile</span>
             </li>
             <li>
-              <a onClick={()=>{navigate('/notification')}}>
+              <a onClick={()=>{
+                setOpen(false);
+                navigate('/notification')}}>
                 <i class="bx bx-bell btnx " ></i>
                 <span class="link_name">notifications</span>
               </a>
               <span class="tooltip">notificationsv</span>
             </li>
             <li>
-              <a onClick={()=>{navigate('/work-life-cycle')}}>
+              <a onClick={()=>{
+                setOpen(false);
+                navigate('/work-life-cycle')}}>
                 <i class="bx bxs-file-doc btnx"></i>
                 <span class="link_name">Work life cycles</span>
               </a>
               <span class="tooltip">work life cycle</span>
             </li>
             <li>
-              <a  onClick={()=>{navigate('/privacy-settings')}}>
+              <a  onClick={()=>{
+                setOpen(false);
+                navigate('/privacy-settings')}}>
                 <i class="bx bxs-lock-alt btnx "></i>
                 <span class="link_name ">Privacy</span>
               </a>
               <span class="tooltip">Privacy</span>
             </li>
             <li>
-              <a  onClick={()=>{navigate('/community')}}>
+              <a  onClick={()=>{
+                setOpen(false);
+                navigate('/community')}}>
                 <i class="bx bxs-chat btnx "></i>
                 <span class="link_name ">Chat</span>
               </a>
@@ -108,7 +118,9 @@ function SideBar() {
         ) : (
           <>
             <li>
-              <a onClick={()=>{navigate('/profile-settings')}}>
+              <a onClick={()=>{
+                setOpen(false);
+                navigate('/profile-settings')}}>
                 <i className="bx bx-user btnx"></i>
                 <span class="link_name">
                   My profile
@@ -117,7 +129,9 @@ function SideBar() {
               <span class="tooltip">my profile</span>
             </li>
             <li>
-              <a onClick={() => navigate("/admin/users")}>
+              <a onClick={() =>{
+                setOpen(false);
+                navigate("/admin/users")}}>
                 
                 <i class="bx bxs-group btnx" onClick={toggleSideBar}></i>
                 <span class="link_name">users</span>
@@ -125,7 +139,9 @@ function SideBar() {
               <span class="tooltip">users</span>
             </li>
             <li>
-              <a  onClick={() => navigate("/admin/projects")}>
+              <a  onClick={() => {
+                setOpen(false);
+                navigate("/admin/projects")}}>
                 <i class="bx bxs-file btnx " onClick={toggleSideBar}></i>
                 <span class="link_name">projects</span>
               </a>

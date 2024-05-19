@@ -89,7 +89,7 @@ export default function CreateProjectModal() {
 
 <>
 
-    <button className="button --shine" onClick={() => setOpen(true)}>
+      <button className="button2 --shine" onClick={() => setOpen(true)}>
         + New Project
       </button>
       <Modal

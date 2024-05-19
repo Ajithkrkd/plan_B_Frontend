@@ -65,6 +65,7 @@ const LoginForm = () => {
       localStorage.setItem('reffreshToken' , response.data.refresh_token);
       navigate('/')
     } catch (error) {
+      console.log(error)
       if(error.response.data.message == 'email verification failed'){
         toast.error("Please check your Email ")
         setIsLoding(false);

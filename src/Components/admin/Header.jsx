@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { getUserDetails } from '../../Api/User';
 import Loader from '../../common/Loader';
+import Logo from "../../assets/avatar.png";
 const Header = () => {
   const navigate = useNavigate();
   const [profilePic ,setProfilePic] = useState(null);
   const [loading,setLoading] = useState(false);
-    useEffect(()=>{
-      const token = localStorage.getItem('accessToken');
-      if(token){
-        fetchUserDetails();
-      }
-    },[])
+    // useEffect(()=>{
+    //   const token = localStorage.getItem('accessToken');
+    //   if(token){
+    //     fetchUserDetails();
+    //   }
+    // },[])
 
     const fetchUserDetails = async() =>{
       try {
@@ -19,7 +20,7 @@ const Header = () => {
         const response = await getUserDetails();
         console.log(response.data.profile_image_path ,'profile Image path');
         if(response.data.profile_image_path === null){
-          setProfilePic('/src/assets/workers.jpg')
+          setProfilePic(Logo)
         }else{
           
           setProfilePic(response.data.profile_image_path)

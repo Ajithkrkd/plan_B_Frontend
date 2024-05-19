@@ -17,8 +17,10 @@ import SingleProjectSkeleton from "./SingleProjectSkeleton";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import Loader from "../../common/Loader";
 import AssignedMembers from "./members/AssignedMembers";
+import ProjectLogo from "../../assets/person.svg";
+import Header from "../Header/Header";
 
-function ViewSingleProject({isAdmin}) {
+function ViewSingleProject({ isAdmin }) {
   const [projectDetails, setProjectDetails] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
@@ -29,8 +31,8 @@ function ViewSingleProject({isAdmin}) {
   const [titleEditing, setTitleEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState();
   const [editedDescription, setEditedDescription] = useState("");
-  const [descriptionEditing, setDescriptionEditing] = useState(false)
-  const [fetching ,setFetching] = useState(false);
+  const [descriptionEditing, setDescriptionEditing] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const navigate = useNavigate();
   const titleEditingInputRef = useRef(null);
   const descriptionEditingInputRef = useRef(null);
@@ -46,7 +48,7 @@ function ViewSingleProject({isAdmin}) {
         if (response.data.project_profile_url != null) {
           setProfilePic(response.data.project_profile_url);
         }
-        console.log("------------------------------------",isAdmin + 'admin')
+        console.log("------------------------------------", isAdmin + "admin");
       } catch (error) {
         console.log(error);
       }
@@ -54,75 +56,75 @@ function ViewSingleProject({isAdmin}) {
     fetchProjectDetails(id);
   }, [id]);
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (descriptionEditingInputRef.current) {
+      descriptionEditingInputRef.current.focus();
+    }
+    if (titleEditingInputRef.current) {
+      titleEditingInputRef.current.focus();
+    }
+  }, [titleEditing, descriptionEditing]);
 
-  if (descriptionEditingInputRef.current) {
-    descriptionEditingInputRef.current.focus(); 
-  }
-  if (titleEditingInputRef.current) {
-    titleEditingInputRef.current.focus(); 
-  }
-
-  },[titleEditing,descriptionEditing])
-
-   const handleTitleEditing = (title) =>{
+  const handleTitleEditing = (title) => {
     setEditedTitle(title);
     setTitleEditing(true);
-   }
+  };
 
-   const saveEditedTitle = async (projectId) => {
+  const saveEditedTitle = async (projectId) => {
     try {
-      setFetching(true)
-      const response = await editProjectTitle(projectId, editedTitle)
+      setFetching(true);
+      const response = await editProjectTitle(projectId, editedTitle);
       setProjectDetails((prevProjectDetails) => ({
         ...prevProjectDetails,
         title: editedTitle,
       }));
       setTitleEditing(false);
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error(error.response.data.message);
-    }finally{
-      setFetching(false)
+    } finally {
+      setFetching(false);
       setTitleEditing(false);
     }
-   }
-   const cancelTitleEdit = () =>{
+  };
+  const cancelTitleEdit = () => {
     setTitleEditing(false);
     setEditedTitle("");
-   }
+  };
 
-   const handleDescriptionEditing = (title) =>{
+  const handleDescriptionEditing = (title) => {
     setEditedDescription(title);
     setDescriptionEditing(true);
-   }
+  };
 
-   const saveEditedDescription = async (projectId) => {
+  const saveEditedDescription = async (projectId) => {
     if (editedDescription.trim() == "") {
       return;
     }
     try {
       setFetching(true);
-      const response = await editProjectDescription(projectId,editedDescription)
+      const response = await editProjectDescription(
+        projectId,
+        editedDescription
+      );
       setProjectDetails((prevProjectDetails) => ({
         ...prevProjectDetails,
         description: editedDescription,
       }));
-      console.log(response)
-      setDescriptionEditing(false)
+      console.log(response);
+      setDescriptionEditing(false);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error(error.response.data.message);
-    }finally{
-      setFetching(false)
-      setDescriptionEditing(false)
+    } finally {
+      setFetching(false);
+      setDescriptionEditing(false);
     }
-   }
-   const cancelDescriptioneEdit = () =>{
+  };
+  const cancelDescriptioneEdit = () => {
     setDescriptionEditing(false);
     setEditedDescription("");
-   }
+  };
 
   useEffect(() => {
     calculateFinishedAndUnFinishedWorkItems(projectDetails.workItems);
@@ -155,20 +157,18 @@ function ViewSingleProject({isAdmin}) {
   };
 
   const handleUpload = async () => {
-
     if (selectedFile == null) {
-      toast.error('select a image');
+      toast.error("select a image");
       return;
     }
-    
+
     const storage = getStorage();
-    const storageRef = ref(storage,selectedFile.name);
+    const storageRef = ref(storage, selectedFile.name);
     try {
       setFetching(true);
-        await uploadBytes(storageRef,selectedFile);
-        const url = await getDownloadURL(storageRef);
-        console.log(url)
-
+      await uploadBytes(storageRef, selectedFile);
+      const url = await getDownloadURL(storageRef);
+      console.log(url);
 
       const config = {
         headers: {
@@ -176,37 +176,33 @@ function ViewSingleProject({isAdmin}) {
         },
       };
       const projectId = projectDetails.projectId;
-      const response = await addProfileImageForProject(
-        projectId,
-        url,
-        config
-      );
+      const response = await addProfileImageForProject(projectId, url, config);
       toast.success("profile pic updated");
       console.log("Profile picture uploaded:", response.data);
     } catch (error) {
       console.log("Profile picture uploaded:", error.message);
-    }finally{
+    } finally {
       setFetching(false);
     }
   };
 
-
-
   return (
     <>
+    <Header />
       {isLoading ? (
         <SingleProjectSkeleton />
       ) : (
         <>
-        {fetching && <Loader/>}
-          <div className="project-container">
-            <div className="flex flex-row items-center justify-between pr-3  py-2">
-              <div className="flex flex-wrap items-center">
-                <div>
-                  <div className=" relative">
+          {fetching && <Loader />}
+          <div className="project-container px-3">
+            <div className="flex flex-col lg:flex-row pr-3 py-2 space-y-4 lg:space-y-0 lg:space-x-4 sm:justify-between items-center">
+              <div className="flex flex-wrap justify-center">
+                <div className="flex flex-col  lg:items-center">
+                  <div className="relative items-center">
                     <img
-                      src={profilePic || `/src/assets/workers.jpg`}
-                      className="profile-img"
+                      src={profilePic || ProjectLogo}
+                      className=""
+                      style={{ width: 200, height: 200, borderRadius: 200 }}
                       alt="Profile"
                     />
                     <label
@@ -233,110 +229,120 @@ function ViewSingleProject({isAdmin}) {
                   </Button>
                 </div>
                 {titleEditing ? (
-                <div className="">
-                  <Input
-                  fullWidth
-                    style={{ padding: 0 ,}}
-                    inputRef={titleEditingInputRef}
-                    value={editedTitle}
-                    onChange={(e) => setEditedTitle(e.target.value)}
-                  />
-                  <Button
-                    variant="soft"
-                    color="success"
-                    className="py-2 mt-2"
-                    onClick={()=>saveEditedTitle(projectDetails.projectId)}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    variant="soft"
-                    color="danger"
-                    className="py-2 mt-2"
-                    onClick={cancelTitleEdit}
-                  >
-                    Cancel
-                  </Button>
+                  <div className=" justify-center items-center flex sm:flex-cols">
+                    <Input
+                      fullWidth
+                      style={{ padding: 0 }}
+                      inputRef={titleEditingInputRef}
+                      value={editedTitle}
+                      onChange={(e) => setEditedTitle(e.target.value)}
+                    />
+                    <div className="flex  mt-2">
+                      <Button
+                        variant="soft"
+                        color="success"
+                        onClick={() =>
+                          saveEditedTitle(projectDetails.projectId)
+                        }
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="soft"
+                        color="danger"
+                        onClick={cancelTitleEdit}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full lg:w-auto flex gap-3  justify-center items-center pt-3 md:pt-0">
+                   <div className="flex items-end justify-between border gap-5 mb-2 sm:mb-0 ">
+                    <span className="px-1 py-1 bg-[#4B84BE] text-white">
+                      name
+                    </span>
+                    <span className="text-lg italic" style={{ minWidth: 180 }}>
+                      {projectDetails.title}
+                    </span>
                 </div>
-              ) : (
-                <div className=" flex justify-start gap-2">
-                  <p className="text-xl font-bold italic p-0">
-                    {projectDetails.title}
-                  </p>
-                  <Edit
-                    className="comment_icons"
-                    onClick={() => handleTitleEditing(projectDetails.title)}
-                  />
-                </div>
-              )}
-             
+                    <Edit
+                      className="comment_icons cursor-pointer"
+                      onClick={() => handleTitleEditing(projectDetails.title)}
+                    />
+                  </div>
+                )}
               </div>
-              <div className=" flex items-end">
-                <InviteMemberModal
-                  projectId={projectDetails.projectId}
-                  onOpen={() => setOpen(true)}
-                />
-              </div>
+              <InviteMemberModal
+                projectId={projectDetails.projectId}
+                onOpen={() => setOpen(true)}
+              />
             </div>
 
             <div className="flex flex-row items-center justify-between pr-3 border px-5   py-3">
               <div>
-                <p className="text-2xl py-2 font-semibold">About the Project</p>
+                <p className="sm:text-2xl text-[18px] py-2 font-semibold">
+                  About the Project
+                </p>
+
                 {descriptionEditing ? (
-                <div className="">
-                  <Input
-                  fullWidth
-                    style={{ padding: 0 , width:'100%'}}
-                    inputRef={descriptionEditingInputRef}
-                    value={editedDescription}
-                    onChange={(e) => setEditedDescription(e.target.value)}
-                  />
-                  <Button
-                    variant="soft"
-                    color="success"
-                    className="py-2 mt-2"
-                    onClick={()=>saveEditedDescription(projectDetails.projectId)}
-                  >
-                    Save
-                  </Button>
-                  <Button
-                    variant="soft"
-                    color="danger"
-                    className="py-2 mt-2"
-                    onClick={cancelDescriptioneEdit}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              ) : (
-                <div className=" flex  gap-2">
-                  <p className="text   p-0">
-                    {projectDetails.description}
-                  </p>
-                  <Edit
-                    className="comment_icons"
-                    
-                    onClick={() => handleDescriptionEditing(projectDetails.description)}
-                  />
-                </div>
-              )}
+                  <div className="">
+                    <Input
+                      fullWidth
+                      style={{ padding: 0, width: "100%" }}
+                      inputRef={descriptionEditingInputRef}
+                      value={editedDescription}
+                      onChange={(e) => setEditedDescription(e.target.value)}
+                    />
+                    <Button
+                      variant="soft"
+                      color="success"
+                      className="py-2 mt-2"
+                      onClick={() =>
+                        saveEditedDescription(projectDetails.projectId)
+                      }
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="soft"
+                      color="danger"
+                      className="py-2 mt-2"
+                      onClick={cancelDescriptioneEdit}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <div className=" flex  gap-2">
+                    <p className="text   p-0">{projectDetails.description}</p>
+                    <Edit
+                      className="comment_icons"
+                      onClick={() =>
+                        handleDescriptionEditing(projectDetails.description)
+                      }
+                    />
+                  </div>
+                )}
               </div>
-             
             </div>
-            <div className="flex flex-row items-center justify-between pr-3 border px-5 py-3">
-              <div>
-                <p className="text-2xl py-2 font-semibold">Project Stats</p>
-                <div className="flex flex-row justify-between items-center space-x-4">
+            <div className="flex flex-col lg:flex-row items-center lg:justify-between border px-5 py-3 space-y-4 lg:space-y-0">
+              <div className="w-full lg:w-auto">
+                <p className="sm:text-2xl text-[18px] py-2 font-semibold">
+                  Project Stats
+                </p>
+                <div className="flex flex-col lg:flex-row justify-between  space-y-4 lg:space-y-0 lg:space-x-4">
                   <div className="flex items-center">
-                    <ListAlt className="text-gray mr-2" />
-                    <span className="text-gray">
-                      <b className="text-2xl">{totalUnFinishedWorkItems}</b>{" "}
-                      Work Item Created
+                    <ListAlt className="text-gray-500 mr-2" />
+                    <span className="text-gray-500 flex items-center">
+                      <b className="text-2xl">{totalUnFinishedWorkItems}</b>
+                      &nbsp;Work Item Created
                     </span>
                   </div>
+
                   <div className="flex items-center">
-                    <ListAlt className="text-gray mr-2" />
-                    <span className="text-gray">
+                    <ListAlt className="text-gray-500 mr-2" />
+                    <span className="text-gray-500">
                       <b className="text-2xl font-semibold">
                         {totalFinishedWorkItem}
                       </b>{" "}
@@ -345,9 +351,14 @@ function ViewSingleProject({isAdmin}) {
                   </div>
                 </div>
               </div>
-              <div className="flex items-end">
-                <Button onClick={()=>navigate(`/project/${projectDetails.projectId}/work-items`)} variant="outlined">
-                  manage
+              <div className="flex items-start  lg:justify-end w-full lg:w-auto">
+                <Button
+                  onClick={() =>
+                    navigate(`/project/${projectDetails.projectId}/work-items`)
+                  }
+                  variant="solid"
+                >
+                  Manage
                 </Button>
               </div>
             </div>
@@ -357,7 +368,7 @@ function ViewSingleProject({isAdmin}) {
              projectAdmins={projectDetails.projectAdministratorDetailsList} 
              projectId={projectDetails.projectId} 
              rootAdmin={projectDetails.projectRootAdministratorEmail}
-             /> {/* Use the new component */}
+             />
           </div>
         </>
       )}
