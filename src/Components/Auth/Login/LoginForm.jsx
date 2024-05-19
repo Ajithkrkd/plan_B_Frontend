@@ -65,14 +65,16 @@ const LoginForm = () => {
       localStorage.setItem('reffreshToken' , response.data.refresh_token);
       navigate('/')
     } catch (error) {
-      console.log(error)
-      if(error.response.data.message == 'email verification failed'){
-        toast.error("Please check your Email ")
-        setIsLoding(false);
-      }else {
-        setIsLoding(false)
-        toast.error(error.response.data.message)
+      console.log(error);
+      setIsLoding(false);
+  
+      if (error.response && error.response.data && error.response.data.message === 'email verification failed') {
+        toast.error("Please check your Email");
+      } else {
+        toast.error(error.response?.data?.message || 'An error occurred');
       }
+    }finally{
+      setIsLoding(false);
     }
   }
   return (
