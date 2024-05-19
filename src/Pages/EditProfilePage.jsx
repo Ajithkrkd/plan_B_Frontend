@@ -6,7 +6,6 @@ function EditProfilePage() {
   return (
     <div>
         <Header/>
-        <SideBar/>
         <EditProfile/>
     </div>
   )

@@ -66,9 +66,9 @@ function PrivacyDetails() {
   }
   
   return (
-    <div className='profile-container'>
+    <div className='project-container'>
+      <div className='w-4/4 md:w-2/4 flex-row p-3'>
       <p className='text-xl font-semibold underline my-3 text-blue-800'>Privacy Settings</p>
-      <div className='w-2/4 flex-row'>
         <p className='my-2 '>Change My Password</p>
 
         <TextField
@@ -154,11 +154,11 @@ function PrivacyDetails() {
           }}
       />
      <div className='flex justify-content-between'>
-     <button className='button --shine' 
+     <button className='button2 --shine' 
       
       onClick={changePassword}
 
-      >Change password</button>
+      >Change</button>
 
       <BasicModalDialog/>
      </div>

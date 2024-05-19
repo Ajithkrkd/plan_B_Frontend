@@ -98,6 +98,7 @@ function CommentSection({ workItemId }) {
       
       // Function to handle confirmed deletion
       const handleConfirmDelete = async (commentId, toastId) => {
+        
         try {
          const response = await deleteCommentById(commentId ,workItemId);
          console.log(response.data)

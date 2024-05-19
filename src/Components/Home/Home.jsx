@@ -35,26 +35,31 @@ function Home() {
   return (
     <div className="flex  flex-wrap justify-center items-center" id="home">
       <div
-        className="w-full  sm:w-5/5 px-4 py-8 mb-8 sm:mb-0 bg-gradient-to-b from-customBlue to-white-800"
+        className="w-full  sm:w-5/5 px-4 py-8 mb-8 sm:mb-0 bg-gradient-to-b from-[#1868DB] to-black"
         style={{ height: "350px" }}
       >
         <div className="my-3">
-          <span className="text-4xl font-thin text-gray-900 dark:text-black px-4">
-            Plan your project with
-          </span>
-          <span className="main-header italic">PLAN-B</span>
-          <h3 className="my-3 pl-5">
-            <span className="text-lg italic">Plan smarter,</span>
-            <span className="text-lg italic"> collaborate better,</span>
-            <span className="text-lg italic">
+          <div className="flex md:items-center gap-3 md:flex-row flex-col">
+            <span className="text-[28px] text-white">
+              Plan your project with
+            </span>
+            <span className="main-header text-white">PLAN-B</span>
+          </div>
+          <h3 className="my-3">
+            <span className="text-lg italic text-white">Plan smarter,</span>
+            <span className="text-lg italic text-white">
+              {" "}
+              collaborate better,
+            </span>
+            <span className="text-lg italic text-white">
               build your project with your plan
             </span>
+            <div className="my-6">
+              <button className="button --shine" onClick={handleNavigation}>
+                Start Now
+              </button>
+            </div>
           </h3>
-        </div>
-        <div className="my-6 pl-5">
-          <button className="button --shine" onClick={handleNavigation}>
-            Start Now
-          </button>
         </div>
       </div>
       <div className="flex flex-col ">
@@ -216,11 +221,7 @@ function Home() {
             </ul>
           </div>
           <div className="w-full sm:w-2/3 px-4">
-            <img
-              className="sm:p-5 object-cover"
-              src={chatImage}
-              alt="chat"
-            />
+            <img className="sm:p-5 object-cover" src={chatImage} alt="chat" />
           </div>
         </div>
         <FAQSection />

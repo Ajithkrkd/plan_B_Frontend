@@ -142,14 +142,15 @@ function EditProfile() {
   return (
     <>
     {isloading && <Loader/>}
-      <div className="profile-container  ">
+      <div className="project-container px-2 ">
         <div className="max-w-4xl max-w-2sm mx-auto">
           <p className=" font-semibold profile-text ">Edit Profile</p>
-          <div className="grid grid-cols-4 items-center justify-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="profile-img-container relative">
               <img
                 src={profilePic || "/src/assets/workers"}
                 className="profile-img"
+                style={{width:150,height:150 ,borderRadius:100}}
                 alt="Profile"
               />
               <label

@@ -7,7 +7,6 @@ function KanbanBoardPage() {
   return (
     <div>
         <Header/>
-        <SideBar/>
         <Board/>
     </div>
   )

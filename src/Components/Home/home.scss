@@ -3,6 +3,7 @@
     --black: #190464;
     --white: #ffffff;
     --primary: #79B3FF;
+    --new: #FCA700
   }
   
   // --- styling --- //
@@ -59,7 +60,53 @@
       }
     }
   }
+   
+
+  .button2 {
+    position: relative;
+    border: 0;
+    transition: 0.5s;
+    z-index: 1;
+    min-width: 5rem;
+    padding: 1rem 2rem;
+    font-size: 0.875rem;
+    line-height: 1;
+    font-family: $font-family;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: var(--new);
+    color: var(--white);
   
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+    }
+  
+    
+    &.--shine {
+      overflow: hidden;
+      &:after {
+        height: 100%;
+        width: 0;
+        left: -25%;
+        top: 0;
+        background: var(--primary);
+        transform: skew(50deg);
+        transform-origin: top left;
+        transition: 0.5s;
+      }
+      &:hover {
+        &:after {
+          width: 125%;
+        }
+      
+      }
+    }
+  }
   // --- animations --- //
   @keyframes pulse {
     0% {

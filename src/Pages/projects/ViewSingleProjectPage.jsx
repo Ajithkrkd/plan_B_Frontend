@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import ViewSingleProject from "../../Components/Project/ViewSingleProject";
 import Header from "../../Components/Header/Header";
-import SideBar from "../../Components/SideBar/SideBar";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { checkAdminOrNot, getIsProjectAdminOrNot } from "../../store/redux/slices/isProjectAdminSlice";
@@ -17,8 +16,7 @@ function ViewSingleProjectPage() {
   console.log(isAdmin)
   return (
     <div>
-      <Header />
-      <SideBar />
+      
       <ViewSingleProject isAdmin={isAdmin}  />
     </div>
   );
