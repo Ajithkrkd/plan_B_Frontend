@@ -451,6 +451,7 @@ function AttachmentSection({ workItemId }) {
             >
               <DialogTitle>Add Attachment</DialogTitle>
               <DialogContent>
+                {loading && <Loader/>}
                 <input
                   className="form-control"
                   type="file"
