@@ -7,6 +7,7 @@ import { validate } from "../Auth/Validation";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails, update_UserDetails, uploadProfileImage } from "../../Api/User";
 import { CameraAlt } from "@mui/icons-material";
+import ProfileLogo from "../../assets/person.svg";
 //fire base
 import {
   getDownloadURL,
@@ -56,7 +57,7 @@ function EditProfile() {
       fullName: data.fullName,
       phoneNumber: data.phoneNumber,
     });
-    setProfilePic(`${data.profile_image_path}`);
+    setProfilePic(data.profile_image_path);
   };
 
   useEffect(() => {
@@ -148,7 +149,7 @@ function EditProfile() {
           <div className="flex flex-wrap items-center justify-center gap-4">
             <div className="profile-img-container relative">
               <img
-                src={profilePic || "/src/assets/workers"}
+                src={profilePic !== null ? profilePic : ProfileLogo}
                 className="profile-img"
                 style={{width:150,height:150 ,borderRadius:100}}
                 alt="Profile"
@@ -157,8 +158,7 @@ function EditProfile() {
                 htmlFor="fileInput"
                 className="edit-icon absolute bottom-3 right-10"
               >
-                <CameraAlt fontSize="small" color="primary" />{" "}
-                {/* Material UI styling */}
+                <CameraAlt fontSize="small" style={{cursor:'pointer'}} />{" "}
               </label>
             </div>
             <input

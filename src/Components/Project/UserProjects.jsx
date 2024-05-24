@@ -4,6 +4,7 @@ import { getAllProjectOfUser } from "../../Api/project";
 import toast from "react-hot-toast";
 import LazyProjectsSkeleton from "./LazyProjectsSkeleton";
 import EmptyBox from "../../assets/looking.svg";
+import ProjectLogo from "../../assets/projectIcon.svg";
 function UserProjects() {
   const [isLoading, setLoading] = useState(false);
 
@@ -42,7 +43,7 @@ function UserProjects() {
               <CreateProjectModal />
             </div>
             {
-            projects.length < 0 && (
+            projects.length <= 0 && (
                 <>
                <div className="items-center flex 
                sm:flex-row flex-col
@@ -74,8 +75,8 @@ function UserProjects() {
                       <img
                         className="profile-img"
                         src={
-                          project.project_profile_url &&
-                          project.project_profile_url
+                          project.project_profile_url ?
+                          project.project_profile_url : ProjectLogo
                         }
                         alt={project.title}
                       />

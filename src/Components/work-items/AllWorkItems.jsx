@@ -57,10 +57,10 @@ function AllWorkItems() {
            
             <Button
               variant="outlined"
-              className="cursor-pointer underline"
+              className="cursor-pointer underline "
               onClick={() => setSelectedLink("work-item-table")}
             >
-              Work Item Table
+              Table
             </Button>
             {/* Button to select the board */}
             <Button
@@ -68,7 +68,7 @@ function AllWorkItems() {
               className="cursor-pointer underline"
               onClick={() => setSelectedLink("boards")}
             >
-              View As Board
+              Board
             </Button>
           </div>
         </div>

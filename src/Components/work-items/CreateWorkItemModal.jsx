@@ -65,7 +65,7 @@ console.log(projectId)
         startDecorator={<Add />}
         onClick={() => setOpen(true)}
       >
-        New WorkItem
+        New
       </Button>
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog>

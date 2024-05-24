@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
+import { FormControl, MenuItem, Select as MuiSelect, useMediaQuery, useTheme } from "@mui/material";
 import Avatar from "@mui/joy/Avatar";
 import { getProjectDetailsByProjectId } from "../../../Api/project";
 import { assignProjectMemberToWorkItem, unAssignMemberFromWorkItem } from "../../../Api/member";
@@ -72,6 +72,10 @@ const AssignMembers = ({ workItemDetails }) => {
     }
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
   return (
     <FormControl>
       {isLoading && <Loader/>}
@@ -81,7 +85,11 @@ const AssignMembers = ({ workItemDetails }) => {
         placeholder="select member"
         value={selectedMember}
         onChange={handleChange}
-        sx={{ width: 300, height: 57, transition: "0.2s" }}
+        sx={{
+          width: isMobile ? '100%' : isTablet ? 300 : 300,
+          height: 60
+        }}
+        
       >
         <MenuItem value="unAssigned" key="unAssigned">
         <div className="flex items-center">

@@ -19,6 +19,8 @@ import {
   DialogTitle,
   Input,
   TextField,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import CommentSection from "./comments/CommentSection";
 import AttachmentSection from "./attachments/AttachmentSection";
@@ -37,7 +39,6 @@ import Loader from "../../common/Loader";
 import "./comments/comment.css";
 import ChildWorkItemSection from "./childWorkItems/ChildWorkItemSection";
 import { getAllWorkLifeCycle } from "../../Api/workLifeCycle";
-
 
 function CreateWorkItem({ creationDetials }) {
   const [tag, setTag] = useState("");
@@ -80,8 +81,8 @@ function CreateWorkItem({ creationDetials }) {
   const [selectedCycleId, setSelectedCycleId] = useState("");
   const [workLifeCycles, setWorkLifeCycles] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [extendingReason, setExtendingReason] = useState("")
-  const [showApplyButton , setShowApplyButton] = useState(true)
+  const [extendingReason, setExtendingReason] = useState("");
+  const [showApplyButton, setShowApplyButton] = useState(true);
   useEffect(() => {
     getWorkItemDetails(workItemId);
     fetchWorkingCycle();
@@ -95,8 +96,6 @@ function CreateWorkItem({ creationDetials }) {
       descriptionEditingInputRef.current.focus();
     }
   }, [titleEditing, descriptionEditing]);
-
-
 
   const getWorkItemDetails = async (workItemId) => {
     try {
@@ -194,7 +193,7 @@ function CreateWorkItem({ creationDetials }) {
       }
       const response = await deletLabelByLabelId(workID, labelId);
       console.log(response.data);
-      toast.success("Label removed Successfully")
+      toast.success("Label removed Successfully");
 
       setWorkItemDetails((prevState) => ({
         ...prevState,
@@ -302,13 +301,17 @@ function CreateWorkItem({ creationDetials }) {
       toast.error("select cycle");
       return;
     }
-    if (projectId == '') {
-      console.log("project id is not find")
+    if (projectId == "") {
+      console.log("project id is not find");
       return;
     }
     try {
       setIsLoading(true);
-      const response = await assignToWorkLifeCycle(workItemId,selectedCycleId,projectId);
+      const response = await assignToWorkLifeCycle(
+        workItemId,
+        selectedCycleId,
+        projectId
+      );
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -340,44 +343,49 @@ function CreateWorkItem({ creationDetials }) {
     setPreviewOpen(false);
   };
 
-  const handleTextAreaChange  = (e) =>{
-    setExtendingReason(e.target.value)
-    const words = extendingReason.split(/\s+/).filter(word => word.length > 0);
+  const handleTextAreaChange = (e) => {
+    setExtendingReason(e.target.value);
+    const words = extendingReason
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
     if (words.length >= 10) {
       setShowApplyButton(false);
-    }else{
+    } else {
       setShowApplyButton(true);
     }
-  }
+  };
 
-  const handleExtentionApply = async ()=>{
-    const words = extendingReason.split(/\s+/).filter(word => word.length > 0);
-    console.log(words)
+  const handleExtentionApply = async () => {
+    const words = extendingReason
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
+    console.log(words);
     if (words.length <= 10) {
       toast.error("reason should contain minimun 10 words !");
       return;
-    } 
-     console.log(workItemDetails.workItemId);
-     const id = workItemDetails.workItemId;
+    }
+    console.log(workItemDetails.workItemId);
+    const id = workItemDetails.workItemId;
     try {
-
       setIsLoading(true);
-      const response = await requestForChangingWorkItemDeadLine(id ,extendingReason);
+      const response = await requestForChangingWorkItemDeadLine(
+        id,
+        extendingReason
+      );
       console.log(response);
       toast.success("request was sent successfully");
-
-      
     } catch (error) {
-      console.log(error)
-    }
-    finally{
+      console.log(error);
+    } finally {
       setPreviewOpen(false);
       setExtendingReason("");
       setIsLoading(false);
     }
-  }
+  };
 
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
   return (
     <>
@@ -393,7 +401,7 @@ function CreateWorkItem({ creationDetials }) {
         </span>
         <div className="pl-5 py-3 px-3 border">
           <div>
-            <div className="flex pb-3">
+            <div className="flex  md:text-xl  md:flex-row flex-col text-[16px] pb-3">
               <p className="text-gray font-semibold pr-3 italic">
                 Work Item Title :{" "}
               </p>
@@ -425,7 +433,7 @@ function CreateWorkItem({ creationDetials }) {
                 </div>
               ) : (
                 <div className=" flex justify-start gap-2">
-                  <p className="text-xl font-bold italic p-0">
+                  <p className="text-xl font-bold  italic p-0">
                     {workItemDetails.title}
                   </p>
                   <Edit
@@ -435,8 +443,8 @@ function CreateWorkItem({ creationDetials }) {
                 </div>
               )}
             </div>
-            <div>
-              <p className="text-gray font-semibold pr-3 italic">
+            <div className="flex flex-col">
+              <p className="text-gray  md:text-[18px] text-[16px] font-semibold pr-3 italic">
                 Work Item Description :{" "}
               </p>
               <div
@@ -459,6 +467,7 @@ function CreateWorkItem({ creationDetials }) {
                       value={editedDescription}
                       onChange={(e) => setEditedDescription(e.target.value)}
                     />
+                    <div className="flex gap-2 items-end">
                     <Button
                       variant="soft"
                       color="success"
@@ -476,6 +485,7 @@ function CreateWorkItem({ creationDetials }) {
                       Cancel
                     </Button>
                   </div>
+                  </div>
                 ) : (
                   <>
                     <span className="italic font-semibold text-gray-600 pr-2">
@@ -491,7 +501,7 @@ function CreateWorkItem({ creationDetials }) {
                 )}
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               {workItemDetails.state && (
                 <StateSelector
                   initialState={workItemDetails && workItemDetails.state}
@@ -501,20 +511,22 @@ function CreateWorkItem({ creationDetials }) {
               {workItemDetails.projectId && (
                 <AssignMembers workItemDetails={workItemDetails} />
               )}
-
               <TextField
                 variant="outlined"
                 placeholder="Add tag +"
                 value={tag}
                 onChange={handleTagInputChange}
                 onKeyDown={handleTagInputKeyDown}
-                style={{ flex: 1, padding: "0px" }}
+                sx={{
+                  width: isMobile ? "100%" : isTablet ? 300 : 150,
+                  flex:1
+                }}
               />
+
               <Button
                 color="neutral"
                 variant="outlined"
                 onClick={() => setActiveSection("comments")}
-                style={{ flex: 1, minWidth: 0 }}
               >
                 <MessageOutlined color="primary" fontSize="small" /> Comments
               </Button>
@@ -522,7 +534,7 @@ function CreateWorkItem({ creationDetials }) {
                 color="neutral"
                 variant="outlined"
                 onClick={() => setActiveSection("attachments")}
-                style={{ flex: 1, minWidth: 0 }}
+              
               >
                 <Attachment color="info" fontSize="small" /> Attachments
               </Button>
@@ -530,19 +542,19 @@ function CreateWorkItem({ creationDetials }) {
                 color="neutral"
                 variant="outlined"
                 onClick={() => setActiveSection("childComponent")}
-                style={{ flex: 1, minWidth: 0 }}
               >
                 <Assignment color="info" fontSize="small" /> Child workItems
               </Button>
             </div>
-            <div className="p-3">
+
+            <div className="p-2 flex flex-wrap gap-2 ">
               {workItemDetails.labels &&
                 workItemDetails.labels.map(
                   (label) =>
                     label.labelId && (
                       <span
                         key={label.labelId}
-                        className="bg-blue-200 px-2 py-1 rounded-md mr-2"
+                        className="bg-blue-200 px-2 py-1  rounded-md mr-2"
                       >
                         {label.labelName}
                         <Close
@@ -713,31 +725,34 @@ function CreateWorkItem({ creationDetials }) {
                       {formatDate(workItemDetails.workingLifeCycle.endDate)}
                     </span>
                   </div>
-                  <Alert className="my-2" severity="info">Do you want to Extend Time ?</Alert>
+                  <Alert className="my-2" severity="info">
+                    Do you want to Extend Time ?
+                  </Alert>
                   <div className="border flex justify-between my-2">
                     <textarea
-                     style={{
-                      padding:"5px",
-                      outline: "none",
-                      border: "1px solid black",
-                      width: "100%",
-                      height:"100px",
-                      
-                    
-                     }}
-                     placeholder="Reason for Extending Time ? should contain atleast 10 words"  
-                     ref={reasonRef}
-                     value={extendingReason}
-                     onChange={handleTextAreaChange}
+                      style={{
+                        padding: "5px",
+                        outline: "none",
+                        border: "1px solid black",
+                        width: "100%",
+                        height: "100px",
+                      }}
+                      placeholder="Reason for Extending Time ? should contain atleast 10 words"
+                      ref={reasonRef}
+                      value={extendingReason}
+                      onChange={handleTextAreaChange}
                     />
-                    
                   </div>
-                  <Button 
-                  disabled={showApplyButton}
-                  onClick={handleExtentionApply}
-                  fullWidth className="mt-4" color="success" variant="solid">
-                      Apply
-                    </Button>
+                  <Button
+                    disabled={showApplyButton}
+                    onClick={handleExtentionApply}
+                    fullWidth
+                    className="mt-4"
+                    color="success"
+                    variant="solid"
+                  >
+                    Apply
+                  </Button>
                 </>
               )}
             </div>

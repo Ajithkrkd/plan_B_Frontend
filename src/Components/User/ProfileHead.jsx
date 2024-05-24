@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { formateJoiningDateTime } from "./userUtils";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../common/Loader";
-import ProfileExample from "../../assets/workers.jpg";
+import ProfileExample from "../../assets/person.svg";
 function ProfileHead({ userDetails }) {
   const divStyle = {
     backgroundImage: profileBG

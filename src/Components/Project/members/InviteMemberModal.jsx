@@ -148,7 +148,7 @@ export default function InviteMemberModal({ projectId, onOpen }) {
           <Alert icon={<CheckCircleOutlined fontSize="inherit" />}
           className="my-3" 
           severity="success">
-            If he joined or declined you will receive the notification
+           He can join using our invitation
           </Alert>
         </Sheet>
       </Modal>

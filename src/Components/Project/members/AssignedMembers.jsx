@@ -13,6 +13,10 @@ import {
   removeMemberFromProject,
 } from "../../../Api/member";
 import Loader from "../../../common/Loader";
+import ProfileAvatar from "../../../assets/maleAvatar.svg";
+import ProfileAvatarAdmin from "../../../assets/greenAvatar.svg";
+
+
 const AssignedMembers = ({
   assignedMembers,
   projectAdmins,
@@ -162,7 +166,7 @@ const AssignedMembers = ({
             >
               <div className="flex items-start mr-5 mb-2 sm:mb-0">
                 <img
-                  src={`${member.profile_image_url}`}
+                  src={`${member.profile_image_url != null ? member.profile_image_url : ProfileAvatarAdmin}`}
                   alt={"img"}
                   className="profile"
                 />
@@ -219,7 +223,7 @@ const AssignedMembers = ({
             >
               <div className="flex items-start mr-5 mb-2 sm:mb-0">
                 <img
-                  src={`${member.profile_image_url}`}
+                  src={`${member.profile_image_url != null ? member.profile_image_url : ProfileAvatar}`}
                   alt={"img"}
                   className="profile"
                 />

@@ -3,6 +3,8 @@ import {
   FormControl,
   MenuItem,
   Select as MuiSelect,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { Circle } from "@mui/icons-material";
 
@@ -19,7 +21,9 @@ const StateSelector = ({ onStateSelector ,initialState}) => {
     onStateSelector(newValue);
     console.log("showing");
   };
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   return (
     <FormControl >
      
@@ -29,9 +33,8 @@ const StateSelector = ({ onStateSelector ,initialState}) => {
         value={selectedState}
         onChange={handleChange}
         sx={{
-          width: 150,
-          transform: selectedState ? "rotate(0deg)" : "rotate(0deg)",
-          transition: "0.2s",
+          width: isMobile ? '100%' : isTablet ? 300 : 200,
+          height: 60
         }}
         
       >

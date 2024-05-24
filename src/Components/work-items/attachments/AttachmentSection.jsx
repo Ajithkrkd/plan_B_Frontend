@@ -13,6 +13,8 @@ import {
   TableHead,
   TableRow,
   TextField,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import {
   MoreVert,
@@ -247,7 +249,9 @@ function AttachmentSection({ workItemId }) {
   setEditedDescription(selectedAttachment.attachment_description);
   setDescriptionEditing(true);
  }
-
+ const theme = useTheme();
+ const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+ const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
 
  useEffect(() => {
   if (descriptionEditingRef.current) {
@@ -300,7 +304,7 @@ function AttachmentSection({ workItemId }) {
           <Button
             variant="outlined"
             color="primary"
-            style={{ float: "align-end", width: "18%", marginBottom: "10px" }}
+            style={{ float: "align-end", width: "", marginBottom: "10px" }}
             onClick={handleOpenAddAttachment}
           >
             <Add /> Add Attachment
@@ -308,8 +312,8 @@ function AttachmentSection({ workItemId }) {
           <div
             className="flex items-center gap-2 mb-3"
             style={{
-              height: "300px",
-              overflowY: "scroll",
+              minHeight: "300px",
+              overflowX: "auto",
               padding: "10px",
               border: "1px solid black",
             }}
@@ -322,7 +326,8 @@ function AttachmentSection({ workItemId }) {
                 No Attachments <AttachFile />
               </p>
             ) : (
-              <TableContainer style={{border:'1px solid black'}}>
+              <div style={{ overflowX: 'auto', width:'100%'}}>
+                <TableContainer style={{border:'1px solid black'}}>
                 <Table >
                   <TableHead>
                     <TableRow>
@@ -389,6 +394,7 @@ function AttachmentSection({ workItemId }) {
                   </TableBody>
                 </Table>
               </TableContainer>
+                </div>
             )}
 
             {/* Attachment operations menu */}

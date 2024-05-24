@@ -17,7 +17,7 @@ import SingleProjectSkeleton from "./SingleProjectSkeleton";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import Loader from "../../common/Loader";
 import AssignedMembers from "./members/AssignedMembers";
-import ProjectLogo from "../../assets/person.svg";
+import ProjectLogo from "../../assets/projectIcon.svg";
 import Header from "../Header/Header";
 
 function ViewSingleProject({ isAdmin }) {

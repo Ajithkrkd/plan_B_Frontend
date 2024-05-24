@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getUserDetails } from "../../Api/User";
 import Loader from "../../common/Loader";
 import Logo from "/planb-icon.png";
-import Avatar from "../../assets/avatar.png"
+import Avatar from "../../assets/person.svg"
 import SideBar from "../SideBar/SideBar";
 function Header() {
 
@@ -16,9 +16,11 @@ function Header() {
   const [toggle, setToggle] = useState(false);
   const [profilePic ,setProfilePic] = useState(null);
   const [loading,setLoading] = useState(false);
+  const [showProfile, setShowProfile] = useState(null);
     useEffect(()=>{
       const token = localStorage.getItem('accessToken');
       if(token){
+        setShowProfile(true);
         fetchUserDetails();
       }
     },[])
@@ -36,7 +38,6 @@ function Header() {
         setLoading(false);
       }
     }
-    const imgUrl = `${profilePic}`;
   return (
     <>
     <div className="relative">
@@ -98,17 +99,18 @@ function Header() {
           </ul>
         <div className="sm:flex ">
      
-          {profilePic
+          {showProfile
            ? 
            <>
           <img className="profile"
-          src={profilePic !== null ? imgUrl : Avatar}
+          src={profilePic != null ? profilePic : Avatar}
           onClick={()=>navigate('/profile-settings')}
           />
           </>
           :
           <>
-          <button className="btn btn-outline-dark " onClick={()=>{navigate('/register')}}>login</button>
+          <button className="btn btn-outline-dark " 
+          onClick={()=>{navigate('/register')}}>login</button>
           </>
           }
         </div>

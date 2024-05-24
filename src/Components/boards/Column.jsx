@@ -5,7 +5,7 @@ import Card from "./Card";
 export default function Column({ title, tasks, id  }) {
    
   return (
-    <div style={{ width: "35%" ,backgroundColor: "#EBECF0", margin:10,padding:10 ,height: "500px"}}>
+    <div style={{ width: "100%", minWidth:400 ,backgroundColor: "#EBECF0", margin:10,padding:10 ,minHeight: "500px"}}>
       <p className="p-2 text-xl font-bold  m-2" style={{ textAlign: "center", border:"1px solid #333" }}>{title}</p>
       <Droppable droppableId={id}>
         {(provided) => (

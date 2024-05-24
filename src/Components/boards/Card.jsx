@@ -51,7 +51,7 @@ function bgcolorChange(props) {
       ? "#F2D7D5"
       : "#FFFFF"
     : props.isBacklog
-    ? "#F2D7D5"
+    ? "#1868DB"
     : "#FFFFFF";
 }
 
