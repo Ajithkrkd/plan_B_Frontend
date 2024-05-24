@@ -77,6 +77,12 @@ function Header() {
                 notification
               </li>
             </Link>
+            <Link to={"/work-life-cycle"}>
+              <li className="">
+                <i className="bx bx-user p-0 btn text-gray-400 text-[20px]"/>
+                Work-Cycle
+              </li>
+            </Link>
             <Link to={"/community"}>
               <li className="">
                 <i className="bx bxs-chat p-0 btn text-gray-400 text-[20px]"/>
