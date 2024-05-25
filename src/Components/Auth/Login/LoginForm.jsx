@@ -69,7 +69,7 @@ const LoginForm = () => {
       setIsLoding(false);
   
       if (error.response && error.response.data && error.response.data.message === 'email verification failed') {
-        toast.error("Please check your Email");
+        toast.error("Please go to Mails and click the link to verify your email first");
       } else {
         toast.error(error.response?.data?.message || 'An error occurred');
       }
